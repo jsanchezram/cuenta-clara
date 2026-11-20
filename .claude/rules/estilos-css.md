@@ -14,7 +14,7 @@ paths:
 - Las clases CSS y los tokens van en inglés.
 - Los estados van como modificadores o atributos, nunca como estilos en línea: `.budget-bar--near`, `[aria-invalid="true"]`, `[aria-pressed="true"]`.
 - Layouts con las primitivas `.stack`, `.cluster` y `.container`.
-- Hay un solo breakpoint, `@media (min-width: 48rem)`, y se diseña mobile-first desde 360 px.
+- Hay un solo breakpoint de ancho, `@media (min-width: 48rem)`, y se diseña mobile-first desde 360 px. La única otra consulta es `(max-height: 30rem)`: en pantallas bajas, las barras dejan de estar fijas (WCAG 1.4.10).
 - Se escribe en `rem`. Los inputs llevan `font-size: 1rem` para evitar el zoom de iOS.
 - Respeta `prefers-reduced-motion`.
 - Estilos de una sola página: en su `<style>`, igual que todo lo demás, con tokens.

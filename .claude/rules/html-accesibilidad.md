@@ -14,7 +14,7 @@ paths:
   - Cada campo con error lleva `aria-invalid="true"` y `aria-describedby` apuntando a su mensaje.
   - Al enviar, el foco va al primer campo con error.
   - Nunca se borra lo escrito.
-- Botones de filtro y atajo con `aria-pressed`. El activo lleva además una señal visible distinta del color (✓ o borde).
+- Botones de filtro y atajo con `aria-pressed`. El activo lleva además una señal visible distinta del color: relleno sólido frente al contorno de los demás y texto más grueso (o ✓, o borde).
 - Mensajes:
   - Confirmaciones con `role="status"`.
   - `role="alert"` solo para errores que interrumpen.

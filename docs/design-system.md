@@ -47,23 +47,25 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 | 2 | Escribe el monto | Registrar · arriba | `.field__control--amount` | Normal, error |
 | 3 | Toca una categoría | Mosaico | `.tile-group` (radios nativos) | Elegida en azul, error |
 | 4 | Elige la fecha (por defecto, hoy) | Hoja inferior | `.date-trigger`, `.sheet`, `<cc-calendario-rango single>` | Hoy, Ayer, día del calendario |
-| 5 | Toca "Guardar" | Barra fija sobre el menú | `.action-bar`, `.btn--primary` | Guardando, confirmación con `role="status"` |
+| 5 | Toca "Guardar" | Al final del formulario, a todo el ancho | `.btn--primary.btn--block` | Guardando, confirmación con `role="status"` |
 
 **Revisar el mes**, en la laptop:
 
 | Paso | Lo que hace | Pantalla y zona | Componentes | Estados |
 |---|---|---|---|---|
-| 1 | Abre Movimientos | Columna izquierda | `.period-trigger`, `.summary` | Cargando, error |
-| 2 | Cambia el período | Hoja / diálogo | `.option` (atajos), `<cc-calendario-rango>` | Atajo activo con ✓, rango marcado |
+| 1 | Abre Movimientos | Barra fija y resumen destacado | `.period-trigger`, `.hero-summary` | Cargando, error |
+| 2 | Cambia el período | Hoja / diálogo | `.option` (atajos), `<cc-calendario-rango>` | Atajo activo relleno en azul, rango marcado |
 | 3 | Filtra por categoría | Chips | `.chip[aria-pressed]` | Vacío por filtro |
 | 4 | Revisa la lista | Columna derecha | `<cc-movimiento>`, `.list-more` | 8 por tanda, "Cargar más" |
-| 5 | Revisa su presupuesto | Presupuesto | `.budget-summary`, `<cc-barra-presupuesto>` | 4 estados de R5, sin límite, "Ver más" |
+| 5 | Revisa su presupuesto | Presupuesto | `.hero-summary--single`, `.month-grid`, `<cc-barra-presupuesto>` | 4 estados de R5, sin límite, "Ver más", mes anterior en solo lectura |
 
 ## 3. Layouts
 
 - Primitivas: `.container` (contenido a 40rem en el celular y 72rem en laptop, siempre con margen lateral), `.stack` (vertical; `--compact` 12 px, `--sm` 8 px) y `.cluster` (fila que se envuelve).
 - **Un solo breakpoint:** `@media (min-width: 48rem)`. Se diseña mobile-first desde 360 px. `.card-grid` usa una cuadrícula intrínseca (`auto-fill`) que no necesita breakpoints extra.
-- En el celular, el menú va abajo y "Guardar" queda fijo justo encima. En laptop, el menú sube a la barra de marca. Movimientos usa `.layout` en 2 columnas y Registrar usa `.container--narrow`.
+- Esqueleto de cada página: `<header class="brand-bar">` (hijo directo de `<body>`) y, dentro de `<main>`, `.page-header` (fecha de hoy y título centrado), `.sticky-bar` (controles de la vista) y `.page-body` (contenido).
+- Al hacer scroll, la barra de marca y `.sticky-bar` quedan fijas: el título pasa en pequeño a la barra y los controles ganan una sombra suave. En pantallas bajas (`max-height: 30rem`: zoom alto o celular horizontal) dejan de ser fijas para no tapar el contenido (WCAG 1.4.10).
+- En el celular, el menú va abajo y "Guardar" va al final del formulario. En laptop, el menú sube a la barra de marca. Movimientos usa `.layout` en 2 columnas y Registrar usa `.container--narrow`.
 - Las hojas (`.sheet`) son diálogos modales: en el celular se abren desde abajo, sobre la pantalla, y en laptop se ven como un diálogo centrado.
 
 ## 4. Componentes
@@ -72,18 +74,19 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 |---|---|
 | `.btn` (`--primary`, `--secondary`, `--danger`, `--danger-solid`, `--link`, `--block`), `.icon-btn` | Acciones. Un solo primario por vista y sin subrayados |
 | `.field` (`__label`, `__control`, `__control--amount`, `__hint`, `__error`, `__counter`) | Campos con etiqueta visible y error junto al campo |
-| `.segmented` | Gasto o Ingreso con radios nativos. El elegido se rellena en azul y lleva ✓ |
+| `.segmented` | Gasto o Ingreso con radios nativos. El elegido se rellena en azul, sobresale y su texto es más grueso |
 | `.tile-group` / `.tile` | Categoría en mosaico con ícono. Un toque, sin desplegable que se salga de la pantalla a 360 px |
-| `.chip` / `.chip-group` | Filtro por categoría. Se ven de 36 px, con área táctil de 44 px, `aria-pressed` y ✓ en el activo |
+| `.chip` / `.chip-group` | Filtro por categoría. Se ven de 36 px, con área táctil de 44 px y `aria-pressed`. El activo va relleno en azul y con texto más grueso; los demás, con contorno. En la barra fija se deslizan hasta el borde de la pantalla |
 | `.period-trigger`, `.date-trigger` | Botones que abren una hoja: período en Movimientos y fecha en Registrar |
-| `.sheet`, `.option` | Hoja modal y atajos en píldoras (Hoy, Esta semana, Este mes, Mes anterior / Hoy, Ayer) |
+| `.sheet`, `.option` | Hoja modal y atajos en píldoras (Hoy, Esta semana, Este mes, Mes anterior / Hoy, Ayer). El atajo activo va relleno, como un chip |
+| `.month-bar`, `.month-grid` | Presupuesto: ‹ mes › y, al tocar el nombre del mes (con ícono de calendario), la hoja "Elige un mes" con el año y los 12 meses |
 | `<cc-calendario-rango>` · `.calendar` | Calendario de un mes. Marca un rango o un día (`single`), con tabindex itinerante y flechas del teclado |
-| `.summary` | Saldo arriba, y Gastos e Ingresos debajo, de lo filtrado |
+| `.hero-summary` (`--single`) | Resumen destacado en una tarjeta azul: el saldo, e ingresos y gastos en dos pozos con ↙ ↗ (Movimientos); lo usado del presupuesto, la barra del total con su % y el aviso en una píldora (Presupuesto) |
 | `.list`, `.list-row`, `.list-more` | Fila compacta (`<cc-movimiento>`) y "Cargar más" de a 8 |
 | `.cat-icon` | Ícono de categoría: azul de marca sobre un círculo azul claro |
-| `.budget-summary`, `.budget-card`, `.budget-bar`, `.budget-status` | Resumen del mes y tarjeta compacta con barra sólida y estado en texto |
+| `.budget-list`, `.budget-row`, `.budget-bar`, `.budget-status` | Una tarjeta por categoría con la fila compacta (como la de un movimiento), la barra sólida y el estado en texto con un puntito |
 | `.alert` (`--success`, `--error`), `.state`, `.skeleton`, `.confirm` | Mensajes, vacío o error, carga y confirmación de eliminar en la página |
-| `.brand-bar`, `.brand`, `.bottom-nav`, `.page-header`, `.skip-link`, `.visually-hidden` | Estructura y accesibilidad |
+| `.brand-bar`, `.brand`, `.bottom-nav`, `.page-header` (`__eyebrow` con la fecha, `__title`, `__accent`), `.sticky-bar`, `.page-body`, `.notice-slot`, `main[data-pending]`, `.skip-link`, `.visually-hidden` | Estructura y accesibilidad. `.notice-slot` vacío no ocupa lugar; `data-pending` oculta la vista hasta que la pantalla pinta su estado real |
 
 Los componentes de negocio `<cc-movimiento>` y `<cc-barra-presupuesto>` se arman con estas clases y no traen CSS propio. El detalle está en `docs/componentes-negocio.md`.
 
@@ -96,10 +99,12 @@ Los nombres siguen el patrón `categoría-rol-variante`.
 | `--color-budget-{normal,near,reached,exceeded}-text` / `-fill` | Semántico | Texto del estado y relleno sólido de la barra (R5) |
 | `--color-budget-track` | Semántico | Pista de la barra |
 | `--color-income-text`, `--color-expense-text` | Semántico | Montos |
-| `--color-brand`, `--color-on-brand`, `--color-accent-text`, `--color-selected-bg`, `--color-selected-text` | Semántico | Marca, acento (enlaces y menú activo) y selección suave |
+| `--color-brand`, `--color-on-brand`, `--color-accent-text`, `--color-selected-bg`, `--color-selected-text`, `--color-selected-border` | Semántico | Marca, acento (enlaces, menú activo y fecha del encabezado), selección suave y borde del botón tonal |
+| `--color-title-accent` | Semántico | Palabra clave del título de cada vista |
+| `--color-hero-bg`, `--color-hero-bg-end`, `--color-on-hero`, `--color-on-hero-muted`, `--color-hero-well`, `--color-hero-track` | Semántico | Resumen destacado: degradado azul, texto blanco (≥ 5:1), pozos y riel de la barra |
 | `--color-cat-icon-bg`, `--color-cat-icon-fg` | Semántico | Ícono de categoría monocromo |
 | `--color-backdrop`, `--shadow-card`, `--shadow-raised`, `--shadow-nav` | Semántico | Velo del modal y elevación |
-| `--calendar-day-size`, `--chip-visual-height`, `--action-bar-space`, `--list-row-min-height` | Componente | Medidas |
+| `--calendar-day-size`, `--chip-visual-height`, `--list-row-min-height` | Componente | Medidas |
 
 ## 6. Estados de UI
 
@@ -107,7 +112,7 @@ Los nombres siguen el patrón `categoría-rol-variante`.
 |---|---|---|---|---|---|---|---|---|
 | Botón | ✓ | ✓ | ✓ anillo de 3 px | — | ✓ | ✓ "Guardando…" con `aria-disabled` | — | — |
 | Campo | ✓ | — | ✓ | — | — | — | — | ✓ borde de 2 px + ⚠ + mensaje |
-| Chip, atajo | ✓ | ✓ | ✓ | ✓ relleno azul + ✓ | — | — | — | — |
+| Chip, atajo | ✓ | ✓ | ✓ | ✓ relleno azul + texto más grueso | — | — | — | — |
 | Mosaico de categoría | ✓ | — | ✓ | ✓ relleno azul | — | — | — | ✓ borde rojo + mensaje |
 | Día del calendario | ✓ | ✓ | ✓ | ✓ círculo azul (extremos) y franja clara (rango) | ✓ futuro o fuera de R2/R6 | — | — | — |
 | Lista | ✓ | ✓ fila | ✓ fila | — | — | ✓ skeleton + "Cargando…" | ✓ `.state` + acción | ✓ alerta + Reintentar |
@@ -131,5 +136,6 @@ El detalle está en `.claude/rules/estilos-css.md` y `.claude/rules/html-accesib
 - Objetivos táctiles de 44 px o más (48 px el primario). Los chips y atajos se ven de 36 px, pero su área táctil es de 44 px.
 - Excepción: los días del calendario miden 46 × 36 px. Cumplen WCAG 2.5.8 (24 px como mínimo); se achicaron para que la hoja no ocupe toda la pantalla.
 - Las hojas devuelven el foco al botón que las abrió al cerrarse por cualquier camino: atajo, Aplicar, Cancelar, ✕, Escape o tocar el fondo.
+- Lo enfocado nunca queda tapado por las barras fijas (WCAG 2.4.11): `scroll-padding-top` usa la altura que mide `watchHeader()`.
 - Se prueba a 360 px y a 1280 px, sin scroll horizontal.
 - Respeta `prefers-reduced-motion`.
