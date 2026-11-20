@@ -4,7 +4,7 @@
  * Es la única puerta a los datos. Hoy usa localStorage; mañana usaría fetch a /api/v1, y las pantallas no notarían el cambio.
  * Guarda DTO (claves cuentaclara.v1.*), devuelve modelos, aplica las reglas del servidor y lanza ApiError.
  */
-import { toTransaction, toTransactionDTO, toTransactionList, toTransactionPatch, toBudget } from '../contracts/mappers.js';
+import { toTransaction, toTransactionDTO, toTransactionList, toTransactionPatch, toBudget, toBudgetRecord } from '../contracts/mappers.js';
 import { EXPENSE_CATEGORIES } from '../models/types.js';
 import { validateAmount, validateCategory, validateDate, validateDescription, validateLimit } from '../logic/rules.js';
 import { currentMonth, monthPeriod, shiftMonth } from '../logic/period.js';
@@ -40,9 +40,10 @@ export class ApiError extends Error {
   /**
    * @param {ErrorCode} code
    * @param {Record<string, string>} [fields]
+   * @param {string} [message]  reemplaza el mensaje por defecto del código
    */
-  constructor(code, fields = {}) {
-    super(MESSAGES[code]);
+  constructor(code, fields = {}, message) {
+    super(message ?? MESSAGES[code]);
     this.name = 'ApiError';
     this.code = code;
     this.fields = fields;
@@ -93,6 +94,7 @@ export function shiftSeed(seed, today) {
       effective_from: shiftMonth(b.effective_from, delta),
       created_at: /** @type {string} */ (shiftIso(b.created_at, delta, today)),
       updated_at: /** @type {string} */ (shiftIso(b.updated_at, delta, today)),
+      ...(b.deleted_at ? { deleted_at: shiftIso(b.deleted_at, delta, today) } : {}),
     })),
   };
 }
@@ -270,8 +272,13 @@ export function createApi({ storage, loadSeed, today, nowIso, delayMs = 400, fai
       await wait();
       maybeFail('presupuesto');
       await ensureSeeded();
-      const history = readBudgets().map(toBudget);
-      return EXPENSE_CATEGORIES.map((c) => effectiveLimit(history, c, month)).filter((b) => b !== null);
+      const history = readBudgets().map(toBudgetRecord);
+      return EXPENSE_CATEGORIES.map((c) => effectiveLimit(history, c, month))
+        .filter((r) => r !== null && !r.removed)
+        .map((r) => {
+          const { removed, ...budget } = /** @type {import('../logic/budget.js').BudgetRecord} */ (r);
+          return /** @type {Budget} */ (budget);
+        });
     },
 
     /**
@@ -294,10 +301,33 @@ export function createApi({ storage, loadSeed, today, nowIso, delayMs = 400, fai
       const existing = list.find((b) => b.category === cat && b.effective_from === month);
       /** @type {BudgetDTO} */
       const dto = existing
-        ? { ...existing, limit: toCents(limit), updated_at: now }
+        ? { ...existing, limit: toCents(limit), updated_at: now, deleted_at: null }
         : { category: cat, limit: toCents(limit), effective_from: month, created_at: now, updated_at: now };
       writeBudgets(existing ? list.map((b) => (b === existing ? dto : b)) : [...list, dto]);
       return toBudget(dto);
+    },
+
+    /**
+     * DELETE /budgets/{category}: quita el límite desde el mes en curso (HU-03, REQ-09).
+     * Eliminación lógica: los meses anteriores conservan su límite (R8).
+     * @param {ExpenseCategory} category
+     * @returns {Promise<void>}
+     */
+    async removeBudget(category) {
+      await wait();
+      maybeFail('guardar');
+      await ensureSeeded();
+      if (!EXPENSE_CATEGORIES.includes(category)) throw new ApiError('VALIDATION_ERROR', { category: 'Solo los gastos tienen presupuesto.' });
+      const month = currentMonth(today());
+      const list = readBudgets();
+      const current = effectiveLimit(list.map(toBudgetRecord), category, month);
+      if (!current || current.removed) throw new ApiError('NOT_FOUND', {}, 'Esa categoría no tiene límite este mes.');
+      const now = nowIso();
+      const cat = /** @type {import('../contracts/dto.js').ExpenseCategoryDTO} */ (category.toUpperCase());
+      const existing = list.find((b) => b.category === cat && b.effective_from === month);
+      writeBudgets(existing
+        ? list.map((b) => (b === existing ? { ...b, deleted_at: now, updated_at: now } : b))
+        : [...list, { category: cat, limit: toCents(current.limit), effective_from: month, created_at: now, updated_at: now, deleted_at: now }]);
     },
 
     /** Borra los datos guardados; el próximo pedido vuelve a sembrar la demo. */

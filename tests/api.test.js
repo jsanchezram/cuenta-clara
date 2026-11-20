@@ -186,3 +186,13 @@ test('REQ-09: quitar una categoría sin límite responde NOT_FOUND', async () =>
   const { api } = makeApi();
   await assert.rejects(api.removeBudget('housing'), { code: 'NOT_FOUND' });
 });
+
+test('shiftSeed también corre deleted_at de un límite quitado', () => {
+  const withRemoved = {
+    transactions: seed.transactions,
+    budgets: [{ category: 'FOOD', limit: 60000, effective_from: '2026-11', created_at: '2026-11-01T09:00:00-05:00', updated_at: '2026-11-01T09:00:00-05:00', deleted_at: '2026-11-02T09:00:00-05:00' }],
+  };
+  const shifted = shiftSeed(/** @type {any} */ (withRemoved), '2026-12-05');
+  assert.equal(shifted.budgets[0].effective_from, '2026-12');
+  assert.equal(shifted.budgets[0].deleted_at, '2026-12-02T09:00:00-05:00');
+});

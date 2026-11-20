@@ -1,4 +1,4 @@
-| [x] 4 pruebas nuevas en rojo (falta removeBudget) || [x] 89/89 en verde || [x] 4 pruebas nuevas en rojo (faltan sortByUrgency y budgetSummary) || [x] 85/85 en verde || [x] 2 pruebas nuevas en rojo (falta toBudgetRecord) |# Tareas · HU-03 Presupuesto por categoría
+| [x] 94/94 en verde (incluye prueba de shiftSeed con deleted_at) || [x] 4 pruebas nuevas en rojo (falta removeBudget) || [x] 89/89 en verde || [x] 4 pruebas nuevas en rojo (faltan sortByUrgency y budgetSummary) || [x] 85/85 en verde || [x] 2 pruebas nuevas en rojo (falta toBudgetRecord) |# Tareas · HU-03 Presupuesto por categoría
 
 > AI-First · Paso B3. Las tareas van en orden y cada una toca **un archivo como máximo** (salvo T1, que es documental).
 > Al terminar cada tarea se ejecuta su verificación y se marca la casilla con el resultado.
