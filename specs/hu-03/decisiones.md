@@ -8,3 +8,4 @@ Aquí se registra cada decisión que Claude tomó **sin preguntar** mientras eje
 | 2 | T7 | Se agregó una prueba de `shiftSeed` con `deleted_at` que no estaba listada en T6. | Lo pedía la tabla de riesgos del plan ("se cubre con una prueba"). |
 | 3 | T10 | Tras guardar o quitar, el store vuelve a pedir presupuestos y gastos del mes sin pasar por `loading`. | Evita que la pantalla parpadee con el skeleton y perder el foco; el orden por urgencia se recalcula con datos reales. |
 | 4 | T10 | Cancelar la edición deja `focusTarget` en la categoría para devolver el foco a "Editar límite". | REQ-05 pide que el foco vuelva al botón que abrió la edición. |
+| 5 | T11 | La ruta raíz del script se calcula con `fileURLToPath`. | La carpeta del proyecto tiene espacios ("AI Frontend Engineering") y `URL.pathname` los deja como `%20`. Fue el primer fallo de la verificación de T11. |

@@ -2,8 +2,9 @@
 // Revisa que los archivos tengan lo pedido. No ejecuta la app: eso lo hacen node --test y la prueba manual.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
+const root = fileURLToPath(new URL('..', import.meta.url));
 const read = (p) => (existsSync(join(root, p)) ? readFileSync(join(root, p), 'utf8') : '');
 const HEX = /#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?![0-9a-zA-Z_-])/;
 
