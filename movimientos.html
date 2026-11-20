@@ -50,10 +50,7 @@
     </div>
 
     <!-- [HU01-6] Navegación de mes (solo en la vista de mes) -->
-    <nav class="month-nav" id="month-nav" aria-label="Cambiar de mes">
-      <a class="month-nav__link" id="prev-month" href="#">← Mes anterior</a>
-      <a class="month-nav__link" id="next-month" href="#">Mes siguiente →</a>
-    </nav>
+    <nav class="month-nav" id="month-nav" aria-label="Cambiar de mes"></nav>
 
     <!-- [HU01-3] Filtro por categoría -->
     <div class="chip-group" id="category-chips" role="group" aria-label="Filtrar por categoría"></div>
@@ -68,7 +65,7 @@
     <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
 
     <section class="stack stack--sm" aria-labelledby="list-title">
-      <h2 class="card__title" id="list-title">Movimientos</h2>
+      <h2 class="card__title" id="list-title" tabindex="-1">Movimientos</h2>
       <!-- [HU01-7..9] Lista y estados de carga, vacío y error -->
       <div id="list-region" aria-busy="true"></div>
     </section>

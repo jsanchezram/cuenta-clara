@@ -514,7 +514,8 @@ textarea.field__control {
   text-decoration: underline;
 }
 
-.month-nav__link[aria-disabled="true"] {
+.month-nav__link[aria-disabled="true"],
+.month-nav__link--disabled {
   color: var(--color-text-muted);
   font-weight: var(--font-weight-regular);
   pointer-events: none;

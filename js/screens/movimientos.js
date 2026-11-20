@@ -98,27 +98,34 @@ export function mountTransactions() {
     nav.hidden = period.kind !== 'month';
     if (period.kind === 'month') {
       const month = period.from.slice(0, 7);
-      const prev = /** @type {HTMLAnchorElement} */ ($('prev-month'));
-      const next = /** @type {HTMLAnchorElement} */ ($('next-month'));
-      prev.href = routes.transactionsHash(monthPeriod(shiftMonth(month, -1)), category);
-      if (month >= currentMonth(today)) {
-        next.removeAttribute('href');
-        next.setAttribute('aria-disabled', 'true');
-        next.innerHTML = 'Mes siguiente →<span class="visually-hidden"> (no hay meses futuros)</span>';
-      } else {
-        next.href = routes.transactionsHash(monthPeriod(shiftMonth(month, 1)), category);
-        next.removeAttribute('aria-disabled');
-        next.textContent = 'Mes siguiente →';
-      }
+      const prevHref = routes.transactionsHash(monthPeriod(shiftMonth(month, -1)), category);
+      // En el mes en curso, "Mes siguiente" es texto (span), no un enlace deshabilitado
+      const next = month >= currentMonth(today)
+        ? '<span class="month-nav__link month-nav__link--disabled">Mes siguiente →<span class="visually-hidden"> (no hay meses futuros)</span></span>'
+        : `<a class="month-nav__link" href="${routes.transactionsHash(monthPeriod(shiftMonth(month, 1)), category)}">Mes siguiente →</a>`;
+      nav.innerHTML = `<a class="month-nav__link" href="${prevHref}">← Mes anterior</a>${next}`;
     }
 
-    // [HU01-3] chips de categoría con aria-pressed
-    const chips = $('category-chips');
+    // [HU01-3] los chips se crean una vez; aquí solo se actualiza aria-pressed para no perder el foco
+    $('category-chips').querySelectorAll('[data-category]').forEach((chip) => {
+      chip.setAttribute('aria-pressed', String((chip.getAttribute('data-category') || null) === category));
+    });
+  }
+
+  function buildChips() {
     /** @type {(Category | null)[]} */
     const options = [null, ...CATEGORIES];
-    chips.innerHTML = options
-      .map((c) => `<button class="chip" type="button" data-category="${c ?? ''}" aria-pressed="${c === category}">${esc(c ? CATEGORY_LABELS[c] : 'Todas')}</button>`)
+    $('category-chips').innerHTML = options
+      .map((c) => `<button class="chip" type="button" data-category="${c ?? ''}" aria-pressed="false">${esc(c ? CATEGORY_LABELS[c] : 'Todas')}</button>`)
       .join('');
+  }
+
+  /** Tras reemplazar la región de la lista, el foco vuelve a un lugar estable en vez de perderse. */
+  let focusAfterLoad = false;
+  function restoreFocus() {
+    if (!focusAfterLoad) return;
+    focusAfterLoad = false;
+    $('list-title').focus();
   }
 
   // ---------- Pintar datos (dependen del store) ----------
@@ -128,7 +135,8 @@ export function mountTransactions() {
     listRegion.setAttribute('aria-busy', String(state.status === 'loading'));
 
     if (state.status === 'loading' || state.status === 'idle') {
-      // [HU01-7] carga
+      // [HU01-7] carga; se vacía el anuncio para que el siguiente se lea aunque repita el texto
+      announcer.textContent = '';
       listRegion.innerHTML = `
         <span class="skeleton" aria-hidden="true"></span>
         <span class="skeleton" aria-hidden="true"></span>
@@ -146,6 +154,7 @@ export function mountTransactions() {
           <button class="btn btn--primary" type="button" data-action="retry">Reintentar</button>
         </div>`;
       paintTotals(null);
+      restoreFocus();
       return;
     }
 
@@ -166,6 +175,7 @@ export function mountTransactions() {
              <a class="btn btn--primary" href="${routes.register()}">Registrar un movimiento</a>
            </div>`;
       announcer.textContent = 'No hay movimientos para mostrar.';
+      restoreFocus();
       return;
     }
 
@@ -182,6 +192,7 @@ export function mountTransactions() {
     }
     listRegion.replaceChildren(ul);
     announcer.textContent = `${list.length} ${list.length === 1 ? 'movimiento' : 'movimientos'} en ${periodLabel(route.period).toLowerCase()}.`;
+    restoreFocus();
   }
 
   /** @param {{ type: 'expense' | 'income', amount: number }[] | null} list */
@@ -222,8 +233,9 @@ export function mountTransactions() {
 
   trigger.addEventListener('click', () => setPanel(panel.hidden));
 
-  panel.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
+  // Escape cierra el panel tanto con el foco dentro como en el botón que lo abre
+  /** @type {HTMLElement} */ (trigger.closest('.period-picker')).addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !panel.hidden) {
       setPanel(false);
       trigger.focus();
     }
@@ -267,12 +279,19 @@ export function mountTransactions() {
     const target = /** @type {HTMLElement} */ (e.target).closest('[data-action]');
     if (!target) return;
     const action = target.getAttribute('data-action');
-    if (action === 'retry') actions.retry();
-    if (action === 'all') go(route.period, null);
+    if (action === 'retry') {
+      focusAfterLoad = true; // el botón desaparece al recargar
+      actions.retry();
+    }
+    if (action === 'all') {
+      go(route.period, null);
+      /** @type {HTMLElement | null} */ ($('category-chips').querySelector('[data-category=""]'))?.focus();
+    }
   });
 
   // ---------- Arranque ----------
 
+  buildChips();
   actions.store.subscribe(paintData);
   window.addEventListener('hashchange', onRouteChange);
   paintData(actions.store.get());
