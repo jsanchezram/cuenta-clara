@@ -95,9 +95,12 @@ export function mountRegister() {
     for (const field of FIELD_ORDER) {
       const message = errors[field] ?? '';
       $(`${field}-error`).textContent = message;
-      const control = field === 'type' ? $('type-group') : $(field);
-      if (message) control.setAttribute('aria-invalid', 'true');
-      else control.removeAttribute('aria-invalid');
+      // En el grupo Tipo, aria-invalid va en cada radio (no aplica a un fieldset)
+      const controls = field === 'type' ? [...form.querySelectorAll('input[name="type"]')] : [$(field)];
+      for (const control of controls) {
+        if (message) control.setAttribute('aria-invalid', 'true');
+        else control.removeAttribute('aria-invalid');
+      }
     }
   }
 
@@ -112,8 +115,11 @@ export function mountRegister() {
   // ---------- Pintar desde el estado ----------
 
   let submitted = false;
+  /** Si el siguiente cambio de estado viene de una acción de la persona, el foco se mueve a un lugar estable. */
+  let moveFocus = false;
   /** @type {string | null} */
   let lastStatus = null;
+  const announcer = $('announcer');
 
   /** @param {Readonly<import('../state/transaction-form.js').FormState>} state */
   function paint(state) {
@@ -133,7 +139,7 @@ export function mountRegister() {
     } else if (state.status === 'notFound') {
       notice.removeAttribute('aria-busy');
       notice.innerHTML = `<div class="state">
-          <p class="state__title">No encontramos ese movimiento</p>
+          <p class="state__title" tabindex="-1">No encontramos ese movimiento</p>
           <p>Puede que se haya eliminado.</p>
           <div class="cluster"><a class="btn btn--primary" href="${routes.transactions(monthPeriod(currentMonth(today)))}">Ver movimientos</a>
           <a class="btn btn--secondary" href="${routes.register()}">Registrar uno nuevo</a></div>
@@ -143,24 +149,25 @@ export function mountRegister() {
       const t = state.original;
       notice.removeAttribute('aria-busy');
       notice.innerHTML = `<div class="state">
-          <p class="state__title">Este movimiento ya no se puede cambiar</p>
+          <p class="state__title" tabindex="-1">Este movimiento ya no se puede cambiar</p>
           <p>${t ? `${esc(t.description)} · ${esc(formatMoney(t.amount))}. ` : ''}Solo puedes editar o eliminar movimientos de este mes.</p>
           <a class="btn btn--primary" href="${routes.transactions(monthPeriod(currentMonth(today)))}">Ver movimientos</a>
         </div>`;
     } else if (state.status === 'loadError') {
       notice.removeAttribute('aria-busy');
       notice.innerHTML = `<div class="state">
-          <p class="alert alert--error" role="alert">No pudimos cargar el movimiento.</p>
+          <p class="alert alert--error state__title" role="alert" tabindex="-1">No pudimos cargar el movimiento.</p>
           <button class="btn btn--primary" type="button" data-action="retry-load">Reintentar</button>
         </div>`;
     } else if (state.status === 'saved' && state.saved) {
       // [HU02-4] confirmación y opciones para seguir
       const s = state.saved;
       notice.removeAttribute('aria-busy');
-      notice.innerHTML = `<div class="alert alert--success stack stack--sm" role="status">
-          <p><strong>${s.type === 'income' ? 'Ingreso' : 'Gasto'} registrado:</strong> ${esc(formatMoney(s.amount))} en ${esc(CATEGORY_LABELS[s.category])}</p>
+      const text = `${s.type === 'income' ? 'Ingreso' : 'Gasto'} registrado: ${formatMoney(s.amount)} en ${CATEGORY_LABELS[s.category]}`;
+      notice.innerHTML = `<div class="alert alert--success stack stack--sm">
+          <p id="saved-message">${esc(text)}</p>
           <div class="cluster">
-            <button class="btn btn--primary" type="button" data-action="another">Registrar otro</button>
+            <button class="btn btn--primary" type="button" data-action="another" aria-describedby="saved-message">Registrar otro</button>
             <a class="btn btn--secondary" href="${routes.transactions(monthPeriod(currentMonth(today)))}">Ver movimientos</a>
           </div>
         </div>`;
@@ -169,17 +176,30 @@ export function mountRegister() {
       if (lastStatus !== 'saving') notice.innerHTML = '';
     }
 
-    // Botón Guardar
+    // Botón Guardar: aria-disabled (no disabled) para que el foco no se pierda y se lea "Guardando…"
     const saving = state.status === 'saving';
-    saveButton.disabled = saving || state.status === 'saved';
+    saveButton.setAttribute('aria-disabled', String(saving || state.status === 'saved'));
     saveButton.setAttribute('aria-busy', String(saving));
     saveButton.textContent = saving ? 'Guardando…' : 'Guardar';
+    if (saving && lastStatus !== 'saving') announcer.textContent = 'Guardando…';
+    if (state.status === 'saved' && lastStatus !== 'saved' && state.saved) {
+      announcer.textContent = /** @type {HTMLElement} */ (notice.querySelector('#saved-message')).textContent ?? '';
+    }
 
-    deleteButton.disabled = state.status === 'deleting';
+    deleteButton.setAttribute('aria-disabled', String(state.status === 'deleting'));
     /** @type {HTMLButtonElement} */ ($('confirm-yes')).textContent = state.status === 'deleting' ? 'Eliminando…' : 'Sí, eliminar';
 
     $('form-failure').textContent = state.failure ?? '';
     paintErrors(state.errors);
+    // Tras Reintentar, guardar o eliminar: si el formulario desaparece, el foco va al mensaje; si vuelve, al título
+    if (moveFocus && !['loading', 'saving', 'deleting'].includes(state.status)) {
+      moveFocus = false;
+      if (['notFound', 'locked', 'loadError'].includes(state.status)) {
+        /** @type {HTMLElement | null} */ (notice.querySelector('.state__title'))?.focus();
+      } else if (state.status === 'ready' && !submitted) {
+        $('page-title').focus();
+      }
+    }
     if (submitted && state.status === 'ready') {
       if (Object.keys(state.errors).length) focusFirstError(state.errors);
       else if (state.failure) saveButton.focus();
@@ -214,8 +234,9 @@ export function mountRegister() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    if (actions.store.get().status === 'saving') return;
+    if (['saving', 'saved'].includes(actions.store.get().status)) return; // aria-disabled no bloquea el envío por sí solo
     submitted = true;
+    moveFocus = true;
     actions.save(readForm());
   });
 
@@ -226,7 +247,10 @@ export function mountRegister() {
       actions.startAnother();
       amount.focus();
     }
-    if (target.getAttribute('data-action') === 'retry-load') actions.init(id);
+    if (target.getAttribute('data-action') === 'retry-load') {
+      moveFocus = true;
+      actions.init(id);
+    }
   });
 
   // [HU02-7] confirmación en la página, con gestión de foco
@@ -249,7 +273,11 @@ export function mountRegister() {
   confirmBox.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') setConfirm(false);
   });
-  $('confirm-yes').addEventListener('click', () => actions.remove());
+  $('confirm-yes').addEventListener('click', () => {
+    if (actions.store.get().status === 'deleting') return;
+    moveFocus = true;
+    actions.remove();
+  });
 
   // ---------- Arranque ----------
 

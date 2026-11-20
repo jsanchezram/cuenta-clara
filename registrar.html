@@ -13,10 +13,13 @@
 
   <header class="container page-header">
     <p class="page-header__eyebrow" id="eyebrow">Nuevo movimiento</p>
-    <h1 class="page-header__title" id="page-title">Registrar</h1>
+    <h1 class="page-header__title" id="page-title" tabindex="-1">Registrar</h1>
   </header>
 
   <main id="contenido" class="container stack">
+    <!-- Anuncios para lector de pantalla (región viva fija desde la carga) -->
+    <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
+
     <!-- Mensajes de la página: carga, no encontrado, mes cerrado, éxito -->
     <div id="notice" class="stack"></div>
 
@@ -39,12 +42,12 @@
       <p class="alert alert--error" id="form-failure" role="alert"></p>
 
       <!-- [HU02-1] Tipo con controles nativos -->
-      <fieldset class="fieldset" id="type-group" aria-describedby="type-error">
+      <fieldset class="fieldset" id="type-group">
         <legend class="fieldset__legend">Tipo de movimiento</legend>
         <div class="segmented">
-          <input class="segmented__input" type="radio" name="type" id="type-expense" value="expense" checked>
+          <input class="segmented__input" type="radio" name="type" id="type-expense" value="expense" checked aria-describedby="type-error">
           <label class="segmented__label" for="type-expense">Gasto</label>
-          <input class="segmented__input" type="radio" name="type" id="type-income" value="income">
+          <input class="segmented__input" type="radio" name="type" id="type-income" value="income" aria-describedby="type-error">
           <label class="segmented__label" for="type-income">Ingreso</label>
         </div>
         <p class="field__error" id="type-error"></p>
@@ -79,7 +82,7 @@
         <label class="field__label" for="description">Descripción</label>
         <textarea class="field__control" id="description" name="description" maxlength="60" rows="2"
                   enterkeyhint="done" placeholder="¿En qué fue?" aria-describedby="description-counter description-error"></textarea>
-        <p class="field__counter" id="description-counter" aria-live="polite">0/60</p>
+        <p class="field__counter" id="description-counter">0/60</p>
         <p class="field__error" id="description-error"></p>
       </div>
 
