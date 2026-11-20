@@ -2,7 +2,7 @@
 
 Herramienta: Figma Make. Baja fidelidad, en grises, con marco de 360 px.
 
-Exportados:
+Exportados desde la versión publicada, con Chrome DevTools a 360 × 800 ("Capturar captura de pantalla"; 450 px reales por el escalado de 125 %):
 - `01-movimientos.png` (HU-01)
 - `02-registrar.png` (HU-02)
 - `03-presupuesto.png` (HU-03)
@@ -50,7 +50,7 @@ I-2 a I-6 se enviaron juntas en un solo prompt para ahorrar créditos. Figma Mak
 | Registrar | Fecha 18/11/2025 (año equivocado) | H2 | ✏️ Corregir | Quedó en 18/11/2026 |
 | Movimientos | Sin estados de carga, vacío ni error | H1 | ✏️ Corregir | I-3 |
 | Movimientos | "Mes siguiente →" activo en el mes en curso | HU01-6 | ✏️ Corregir | I-4 |
-| Movimientos | "S/ 1,800.00" con coma frente a "S/ 3 200.00" con espacio | H4 · CC-6 | ✏️ Corregir | Point and edit (verificar) |
+| Movimientos | "S/ 1,800.00" con coma frente a "S/ 3 200.00" con espacio | H4 · CC-6 | ✏️ Corregir | Quedó con coma en el wireframe. En el código, el formato lo define `js/utils/money.js` (CC-6). |
 | Presupuesto | Ocio (130 %) y Transporte (100 %) con la misma barra | R5 · WCAG 1.4.1 | ✏️ Corregir | I-5 |
 | Todas | Selección marcada solo con fondo gris | WCAG 1.4.1 | ✏️ Corregir | I-6 |
 | Movimientos | 4 botones de atajo que ocupan media pantalla | H8 · Hick | ✏️ Corregir | I-7: un solo desplegable |
