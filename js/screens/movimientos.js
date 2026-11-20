@@ -289,6 +289,15 @@ export function mountTransactions() {
     }
   });
 
+  // ---------- Aviso al volver de registrar.html (?aviso=actualizado|eliminado) ----------
+
+  const NOTICES = /** @type {Record<string, string>} */ ({ actualizado: 'Movimiento actualizado.', eliminado: 'Movimiento eliminado.' });
+  const flash = NOTICES[new URLSearchParams(location.search).get('aviso') ?? ''];
+  if (flash) {
+    $('flash').innerHTML = `<p class="alert alert--success" role="status">${esc(flash)}</p>`;
+    history.replaceState(null, '', location.pathname + location.hash); // el aviso no se repite al recargar
+  }
+
   // ---------- Arranque ----------
 
   buildChips();
