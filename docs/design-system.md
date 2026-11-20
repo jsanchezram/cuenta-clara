@@ -53,7 +53,7 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 
 | Paso | Lo que hace | Pantalla y zona | Componentes | Estados |
 |---|---|---|---|---|
-| 1 | Abre Movimientos | Barra fija y resumen destacado | `.period-trigger`, `.hero-summary` | Cargando, error |
+| 1 | Abre Movimientos | Controles fijos (celular) o panel fijo (laptop) y resumen destacado | `.period-trigger`, `.hero-summary` | Cargando, error |
 | 2 | Cambia el período | Hoja / diálogo | `.option` (atajos), `<cc-calendario-rango>` | Atajo activo relleno en azul, rango marcado |
 | 3 | Filtra por categoría | Chips | `.chip[aria-pressed]` | Vacío por filtro |
 | 4 | Revisa la lista | Columna derecha | `<cc-movimiento>`, `.list-more` | 8 por tanda, "Cargar más" |
@@ -63,9 +63,10 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 
 - Primitivas: `.container` (contenido a 40rem en el celular y 72rem en laptop, siempre con margen lateral), `.stack` (vertical; `--compact` 12 px, `--sm` 8 px) y `.cluster` (fila que se envuelve).
 - **Un solo breakpoint:** `@media (min-width: 48rem)`. Se diseña mobile-first desde 360 px. `.card-grid` usa una cuadrícula intrínseca (`auto-fill`) que no necesita breakpoints extra.
-- Esqueleto de cada página: `<header class="brand-bar">` (hijo directo de `<body>`) y, dentro de `<main>`, `.page-header` (fecha de hoy y título centrado), `.sticky-bar` (controles de la vista) y `.page-body` (contenido).
+- Esqueleto de cada página: `<header class="brand-bar">` (hijo directo de `<body>`) y, dentro de `<main>`, `.page-header` (fecha de hoy y título) y `.page-body` (contenido). En Movimientos y Presupuesto, `.page-body.layout` empieza con `.layout__panel`, que guarda los controles de la vista (`.sticky-bar`) y el resumen destacado.
 - Al hacer scroll, la barra de marca y `.sticky-bar` quedan fijas: el título pasa en pequeño a la barra y los controles ganan una sombra suave. En pantallas bajas (`max-height: 30rem`: zoom alto o celular horizontal) dejan de ser fijas para no tapar el contenido (WCAG 1.4.10).
-- En el celular, el menú va abajo y "Guardar" va al final del formulario. En laptop, el menú sube a la barra de marca. Movimientos usa `.layout` en 2 columnas y Registrar usa `.container--narrow`.
+- En el celular, el menú va abajo, el título va centrado y "Guardar" va al final del formulario. `.layout__panel` no genera caja (`display: contents`): los controles quedan fijos arriba y el resumen va en el flujo.
+- En laptop, el menú sube a la barra de marca y el título se alinea a la izquierda. Movimientos y Presupuesto usan un **panel fijo a la izquierda** (`.layout__panel` con `position: sticky`: período y chips, o el mes, más el resumen) y el contenido a la derecha, que es lo único que se desplaza. Registrar usa `.container--narrow`, con el título centrado (`.page-header--center`) y el formulario en una tarjeta (`.form-card`).
 - Las hojas (`.sheet`) son diálogos modales: en el celular se abren desde abajo, sobre la pantalla, y en laptop se ven como un diálogo centrado.
 
 ## 4. Componentes
@@ -85,6 +86,7 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 | `.list`, `.list-row`, `.list-more` | Fila compacta (`<cc-movimiento>`) y "Cargar más" de a 8 |
 | `.cat-icon` | Ícono de categoría: azul de marca sobre un círculo azul claro |
 | `.budget-list`, `.budget-row`, `.budget-bar`, `.budget-status` | Una tarjeta por categoría con la fila compacta (como la de un movimiento), la barra sólida y el estado en texto con un puntito |
+| `.layout`, `.layout__panel`, `.form-card` | Laptop: panel fijo a la izquierda con los controles y el resumen, y el contenido a la derecha. El formulario de Registrar va en una tarjeta |
 | `.form-actions`, `.sheet__footer` | Fila de acciones con botones de igual ancho: uno solo va a todo el ancho; dos, mitad y mitad (Eliminar · Guardar, Sí, eliminar · Cancelar, Cancelar · Aplicar) |
 | `.alert` (`--success`, `--error`), `.state`, `.skeleton`, `.confirm` | Mensajes, vacío o error, carga y confirmación de eliminar en la página |
 | `.brand-bar`, `.brand`, `.bottom-nav`, `.page-header` (`__eyebrow` con la fecha, `__title`, `__accent`), `.sticky-bar`, `.page-body`, `.notice-slot`, `main[data-pending]`, `.skip-link`, `.visually-hidden` | Estructura y accesibilidad. `.notice-slot` vacío no ocupa lugar; `data-pending` oculta la vista hasta que la pantalla pinta su estado real |
