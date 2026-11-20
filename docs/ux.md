@@ -10,7 +10,7 @@ Las 3 heurísticas o leyes que guían el diseño, la pantalla donde se ven y có
 
 **Aplicación:**
 - "Guardar" es la única acción primaria. Va al final del formulario, a todo el ancho y mide 48 px de alto (`--button-height`): al terminar de llenar, cae en la mitad inferior, en la zona del pulgar. *(Antes iba fija sobre el menú; la persona prefirió que sea parte de la vista: bitácora #37.)*
-- "Eliminar" (destructiva) va lejos de Guardar, como botón secundario arriba del formulario, y además pide confirmación en la página.
+- "Eliminar" (destructiva) solo aparece al editar. Va junto a Guardar, mitad y mitad: con contorno rojo frente al relleno azul de Guardar, y Guardar a la derecha, más cerca del pulgar. Pide confirmación en la página, así que un toque por error no borra nada. *(Antes iba arriba del formulario; la persona prefirió las dos acciones juntas al final: bitácora #45.)*
 - Los objetivos táctiles miden 44 px o más (WCAG 2.5.8 pide 24 px como mínimo).
 - El tipo Gasto/Ingreso se elige con dos controles grandes, uno al lado del otro.
 
