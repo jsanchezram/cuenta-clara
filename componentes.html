@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Vitrina del design system de CuentaClara: cada componente en cada estado.">
+  <title>Vitrina de componentes · CuentaClara</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <style>
+    .showcase-section {
+      padding-block: var(--space-6);
+      border-bottom: var(--border-width-1) solid var(--color-divider);
+    }
+    .showcase-section > h2 {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-4);
+    }
+    .showcase-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="container page-header">
+    <p class="page-header__eyebrow">Design system</p>
+    <h1 class="page-header__title">Vitrina de componentes</h1>
+    <p class="page-header__lead">Cada componente de CuentaClara en cada estado. Los colores salen solo de <code>styles/tokens.css</code>.</p>
+    <div class="cluster" style="margin-top: var(--space-4)">
+      <button class="btn btn--secondary" type="button" id="tema" aria-pressed="false">Tema oscuro</button>
+    </div>
+  </header>
+
+  <main id="contenido" class="container">
+
+    <!-- ===== Componentes de negocio en vivo ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-negocio">
+      <h2 id="t-negocio">Componentes de negocio (en vivo)</h2>
+      <p class="showcase-label">&lt;cc-movimiento&gt;: gasto e ingreso editables y un movimiento de un mes anterior</p>
+      <ul class="list" id="demo-movimientos"></ul>
+      <p class="showcase-label">&lt;cc-barra-presupuesto&gt;: los 4 estados de R5 y sin límite</p>
+      <div class="stack" id="demo-presupuesto"></div>
+      <p class="showcase-label">Eventos emitidos</p>
+      <ol class="field__hint" id="demo-eventos" role="log" aria-live="polite"><li>Activa "Editar" o "Editar límite" para ver el evento.</li></ol>
+    </section>
+
+    <!-- ===== Presupuesto: los 4 estados de R5 + sin límite (HTML estático) ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-presupuesto">
+      <h2 id="t-presupuesto">Presupuesto · estados (R5)</h2>
+
+      <article class="card" aria-labelledby="b-servicios">
+        <div class="card__header">
+          <h3 class="card__title" id="b-servicios">Servicios</h3>
+          <button class="btn btn--link" type="button">Editar límite<span class="visually-hidden"> de Servicios</span></button>
+        </div>
+        <dl class="budget-figures">
+          <div><dt class="budget-figures__label">Usado</dt><dd class="budget-figures__value">S/ 120.00</dd></div>
+          <div><dt class="budget-figures__label">Límite</dt><dd class="budget-figures__value">S/ 300.00</dd></div>
+          <div><dt class="budget-figures__label">Restante</dt><dd class="budget-figures__value">S/ 180.00</dd></div>
+        </dl>
+        <div class="budget-bar" role="progressbar" aria-label="Uso del presupuesto de Servicios" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" aria-valuetext="40 % usado. Te quedan S/ 180.00">
+          <span class="budget-bar__fill" style="--budget-value: 40%"></span>
+        </div>
+        <div class="budget-meta">
+          <p class="budget-status"><span class="budget-status__icon" aria-hidden="true">✓</span>Te quedan S/ 180.00</p>
+          <p class="budget-meta__percent">40 % usado</p>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="b-comida">
+        <div class="card__header">
+          <h3 class="card__title" id="b-comida">Comida</h3>
+          <button class="btn btn--link" type="button">Editar límite<span class="visually-hidden"> de Comida</span></button>
+        </div>
+        <dl class="budget-figures">
+          <div><dt class="budget-figures__label">Usado</dt><dd class="budget-figures__value">S/ 510.00</dd></div>
+          <div><dt class="budget-figures__label">Límite</dt><dd class="budget-figures__value">S/ 600.00</dd></div>
+          <div><dt class="budget-figures__label">Restante</dt><dd class="budget-figures__value">S/ 90.00</dd></div>
+        </dl>
+        <div class="budget-bar budget-bar--near" role="progressbar" aria-label="Uso del presupuesto de Comida" aria-valuemin="0" aria-valuemax="100" aria-valuenow="85" aria-valuetext="85 % usado. Cerca del límite">
+          <span class="budget-bar__fill" style="--budget-value: 85%"></span>
+        </div>
+        <div class="budget-meta">
+          <p class="budget-status budget-status--near"><span class="budget-status__icon" aria-hidden="true">⚠</span>Cerca del límite</p>
+          <p class="budget-meta__percent">85 % usado</p>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="b-transporte">
+        <div class="card__header">
+          <h3 class="card__title" id="b-transporte">Transporte</h3>
+          <button class="btn btn--link" type="button">Editar límite<span class="visually-hidden"> de Transporte</span></button>
+        </div>
+        <dl class="budget-figures">
+          <div><dt class="budget-figures__label">Usado</dt><dd class="budget-figures__value">S/ 200.00</dd></div>
+          <div><dt class="budget-figures__label">Límite</dt><dd class="budget-figures__value">S/ 200.00</dd></div>
+          <div><dt class="budget-figures__label">Restante</dt><dd class="budget-figures__value">S/ 0.00</dd></div>
+        </dl>
+        <div class="budget-bar budget-bar--reached" role="progressbar" aria-label="Uso del presupuesto de Transporte" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100 % usado. Alcanzaste tu límite">
+          <span class="budget-bar__fill" style="--budget-value: 100%"></span>
+        </div>
+        <div class="budget-meta">
+          <p class="budget-status budget-status--reached"><span class="budget-status__icon" aria-hidden="true">●</span>Alcanzaste tu límite</p>
+          <p class="budget-meta__percent">100 % usado</p>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="b-ocio">
+        <div class="card__header">
+          <h3 class="card__title" id="b-ocio">Ocio</h3>
+          <button class="btn btn--link" type="button">Editar límite<span class="visually-hidden"> de Ocio</span></button>
+        </div>
+        <dl class="budget-figures">
+          <div><dt class="budget-figures__label">Usado</dt><dd class="budget-figures__value">S/ 195.00</dd></div>
+          <div><dt class="budget-figures__label">Límite</dt><dd class="budget-figures__value">S/ 150.00</dd></div>
+          <div><dt class="budget-figures__label">Excedido</dt><dd class="budget-figures__value">S/ 45.00</dd></div>
+        </dl>
+        <div class="budget-bar budget-bar--exceeded" role="progressbar" aria-label="Uso del presupuesto de Ocio" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-valuetext="130 % usado. Te pasaste por S/ 45.00">
+          <span class="budget-bar__fill" style="--budget-value: 130%"></span>
+        </div>
+        <div class="budget-meta">
+          <p class="budget-status budget-status--exceeded"><span class="budget-status__icon" aria-hidden="true">✕</span>Te pasaste por S/ 45.00</p>
+          <p class="budget-meta__percent">130 % usado</p>
+        </div>
+      </article>
+
+      <article class="card" aria-labelledby="b-vivienda">
+        <div class="card__header">
+          <h3 class="card__title" id="b-vivienda">Vivienda</h3>
+          <button class="btn btn--link" type="button">Definir límite<span class="visually-hidden"> de Vivienda</span></button>
+        </div>
+        <p class="budget-status budget-status--none"><span class="budget-status__icon" aria-hidden="true">○</span>Sin límite definido</p>
+        <p class="field__hint">Usado este mes: S/ 1 200.00</p>
+      </article>
+    </section>
+
+    <!-- ===== Botones ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-botones">
+      <h2 id="t-botones">Botones</h2>
+      <p class="showcase-label">Variantes</p>
+      <div class="cluster">
+        <button class="btn btn--primary" type="button">Guardar</button>
+        <button class="btn btn--secondary" type="button">Cancelar</button>
+        <button class="btn btn--danger" type="button">Eliminar</button>
+        <button class="btn btn--link" type="button">Editar</button>
+      </div>
+      <p class="showcase-label">Estados: deshabilitado y guardando</p>
+      <div class="cluster">
+        <button class="btn btn--primary" type="button" disabled>Guardar</button>
+        <button class="btn btn--primary" type="button" disabled aria-busy="true">Guardando…</button>
+      </div>
+      <p class="showcase-label">Bloque (acción primaria en la zona del pulgar)</p>
+      <button class="btn btn--primary btn--block" type="button">Guardar</button>
+    </section>
+
+    <!-- ===== Campos ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-campos">
+      <h2 id="t-campos">Campos de formulario</h2>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset__legend">Tipo de movimiento</legend>
+        <div class="segmented">
+          <input class="segmented__input" type="radio" name="v-tipo" id="v-gasto" value="expense" checked>
+          <label class="segmented__label" for="v-gasto">Gasto</label>
+          <input class="segmented__input" type="radio" name="v-tipo" id="v-ingreso" value="income">
+          <label class="segmented__label" for="v-ingreso">Ingreso</label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label class="field__label" for="v-monto">Monto</label>
+        <div class="field__money">
+          <span class="field__prefix" aria-hidden="true">S/</span>
+          <input class="field__control" id="v-monto" type="text" inputmode="decimal" enterkeyhint="next" aria-describedby="v-monto-hint" value="25.50">
+        </div>
+        <p class="field__hint" id="v-monto-hint">Hasta S/ 10 000, con 2 decimales como máximo.</p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="v-monto-error">Monto (con error)</label>
+        <div class="field__money">
+          <span class="field__prefix" aria-hidden="true">S/</span>
+          <input class="field__control" id="v-monto-error" type="text" inputmode="decimal" aria-invalid="true" aria-describedby="v-monto-error-msg" value="12.345">
+        </div>
+        <p class="field__error" id="v-monto-error-msg">Usa como máximo 2 decimales.</p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="v-fecha">Fecha</label>
+        <input class="field__control" id="v-fecha" type="date" value="2026-11-20" min="2026-09-21" max="2026-11-20">
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="v-categoria">Categoría</label>
+        <select class="field__control" id="v-categoria">
+          <option value="">Selecciona una categoría</option>
+          <option value="food">Comida</option>
+          <option value="transport">Transporte</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="v-descripcion">Descripción</label>
+        <textarea class="field__control" id="v-descripcion" maxlength="60" aria-describedby="v-descripcion-contador">Almuerzo menú</textarea>
+        <p class="field__counter" id="v-descripcion-contador">13/60</p>
+      </div>
+    </section>
+
+    <!-- ===== Filtros y período ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-filtros">
+      <h2 id="t-filtros">Filtros, período y navegación de mes</h2>
+
+      <div class="period-picker">
+        <button class="period-picker__trigger" type="button" aria-expanded="true" aria-controls="v-periodo-panel">
+          <span><span class="period-picker__caption">Período</span><span class="period-picker__value">Este mes</span></span>
+        </button>
+        <div class="period-picker__panel stack" id="v-periodo-panel">
+          <p class="showcase-label">Selecciona un atajo</p>
+          <div class="period-picker__shortcuts" role="group" aria-label="Atajos de período">
+            <button class="chip" type="button" aria-pressed="false">Hoy</button>
+            <button class="chip" type="button" aria-pressed="false">Esta semana</button>
+            <button class="chip" type="button" aria-pressed="true">Este mes</button>
+          </div>
+          <p class="showcase-label">O elige un rango de fechas</p>
+          <div class="period-picker__range">
+            <div class="field">
+              <label class="field__label" for="v-desde">Desde</label>
+              <input class="field__control" id="v-desde" type="date" value="2026-11-01">
+            </div>
+            <div class="field">
+              <label class="field__label" for="v-hasta">Hasta</label>
+              <input class="field__control" id="v-hasta" type="date" value="2026-11-20">
+            </div>
+          </div>
+          <button class="btn btn--primary btn--block" type="button">Aplicar rango</button>
+        </div>
+      </div>
+
+      <nav class="month-nav" aria-label="Cambiar de mes">
+        <a class="month-nav__link" href="#t-filtros">← Mes anterior</a>
+        <a class="month-nav__link" aria-disabled="true">Mes siguiente →<span class="visually-hidden"> (no hay meses futuros)</span></a>
+      </nav>
+
+      <div class="chip-group" role="group" aria-label="Filtrar por categoría">
+        <button class="chip" type="button" aria-pressed="true">Todas</button>
+        <button class="chip" type="button" aria-pressed="false">Comida</button>
+        <button class="chip" type="button" aria-pressed="false">Transporte</button>
+        <button class="chip" type="button" aria-pressed="false">Vivienda</button>
+        <button class="chip" type="button" aria-pressed="false">Servicios</button>
+        <button class="chip" type="button" aria-pressed="false">Ocio</button>
+      </div>
+    </section>
+
+    <!-- ===== Resumen y lista ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-lista">
+      <h2 id="t-lista">Resumen y lista de movimientos</h2>
+
+      <dl class="summary">
+        <div class="summary__item"><dt class="summary__label">Gastos</dt><dd class="summary__value amount amount--expense">− S/ 837.50</dd></div>
+        <div class="summary__item"><dt class="summary__label">Ingresos</dt><dd class="summary__value amount amount--income">+ S/ 3 200.00</dd></div>
+        <div class="summary__item summary__item--total"><dt class="summary__label">Saldo</dt><dd class="summary__value">S/ 2 362.50</dd></div>
+      </dl>
+
+      <ul class="list">
+        <li class="list-row">
+          <div>
+            <p class="list-row__title">Almuerzo menú</p>
+            <p class="list-row__meta">Comida · 18 nov · Gasto</p>
+          </div>
+          <div class="list-row__aside">
+            <span class="amount amount--expense">− S/ 15.00</span>
+            <button class="btn btn--link" type="button">Editar<span class="visually-hidden"> Almuerzo menú</span></button>
+          </div>
+        </li>
+        <li class="list-row">
+          <div>
+            <p class="list-row__title">Pago proyecto logo</p>
+            <p class="list-row__meta">Trabajo · 15 nov · Ingreso</p>
+          </div>
+          <div class="list-row__aside">
+            <span class="amount amount--income">+ S/ 1 800.00</span>
+            <button class="btn btn--link" type="button">Editar<span class="visually-hidden"> Pago proyecto logo</span></button>
+          </div>
+        </li>
+        <li class="list-row">
+          <div>
+            <p class="list-row__title">Recibo de luz (mes anterior: no editable)</p>
+            <p class="list-row__meta">Servicios · 28 oct · Gasto</p>
+          </div>
+          <div class="list-row__aside">
+            <span class="amount amount--expense">− S/ 96.40</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ===== Estados de vista ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-estados">
+      <h2 id="t-estados">Estados: carga, vacío, error y éxito</h2>
+
+      <p class="showcase-label">Cargando</p>
+      <div aria-busy="true">
+        <p class="visually-hidden">Cargando movimientos…</p>
+        <span class="skeleton" aria-hidden="true"></span>
+        <span class="skeleton" aria-hidden="true"></span>
+        <p aria-hidden="true">Cargando movimientos…</p>
+      </div>
+
+      <p class="showcase-label">Vacío</p>
+      <div class="state">
+        <p class="state__title">No hay movimientos en Ocio</p>
+        <p>Prueba con otra categoría o registra un gasto.</p>
+        <button class="btn btn--secondary" type="button">Ver todas las categorías</button>
+      </div>
+
+      <p class="showcase-label">Error</p>
+      <div class="state">
+        <p class="alert alert--error">No pudimos cargar tus movimientos.</p>
+        <button class="btn btn--primary" type="button">Reintentar</button>
+      </div>
+
+      <p class="showcase-label">Éxito (role="status")</p>
+      <div class="alert alert--success" role="status">Gasto registrado: S/ 15.00 en Comida</div>
+    </section>
+
+    <!-- ===== Confirmación en la página ===== -->
+    <section class="showcase-section stack" aria-labelledby="t-confirmar">
+      <h2 id="t-confirmar">Confirmación de eliminar</h2>
+      <div class="confirm stack" role="group" aria-labelledby="v-confirm-title">
+        <h3 class="confirm__title" id="v-confirm-title" tabindex="-1">¿Eliminar este movimiento?</h3>
+        <p>Almuerzo menú · S/ 15.00. Esta acción no se puede deshacer.</p>
+        <div class="cluster">
+          <button class="btn btn--danger-solid" type="button">Sí, eliminar</button>
+          <button class="btn btn--secondary" type="button">Cancelar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Principal">
+    <ul class="bottom-nav__list">
+      <li><a class="bottom-nav__link" href="movimientos.html"><span class="bottom-nav__icon" aria-hidden="true">≡</span>Movimientos</a></li>
+      <li><a class="bottom-nav__link" href="registrar.html"><span class="bottom-nav__icon" aria-hidden="true">＋</span>Registrar</a></li>
+      <li><a class="bottom-nav__link" href="presupuesto.html" aria-current="page"><span class="bottom-nav__icon" aria-hidden="true">◔</span>Presupuesto</a></li>
+    </ul>
+  </nav>
+
+  <script type="module" src="js/screens/componentes.js"></script>
+</body>
+</html>

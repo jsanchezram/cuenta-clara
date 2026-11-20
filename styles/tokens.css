@@ -1,0 +1,218 @@
+/* =====================================================================
+   CuentaClara · Design tokens
+   Único archivo con colores hex. Hay 3 capas y cada una usa solo la de abajo:
+     1 · PRIMITIVOS   valor crudo
+     2 · SEMÁNTICOS   intención; el tema oscuro redefine solo esta capa
+     3 · COMPONENTE   decisiones de un componente
+   Los componentes de components.css usan las capas 2 y 3, nunca la 1.
+   Contrastes (WCAG 2.2): texto ≥ 4.5:1 y bordes/barras ≥ 3:1, medidos contra
+   la superficie donde se usan.
+   ===================================================================== */
+
+/* ---------- 1 · PRIMITIVOS ---------- */
+:root {
+  /* Grises */
+  --gray-0: #ffffff;
+  --gray-50: #f7f7f5;
+  --gray-100: #e6e9ed;
+  --gray-200: #d9dde1;
+  --gray-400: #a7b0ba;
+  --gray-500: #7b8794;
+  --gray-600: #6b7785;
+  --gray-700: #52606d;
+  --gray-800: #2a313a;
+  --gray-900: #1f2933;
+  --gray-925: #1b2027;
+  --gray-950: #111418;
+
+  /* Verde: marca, acción e ingresos */
+  --green-50: #e7f5ee;
+  --green-300: #6fcf9f;
+  --green-700: #0f6b4f;
+  --green-800: #0a523c;
+  --green-950: #0b1f17;
+
+  /* Ámbar: cerca del límite */
+  --amber-50: #fff4e0;
+  --amber-300: #f5b754;
+  --amber-800: #8a4b00;
+  --amber-950: #3a2a10;
+
+  /* Naranja: límite alcanzado */
+  --orange-50: #fff0e6;
+  --orange-300: #fdae6b;
+  --orange-800: #9a3412;
+  --orange-950: #3b1d0f;
+
+  /* Rojo: error y límite excedido */
+  --red-50: #fdecea;
+  --red-300: #ff8a80;
+  --red-700: #b42318;
+  --red-950: #3d1512;
+
+  /* Azul: foco */
+  --blue-300: #93b4ff;
+  --blue-700: #1d4ed8;
+
+  /* Espacios: grilla de 8 pt con medio paso de 4 */
+  --space-1: 0.25rem;  /* 4 px */
+  --space-2: 0.5rem;   /* 8 px */
+  --space-3: 0.75rem;  /* 12 px */
+  --space-4: 1rem;     /* 16 px */
+  --space-6: 1.5rem;   /* 24 px */
+  --space-8: 2rem;     /* 32 px */
+  --space-12: 3rem;    /* 48 px */
+
+  /* Tipografía: escala 16 × 1.25 */
+  --font-family-base: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-body: 1.5;
+  --line-height-heading: 1.2;
+
+  /* Formas */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-pill: 999px;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --duration-fast: 150ms;
+}
+
+/* ---------- 2 · SEMÁNTICOS · tema claro ---------- */
+:root {
+  color-scheme: light;
+
+  --color-bg: var(--gray-50);
+  --color-surface: var(--gray-0);
+  --color-surface-muted: var(--gray-100);
+  --color-text: var(--gray-900);                    /* 14.8:1 sobre surface */
+  --color-text-muted: var(--gray-700);              /* 6.5:1 */
+  --color-border: var(--gray-600);                  /* 4.6:1 · bordes de controles */
+  --color-divider: var(--gray-200);                 /* decorativo */
+
+  --color-action-primary: var(--green-700);         /* 6.5:1 con on-action */
+  --color-action-primary-hover: var(--green-800);
+  --color-on-action: var(--gray-0);
+  --color-action-secondary-bg: var(--gray-0);
+  --color-action-secondary-hover: var(--gray-100);
+  --color-selected-bg: var(--green-50);
+  --color-selected-border: var(--green-700);
+  --color-focus-ring: var(--blue-700);              /* 6.3:1 sobre bg */
+
+  --color-income-text: var(--green-700);            /* 6.5:1 */
+  --color-expense-text: var(--gray-900);
+
+  --color-danger-text: var(--red-700);              /* 6.6:1 */
+  --color-danger-bg: var(--red-50);
+  --color-danger-border: var(--red-700);
+  --color-success-text: var(--green-700);
+  --color-success-bg: var(--green-50);
+  --color-success-border: var(--green-700);
+
+  /* Presupuesto: 4 estados (R5). El texto y el patrón distinguen; el color refuerza. */
+  --color-budget-track: var(--gray-100);
+  --color-budget-track-border: var(--gray-600);     /* 4.6:1: el contorno de la barra se ve */
+  --color-budget-normal-fill: var(--green-700);     /* 5.3:1 sobre track */
+  --color-budget-normal-text: var(--green-700);
+  --color-budget-near-fill: var(--amber-800);       /* 5.6:1 sobre track */
+  --color-budget-near-text: var(--amber-800);       /* 6.8:1 */
+  --color-budget-near-bg: var(--amber-50);
+  --color-budget-reached-fill: var(--orange-800);   /* 6.0:1 sobre track */
+  --color-budget-reached-text: var(--orange-800);   /* 7.3:1 */
+  --color-budget-reached-bg: var(--orange-50);
+  --color-budget-exceeded-fill: var(--red-700);     /* 5.4:1 sobre track */
+  --color-budget-exceeded-text: var(--red-700);     /* 6.6:1 */
+  --color-budget-exceeded-bg: var(--red-50);
+  --color-budget-pattern: var(--gray-0);            /* rayas sobre el relleno */
+
+  --color-skeleton: var(--gray-100);
+  --color-skeleton-shine: var(--gray-50);
+}
+
+/* ---------- 2 · SEMÁNTICOS · tema oscuro ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: var(--gray-950);
+  --color-surface: var(--gray-925);
+  --color-surface-muted: var(--gray-800);
+  --color-text: var(--gray-100);                    /* 13.4:1 sobre surface */
+  --color-text-muted: var(--gray-400);              /* 7.5:1 */
+  --color-border: var(--gray-500);                  /* 4.4:1 · bordes piden ≥ 3:1 */
+  --color-divider: var(--gray-800);
+
+  --color-action-primary: var(--green-300);         /* 9:1 con on-action */
+  --color-action-primary-hover: var(--green-50);
+  --color-on-action: var(--green-950);
+  --color-action-secondary-bg: var(--gray-925);
+  --color-action-secondary-hover: var(--gray-800);
+  --color-selected-bg: var(--green-950);
+  --color-selected-border: var(--green-300);
+  --color-focus-ring: var(--blue-300);              /* 9:1 */
+
+  --color-income-text: var(--green-300);            /* 8.7:1 */
+  --color-expense-text: var(--gray-100);
+
+  --color-danger-text: var(--red-300);              /* 7.2:1 */
+  --color-danger-bg: var(--red-950);
+  --color-danger-border: var(--red-300);
+  --color-success-text: var(--green-300);
+  --color-success-bg: var(--green-950);
+  --color-success-border: var(--green-300);
+
+  --color-budget-track: var(--gray-800);
+  --color-budget-track-border: var(--gray-500);     /* 4.4:1 */
+  --color-budget-normal-fill: var(--green-300);
+  --color-budget-normal-text: var(--green-300);
+  --color-budget-near-fill: var(--amber-300);
+  --color-budget-near-text: var(--amber-300);       /* 9.2:1 */
+  --color-budget-near-bg: var(--amber-950);
+  --color-budget-reached-fill: var(--orange-300);
+  --color-budget-reached-text: var(--orange-300);   /* 8.9:1 */
+  --color-budget-reached-bg: var(--orange-950);
+  --color-budget-exceeded-fill: var(--red-300);
+  --color-budget-exceeded-text: var(--red-300);     /* 7.2:1 */
+  --color-budget-exceeded-bg: var(--red-950);
+  --color-budget-pattern: var(--gray-950);
+
+  --color-skeleton: var(--gray-800);
+  --color-skeleton-shine: var(--gray-925);
+}
+
+/* ---------- 3 · COMPONENTE ---------- */
+:root {
+  --content-max-width: 40rem;
+
+  --control-height: 2.75rem;                        /* 44 px: objetivo táctil mínimo */
+  --button-height: 3rem;                            /* 48 px: acción primaria (Fitts) */
+  --button-radius: var(--radius-md);
+  --button-font-weight: var(--font-weight-semibold);
+
+  --field-border-width: var(--border-width-1);
+  --field-radius: var(--radius-sm);
+  --field-error-border-width: var(--border-width-2);
+
+  --chip-height: 2.75rem;
+  --chip-radius: var(--radius-pill);
+
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  --list-row-min-height: 4rem;
+  --bottom-nav-height: 4rem;
+
+  --budget-bar-height: 0.75rem;
+  --budget-bar-radius: var(--radius-pill);
+  --budget-marker-width: 3px;
+
+  --card-padding: var(--space-4);
+  --card-radius: var(--radius-md);
+}
