@@ -5,13 +5,13 @@
  * - monta los componentes en vivo con datos de ejemplo y registra los eventos que emiten;
  * - muestra todos los íconos.
  */
-import '../components/cc-movimiento.js';
-import '../components/cc-barra-presupuesto.js';
-import '../components/cc-calendario-rango.js';
+import '../components/business/cc-movimiento.js';
+import '../components/business/cc-barra-presupuesto.js';
+import '../components/ui/cc-calendario-rango.js';
 import { buildBudgetRows, sortByUrgency } from '../logic/budget.js';
-import { icon, ICON_NAMES } from '../components/icons.js';
+import { icon, ICON_NAMES } from '../components/ui/icons.js';
 import { esc } from '../utils/html.js';
-import { watchHeader } from '../components/sticky-header.js';
+import { watchHeader } from '../components/ui/sticky-header.js';
 
 watchHeader();
 
@@ -37,7 +37,7 @@ const transactions = [
 const list = document.getElementById('demo-movimientos');
 transactions.forEach((t, i) => {
   const li = document.createElement('li');
-  const el = /** @type {import('../components/cc-movimiento.js').CcMovimiento} */ (document.createElement('cc-movimiento'));
+  const el = /** @type {import('../components/business/cc-movimiento.js').CcMovimiento} */ (document.createElement('cc-movimiento'));
   li.append(el);
   list?.append(li);
   el.transaction = t;
@@ -62,14 +62,14 @@ const rows = sortByUrgency(buildBudgetRows(
 
 const budgets = document.getElementById('demo-presupuesto');
 for (const row of rows) {
-  const el = /** @type {import('../components/cc-barra-presupuesto.js').CcBarraPresupuesto} */ (document.createElement('cc-barra-presupuesto'));
+  const el = /** @type {import('../components/business/cc-barra-presupuesto.js').CcBarraPresupuesto} */ (document.createElement('cc-barra-presupuesto'));
   el.setAttribute('editable', '');
   el.setAttribute('heading-level', '3');
   budgets?.append(el);
   el.row = row;
 }
 
-const calendar = /** @type {import('../components/cc-calendario-rango.js').CcCalendarioRango | null} */ (document.getElementById('demo-calendario'));
+const calendar = /** @type {import('../components/ui/cc-calendario-rango.js').CcCalendarioRango | null} */ (document.getElementById('demo-calendario'));
 if (calendar) {
   calendar.today = '2026-11-20';
   calendar.value = { from: '2026-11-09', to: '2026-11-15' };

@@ -15,12 +15,12 @@ paths:
   - Se compara en céntimos (`toCents`).
   - Se muestra con `formatMoney` de `js/utils/money.js`.
 - `localStorage` solo en `js/api/`, con claves `cuentaclara.v1.*`.
-- Componentes (`js/components/`):
+- Componentes (`js/components/business/` y `js/components/ui/`):
   - Custom elements sin Shadow DOM y sin CSS propio.
   - No importan la API ni el store: reciben los datos por propiedad y avisan con `CustomEvent('cc-…', { bubbles: true })`.
 - Antes de `innerHTML`, escapa todo dato de personas con `esc()`.
 - Pruebas:
-  - Van en `tests/*.test.js` con `node:test` y `node:assert/strict`.
+  - Van en `tests/`, en la carpeta de su capa (igual que `js/`: `tests/logic/`, `tests/state/`…), con `node:test` y `node:assert/strict`.
   - Los nombres de las pruebas son frases en español.
   - No borres ni debilites una prueba para que pase.
   - Después de cada archivo, ejecuta `node --test`. Si falla 2 veces seguidas, detente.

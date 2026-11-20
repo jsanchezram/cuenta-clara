@@ -4,8 +4,8 @@
  * Es el único módulo que conoce ruta, API, store y componentes. Solo conecta: no tiene reglas de negocio ni estilos.
  * La URL manda: cada acción de la persona cambia location.hash, y hashchange carga y pinta.
  */
-import '../components/cc-movimiento.js';
-import '../components/cc-calendario-rango.js';
+import '../components/business/cc-movimiento.js';
+import '../components/ui/cc-calendario-rango.js';
 import { createBrowserApi } from '../api/cuentaclara-api.js';
 import { createTransactionsActions } from '../state/transactions.js';
 import { parseTransactionsRoute, routes } from '../rutas.js';
@@ -16,13 +16,13 @@ import { periodFromShortcut, periodUnit, shortcutOf, validateRange } from '../lo
 import { addDays, todayInLima, formatMonth, formatDayShort, formatDayWithYear, isValidDate } from '../utils/lima-date.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
-import { watchHeader } from '../components/sticky-header.js';
+import { watchHeader } from '../components/ui/sticky-header.js';
 
 /** @typedef {import('../models/types.js').Period} Period */
 /** @typedef {import('../models/types.js').Category} Category */
 /** @typedef {import('../models/types.js').Transaction} Transaction */
-/** @typedef {import('../components/cc-movimiento.js').CcMovimiento} CcMovimiento */
-/** @typedef {import('../components/cc-calendario-rango.js').CcCalendarioRango} CcCalendarioRango */
+/** @typedef {import('../components/business/cc-movimiento.js').CcMovimiento} CcMovimiento */
+/** @typedef {import('../components/ui/cc-calendario-rango.js').CcCalendarioRango} CcCalendarioRango */
 
 /** @param {string} id */
 const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));

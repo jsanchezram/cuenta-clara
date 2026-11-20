@@ -8,8 +8,8 @@ import {
   periodFromShortcut,
   validateRange,
   addDays,
-} from '../js/logic/period.js';
-import { todayInLima } from '../js/utils/lima-date.js';
+} from '../../js/logic/period.js';
+import { todayInLima } from '../../js/utils/lima-date.js';
 
 const TODAY = '2026-11-20'; // viernes
 
@@ -69,8 +69,8 @@ test('todayInLima usa la hora de Lima y no la de la PC', () => {
 });
 
 // ---------- Calendario del selector de período (HU01-12) ----------
-import { calendarWeeks, shortcutOf } from '../js/logic/period.js';
-import { formatDayLong } from '../js/utils/lima-date.js';
+import { calendarWeeks, shortcutOf } from '../../js/logic/period.js';
+import { formatDayLong } from '../../js/utils/lima-date.js';
 
 test('calendarWeeks arma semanas de lunes a domingo con huecos fuera del mes', () => {
   const weeks = calendarWeeks('2026-11'); // el 1 de noviembre de 2026 es domingo
@@ -90,7 +90,7 @@ test('formatDayLong sin el año da la fecha del encabezado de cada vista', () =>
 });
 
 // ---------- Atajo "Mes anterior" y unidad del período (HU01-12) ----------
-import { periodUnit } from '../js/logic/period.js';
+import { periodUnit } from '../../js/logic/period.js';
 
 test('HU01-12: el atajo Mes anterior abre el mes completo anterior al mes en curso', () => {
   assert.deepEqual(periodFromShortcut('PREV_MONTH', TODAY), monthPeriod('2026-10'));
@@ -107,8 +107,8 @@ test('periodUnit reconoce mes, día, semana y rango', () => {
 });
 
 // ---------- Hoja "Elige un mes" de Presupuesto: saltar a otro año sin tocar ‹ una y otra vez ----------
-import { monthsOfYear } from '../js/logic/period.js';
-import { formatMonthName } from '../js/utils/lima-date.js';
+import { monthsOfYear } from '../../js/logic/period.js';
+import { formatMonthName } from '../../js/utils/lima-date.js';
 
 test('monthsOfYear da los 12 meses del año en orden, de enero a diciembre', () => {
   const months = monthsOfYear(2025);

@@ -11,7 +11,7 @@ const HEX = /#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})(?![0-9a-zA-Z_-]
 const page = read('presupuesto.html');
 const screen = read('js/screens/presupuesto.js');
 const state = read('js/state/budget.js');
-const component = read('js/components/cc-barra-presupuesto.js');
+const component = read('js/components/business/cc-barra-presupuesto.js');
 const contract = read('docs/api/contrato-v1.md');
 const rutas = read('js/rutas.js');
 

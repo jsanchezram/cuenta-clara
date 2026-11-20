@@ -5,8 +5,8 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
 ## 1. Contexto tecnológico
 - Stack: HTML, CSS y JavaScript con módulos ES (`<script type="module">`). Sin frameworks, librerías ni build. No hay npm ni package.json: no propongas instalarlos.
 - Tipos con JSDoc y `// @ts-check` en la primera línea de cada archivo de `js/`.
-- Pruebas: `node --test` (Node LTS) busca `tests/*.test.js`. Usa solo `node:test` y `node:assert/strict`.
-- Se abre con Live Server (VS Code): los módulos ES no funcionan con `file://`. El equipo trabaja en Windows (PowerShell).
+- Pruebas: `node --test` (Node LTS) busca `tests/**/*.test.js`, ordenadas por capa igual que `js/`. Usa solo `node:test` y `node:assert/strict`.
+- Se abre con Live Server (VS Code): los módulos ES no funcionan con `file://`, y `index.html` lleva a `movimientos.html`. El equipo trabaja en Windows (PowerShell).
 
 ## 2. Contexto arquitectónico
 - Una página HTML por pantalla, en la raíz: `movimientos.html`, `registrar.html`, `presupuesto.html`. La página es solo el armazón y su pantalla vive en `js/screens/` con el mismo nombre.
@@ -14,12 +14,12 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
   1. Design system: `styles/tokens.css` → `styles/components.css` → vitrina `componentes.html`.
   2. Modelos y contratos: `js/models/types.js`, `js/contracts/{dto,mappers}.js`.
   3. Estado y lógica: `js/logic/` (reglas puras), `js/api/` (API simulada), `js/state/` (store y acciones).
-  4. Componentes: `js/components/` (de negocio `<cc-movimiento>`, `<cc-barra-presupuesto>`; de UI `<cc-calendario-rango>` e `icons.js`).
+  4. Componentes: `js/components/business/` (`<cc-movimiento>`, `<cc-barra-presupuesto>`) y `js/components/ui/` (`<cc-calendario-rango>`, `icons.js`, `sticky-header.js`).
   5. Rutas y pantallas: `js/rutas.js`, `js/screens/`.
 - Una pantalla es el único módulo que conoce rutas, API, store y componentes. Solo conecta: no tiene reglas ni estilos.
 - Un componente no importa ni la API ni el store: recibe los datos por propiedades y avisa con eventos `cc-*`.
 - `localStorage` solo se usa dentro de `js/api/`, con claves `cuentaclara.v1.*`. Las páginas nunca lo tocan.
-- Fuentes de verdad: `docs/historias-de-usuario.md` (criterios y reglas R1–R8), `docs/api/contrato-v1.md` (datos) y `docs/design-system.md` (UI).
+- Fuentes de verdad: `docs/historias-de-usuario.md` (criterios y reglas R1–R8), `docs/api/contrato-v1.md` (datos), `docs/design-system.md` (UI) y `docs/arquitectura.md` (capas y dependencias).
 - Antes de crear UI, revisa `docs/design-system.md` y reutiliza las clases de `components.css`.
 
 ## 3. Contexto de ingeniería

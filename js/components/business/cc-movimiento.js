@@ -12,13 +12,13 @@
  * Eventos:
  *   cc-editar { id }          al activar la fila, antes de navegar
  */
-import { CATEGORY_LABELS } from '../models/types.js';
-import { icon } from './icons.js';
-import { formatDayShort } from '../utils/lima-date.js';
-import { formatMoney } from '../utils/money.js';
-import { esc } from '../utils/html.js';
+import { CATEGORY_LABELS } from '../../models/types.js';
+import { icon } from '../ui/icons.js';
+import { formatDayShort } from '../../utils/lima-date.js';
+import { formatMoney } from '../../utils/money.js';
+import { esc } from '../../utils/html.js';
 
-/** @typedef {import('../models/types.js').Transaction} Transaction */
+/** @typedef {import('../../models/types.js').Transaction} Transaction */
 
 export class CcMovimiento extends HTMLElement {
   constructor() {

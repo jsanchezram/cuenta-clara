@@ -6,7 +6,7 @@ Es un acuerdo escrito sobre cómo se ve y cómo se comporta la UI. El CSS es una
 |---|---|
 | `styles/tokens.css` | Valores en 3 capas, en tema claro y oscuro. Es el único archivo con hex. |
 | `styles/components.css` | Layouts y componentes de UI. |
-| `js/components/icons.js` | Íconos SVG sólidos y monocromos (una sola fuente; `scripts/expandir-iconos.mjs` los copia a las páginas). |
+| `js/components/ui/icons.js` | Íconos SVG sólidos y monocromos (una sola fuente; `scripts/expandir-iconos.mjs` los copia a las páginas). |
 | `componentes.html` | Vitrina: cada componente en cada estado y un botón "Tema oscuro". |
 | `.claude/rules/estilos-css.md`, `html-accesibilidad.md` | Reglas que Claude aplica al tocar CSS, HTML, componentes y pantallas. |
 

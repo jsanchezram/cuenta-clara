@@ -2,11 +2,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { createApi, ApiError, shiftSeed } from '../js/api/cuentaclara-api.js';
+import { createApi, ApiError, shiftSeed } from '../../js/api/cuentaclara-api.js';
 
 const seed = {
-  transactions: JSON.parse(readFileSync(new URL('../datos/movimientos.json', import.meta.url), 'utf8')).data,
-  budgets: JSON.parse(readFileSync(new URL('../datos/presupuestos.json', import.meta.url), 'utf8')).data,
+  transactions: JSON.parse(readFileSync(new URL('../../datos/movimientos.json', import.meta.url), 'utf8')).data,
+  budgets: JSON.parse(readFileSync(new URL('../../datos/presupuestos.json', import.meta.url), 'utf8')).data,
 };
 
 /** Almacén en memoria con la misma interfaz que localStorage. */

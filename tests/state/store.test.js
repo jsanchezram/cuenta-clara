@@ -1,8 +1,8 @@
 // @ts-check
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createStore } from '../js/state/store.js';
-import { createTransactionsActions } from '../js/state/transactions.js';
+import { createStore } from '../../js/state/store.js';
+import { createTransactionsActions } from '../../js/state/transactions.js';
 
 test('el store es inmutable y avisa a sus suscriptores', () => {
   const store = createStore({ count: 0, name: 'a' });
@@ -43,7 +43,7 @@ test('una respuesta que llega tarde no pisa a la más reciente', async () => {
 });
 
 // ---------- HU-03 · acciones de presupuesto ----------
-import { createBudgetActions } from '../js/state/budget.js';
+import { createBudgetActions } from '../../js/state/budget.js';
 
 function fakeBudgetApi() {
   /** @type {any[]} */

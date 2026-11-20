@@ -24,12 +24,12 @@
  * Métodos de foco:
  *   focusAction() · focusField() · focusConfirm() · focusRemove()
  */
-import { CATEGORY_LABELS } from '../models/types.js';
-import { formatMoney } from '../utils/money.js';
-import { esc } from '../utils/html.js';
-import { icon } from './icons.js';
+import { CATEGORY_LABELS } from '../../models/types.js';
+import { formatMoney } from '../../utils/money.js';
+import { esc } from '../../utils/html.js';
+import { icon } from '../ui/icons.js';
 
-/** @typedef {import('../logic/budget.js').BudgetRow} BudgetRow */
+/** @typedef {import('../../logic/budget.js').BudgetRow} BudgetRow */
 /** @typedef {{ editing: boolean, confirmingRemoval: boolean, saving: boolean, error: string, draft: string }} CardState */
 
 const MODIFIER = /** @type {const} */ ({ NORMAL: '', NEAR: 'near', REACHED: 'reached', EXCEEDED: 'exceeded' });
@@ -140,7 +140,7 @@ export class CcBarraPresupuesto extends HTMLElement {
       figures = `<span class="budget-row__money budget-row__spent">${esc(formatMoney(r.spent))}</span> usados`;
       status = '<p class="budget-status budget-status--none"><span class="budget-status__dot" aria-hidden="true"></span>Sin límite definido</p>';
     } else {
-      const st = /** @type {import('../models/types.js').BudgetStatus} */ (r.status);
+      const st = /** @type {import('../../models/types.js').BudgetStatus} */ (r.status);
       const mod = MODIFIER[st];
       const percent = /** @type {number} */ (r.percent);
       const remaining = /** @type {number} */ (r.remaining);

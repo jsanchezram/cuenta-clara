@@ -4,7 +4,7 @@ Son custom elements **sin Shadow DOM y sin CSS propio**. Se arman con clases de 
 
 Las etiquetas y los eventos `cc-*` van en español, como las dos etiquetas que fija el enunciado.
 
-## `<cc-movimiento>` · `js/components/cc-movimiento.js`
+## `<cc-movimiento>` · `js/components/business/cc-movimiento.js`
 
 | Contrato | Detalle |
 |---|---|
@@ -27,7 +27,7 @@ Accesibilidad:
 - La descripción va escapada con `esc()`.
 - El ícono es decorativo (`aria-hidden`).
 
-## `<cc-barra-presupuesto>` · `js/components/cc-barra-presupuesto.js`
+## `<cc-barra-presupuesto>` · `js/components/business/cc-barra-presupuesto.js`
 
 | Contrato | Detalle |
 |---|---|
@@ -63,7 +63,7 @@ Accesibilidad:
 
 El foco lo mueve la pantalla con los métodos `focus*()`, buscando la tarjeta por categoría, porque las tarjetas se reordenan por urgencia.
 
-## Componente de UI: `<cc-calendario-rango>` · `js/components/cc-calendario-rango.js`
+## Componente de UI: `<cc-calendario-rango>` · `js/components/ui/cc-calendario-rango.js`
 
 No es de negocio, pero sigue las mismas reglas: no tiene Shadow DOM ni CSS propio y no conoce rutas, API ni store.
 
