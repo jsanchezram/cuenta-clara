@@ -45,6 +45,7 @@ export class CcBarraPresupuesto extends HTMLElement {
 
   /** @param {BudgetRow} value */
   set row(value) {
+    if (value === this._row) return; // misma fila: no repintar (evita perder el foco)
     this._row = value;
     this.render();
   }
@@ -55,8 +56,33 @@ export class CcBarraPresupuesto extends HTMLElement {
 
   /** @param {Partial<CardState>} partial */
   setState(partial) {
-    this._state = { ...this._state, ...partial };
+    const before = this._state;
+    this._state = { ...before, ...partial };
+    const s = this._state;
+    const same = (/** @type {keyof CardState} */ k) => before[k] === s[k];
+    // draft solo llena el campo al abrir la edición o al mostrar un error: no obliga a repintar
+    if (['editing', 'confirmingRemoval', 'error'].every((k) => same(/** @type {keyof CardState} */ (k)))) {
+      // Solo cambió "saving" (o nada): actualizar el botón en su lugar para no perder el foco ni el anuncio
+      if (!same('saving')) this._paintSaving();
+      return;
+    }
     this.render();
+  }
+
+  /** Actualiza "Guardando…" / "Quitando…" sin rehacer la tarjeta. */
+  _paintSaving() {
+    const saving = this._state.saving;
+    const submit = this.querySelector('[data-form] [type="submit"]');
+    if (submit) {
+      submit.setAttribute('aria-disabled', String(saving));
+      submit.toggleAttribute('aria-busy', saving);
+      submit.textContent = saving ? 'Guardando…' : 'Guardar';
+    }
+    const confirm = this.querySelector('[data-action="confirm-remove"]');
+    if (confirm) {
+      confirm.setAttribute('aria-disabled', String(saving));
+      confirm.textContent = saving ? 'Quitando…' : 'Sí, quitar';
+    }
   }
 
   connectedCallback() {
