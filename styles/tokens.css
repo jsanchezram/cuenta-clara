@@ -28,6 +28,7 @@
 
   /* Azul: marca y acción */
   --blue-50: #eff6ff;
+  --blue-100: #dbeafe;
   --blue-300: #93c5fd;
   --blue-400: #60a5fa;
   --blue-600: #2563eb;
@@ -66,6 +67,8 @@
   --shadow-dark: rgb(0 0 0 / 0.45);
   --veil-light: rgb(11 18 32 / 0.45);
   --veil-dark: rgb(0 0 0 / 0.6);
+  --veil-ink-soft: rgb(11 18 32 / 0.2);
+  --veil-white-soft: rgb(255 255 255 / 0.25);
 
   /* Espacios: grilla de 8 pt con medio paso de 4 */
   --space-1: 0.25rem;  /* 4 px */
@@ -122,6 +125,13 @@
   --color-divider: var(--gray-200);                 /* decorativo */
 
   --color-brand: var(--blue-600);                   /* barra de marca */
+  --color-title-accent: var(--blue-600);            /* 5.2:1 sobre surface · 4.8:1 sobre bg */
+  --color-hero-bg: var(--blue-600);                 /* resumen destacado: texto blanco 5.2:1 */
+  --color-hero-bg-end: var(--blue-700);             /* fin del degradado: texto blanco 6.7:1 */
+  --color-on-hero: var(--gray-0);
+  --color-on-hero-muted: var(--blue-50);            /* 4.8:1 sobre hero-bg */
+  --color-hero-well: var(--veil-ink-soft);          /* pozo de ingresos y gastos: texto blanco 6.5:1 */
+  --color-hero-track: var(--veil-white-soft);       /* decorativo: riel de la barra del resumen */
   --color-on-brand: var(--gray-0);                  /* 5.2:1 sobre brand */
   --color-action-primary: var(--blue-600);          /* 5.2:1 con on-action */
   --color-action-primary-hover: var(--blue-700);
@@ -130,7 +140,9 @@
   --color-action-secondary-hover: var(--gray-100);
   --color-accent-text: var(--blue-700);             /* enlaces y menú activo: 6.7:1 */
   --color-selected-bg: var(--blue-50);
-  --color-selected-text: var(--blue-700);           /* 6.2:1 sobre selected-bg */
+  --color-selected-bg-hover: var(--blue-100);
+  --color-selected-text: var(--blue-700);           /* 6.2:1 sobre selected-bg · 5.5:1 sobre el hover */
+  --color-selected-border: var(--blue-300);         /* decorativo: el texto ya identifica el botón */
   --color-focus-ring: var(--blue-700);              /* 6.3:1 sobre bg */
   --color-backdrop: var(--veil-light);
 
@@ -169,6 +181,7 @@
   --shadow-card: 0 1px 2px var(--shadow-light), 0 2px 10px var(--shadow-light);
   --shadow-raised: 0 12px 32px var(--shadow-light-strong);
   --shadow-nav: 0 -2px 12px var(--shadow-light);
+  --shadow-header: 0 8px 12px -10px var(--shadow-light-strong);
 }
 
 /* ---------- 2 · SEMÁNTICOS · tema oscuro ---------- */
@@ -184,6 +197,13 @@
   --color-divider: var(--gray-800);
 
   --color-brand: var(--blue-900);
+  --color-title-accent: var(--blue-400);            /* 6.8:1 sobre surface */
+  --color-hero-bg: var(--blue-900);                 /* texto blanco 10.4:1 */
+  --color-hero-bg-end: var(--blue-950);
+  --color-on-hero: var(--gray-0);
+  --color-on-hero-muted: var(--blue-100);           /* 8.4:1 sobre hero-bg */
+  --color-hero-well: var(--veil-ink-soft);
+  --color-hero-track: var(--veil-white-soft);
   --color-on-brand: var(--gray-0);
   --color-action-primary: var(--blue-400);
   --color-action-primary-hover: var(--blue-300);
@@ -192,7 +212,9 @@
   --color-action-secondary-hover: var(--gray-800);
   --color-accent-text: var(--blue-300);
   --color-selected-bg: var(--blue-950);
+  --color-selected-bg-hover: var(--blue-900);
   --color-selected-text: var(--blue-300);
+  --color-selected-border: var(--blue-700);         /* decorativo: el texto ya identifica el botón */
   --color-focus-ring: var(--blue-300);
   --color-backdrop: var(--veil-dark);
 
@@ -229,6 +251,7 @@
   --shadow-card: 0 1px 3px var(--shadow-dark);
   --shadow-raised: 0 12px 32px var(--shadow-dark);
   --shadow-nav: 0 -2px 12px var(--shadow-dark);
+  --shadow-header: 0 8px 12px -10px var(--shadow-dark);
 }
 
 /* ---------- 3 · COMPONENTE ---------- */
@@ -257,7 +280,6 @@
   --cat-icon-size: 2.5rem;
   --brand-bar-height: 3rem;
   --bottom-nav-height: 4rem;
-  --action-bar-space: 4.5rem;                       /* alto de la barra de Guardar fija */
   --list-row-min-height: 3.5rem;
 
   --budget-bar-height: 0.625rem;
