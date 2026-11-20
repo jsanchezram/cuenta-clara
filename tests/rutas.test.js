@@ -63,3 +63,25 @@ test('cada categoría tiene un slug y el slug vuelve a la misma categoría', () 
   }
   assert.equal(slugToCategory('otros-ingresos'), 'other_income');
 });
+
+// ---------- HU-03 · ruta del presupuesto (REQ-01, REQ-10) ----------
+import { parseBudgetRoute } from '../js/rutas.js';
+
+test('REQ-01: presupuesto sin ruta abre el mes en curso y pide corregir la URL', () => {
+  assert.deepEqual(parseBudgetRoute('', TODAY), { month: '2026-11', hash: '#/2026-11', corrected: true });
+});
+
+test('REQ-10: un mes anterior válido se respeta', () => {
+  assert.deepEqual(parseBudgetRoute('#/2026-10', TODAY), { month: '2026-10', hash: '#/2026-10', corrected: false });
+});
+
+test('REQ-01: un mes inválido o futuro se corrige al mes en curso', () => {
+  assert.equal(parseBudgetRoute('#/2026-13', TODAY).hash, '#/2026-11');
+  assert.equal(parseBudgetRoute('#/2027-01', TODAY).hash, '#/2026-11');
+  assert.equal(parseBudgetRoute('#/2026-10/extra', TODAY).corrected, true);
+});
+
+test('routes.budget arma la ruta del mes', () => {
+  assert.equal(routes.budget('2026-10'), 'presupuesto.html#/2026-10');
+  assert.equal(routes.budget(), 'presupuesto.html');
+});
