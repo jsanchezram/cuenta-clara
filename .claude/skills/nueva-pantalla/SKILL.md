@@ -9,7 +9,7 @@ disable-model-invocation: true
 1. **Entender, sin editar nada.**
    - Lee los criterios de $ARGUMENTS en `docs/historias-de-usuario.md` y las reglas R1–R8 que cita.
    - Lee el wireframe en `docs/wireframes/`.
-   - Lee las clases de `styles/components.css`, los componentes `cc-*` de `js/components/`, las acciones de `js/state/` y `js/rutas.js`.
+   - Lee las clases de `styles/components.css`, los componentes `cc-*` de `js/components/business/` y `js/components/ui/`, las acciones de `js/state/` y `js/rutas.js`.
 2. **Planificar.**
    - Archivos que creas o cambias, en orden: armazón HTML → ruta → pantalla → mensajes → foco.
    - Clases y componentes que reutilizas.
