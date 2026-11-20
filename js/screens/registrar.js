@@ -8,10 +8,11 @@ import { createFormActions } from '../state/transaction-form.js';
 import { routes } from '../rutas.js';
 import { CATEGORY_LABELS, categoriesFor } from '../models/types.js';
 import { addDays, monthPeriod, currentMonth } from '../logic/period.js';
-import { todayInLima, formatDayLong } from '../utils/lima-date.js';
+import { todayInLima, formatDayWithYear } from '../utils/lima-date.js';
 import '../components/cc-calendario-rango.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
+import { watchHeader } from '../components/sticky-header.js';
 import { icon } from '../components/icons.js';
 
 /** @typedef {import('../models/types.js').Transaction} Transaction */
@@ -26,6 +27,7 @@ const FIELD_ORDER = ['type', 'amount', 'category', 'date', 'description'];
 
 export function mountRegister() {
   const today = todayInLima(new Date());
+  watchHeader({ today });
   const api = createBrowserApi();
   const actions = createFormActions(api, today);
   const id = new URLSearchParams(location.search).get('id');
@@ -135,8 +137,8 @@ export function mountRegister() {
   /** @param {string} value YYYY-MM-DD */
   function setDate(value) {
     date.value = value;
-    const label = value === today ? 'Hoy' : value === addDays(today, -1) ? 'Ayer' : formatDayLong(value);
-    $('date-value').textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    const day = formatDayWithYear(value);
+    $('date-value').textContent = value === today ? `Hoy · ${day}` : value === addDays(today, -1) ? `Ayer · ${day}` : day;
   }
 
   function openDateSheet() {
@@ -180,6 +182,18 @@ export function mountRegister() {
     closeDateSheet();
   });
 
+  /**
+   * Título: al crear sigue al tipo ("Nuevo gasto" / "Nuevo ingreso"); al editar es fijo, "Editar movimiento"
+   * (HU02-5), para que no cambie cuando termina de cargar.
+   */
+  function paintTitle() {
+    const editing = actions.store.get().mode === 'edit';
+    const [verb, noun] = editing ? ['Editar', 'movimiento'] : ['Nuevo', currentType() === 'income' ? 'ingreso' : 'gasto'];
+    // La palabra clave va resaltada en el color de la marca (textos fijos, sin datos de la persona)
+    $('page-title').innerHTML = `${verb} <span class="page-header__accent">${noun}</span>`;
+    document.title = `${verb} ${noun} · CuentaClara`;
+  }
+
   // ---------- Pintar desde el estado ----------
 
   let submitted = false;
@@ -192,9 +206,7 @@ export function mountRegister() {
   /** @param {Readonly<import('../state/transaction-form.js').FormState>} state */
   function paint(state) {
     const editing = state.mode === 'edit';
-    $('eyebrow').textContent = editing ? 'Corregir movimiento' : 'Nuevo movimiento';
-    $('page-title').textContent = editing ? 'Editar movimiento' : 'Registrar';
-    document.title = `${editing ? 'Editar movimiento' : 'Registrar'} · CuentaClara`;
+    paintTitle();
 
     const blocked = ['loading', 'notFound', 'locked', 'loadError'].includes(state.status);
     form.hidden = blocked;
@@ -296,7 +308,10 @@ export function mountRegister() {
   // ---------- Eventos ----------
 
   form.addEventListener('change', (e) => {
-    if (/** @type {HTMLInputElement} */ (e.target).name === 'type') fillCategories();
+    if (/** @type {HTMLInputElement} */ (e.target).name === 'type') {
+      fillCategories();
+      paintTitle();
+    }
   });
   description.addEventListener('input', updateCounter);
 
@@ -349,13 +364,22 @@ export function mountRegister() {
 
   // ---------- Arranque ----------
 
+  // La página llega con <main data-pending> (oculto): se muestra cuando ya pinta su estado real.
+  // Así, al editar no se ve un instante "Nuevo gasto" vacío antes de "Editar movimiento" con sus datos.
+  const main = $('contenido');
+  const reveal = () => main.removeAttribute('data-pending');
+
   setDateLimits(id ? 'edit' : 'create');
   setDate(today);
   fillCategories();
   actions.store.subscribe((state) => {
     if (state.status === 'ready' && state.original && lastStatus === 'loading') fillForm(state.original);
     paint(state);
+    if (state.status !== 'loading') reveal();
   });
   paint(actions.store.get());
   actions.init(id);
+  if (!id) reveal();
+  // Si la carga tarda más de lo normal, se muestra el esqueleto de "Cargando movimiento…"
+  else setTimeout(reveal, 600);
 }
