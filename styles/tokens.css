@@ -53,6 +53,30 @@
   /* Azul: foco */
   --blue-300: #93b4ff;
   --blue-700: #1d4ed8;
+  --blue-50: #e8f0fe;
+  --blue-950: #172554;
+
+  /* Identidad: verde profundo de marca */
+  --green-900: #073b2c;
+
+  /* Categorías (solo decorativo: el nombre siempre va escrito) */
+  --purple-50: #f3e8ff;
+  --purple-300: #d8b4fe;
+  --purple-700: #6b21a8;
+  --purple-950: #2e1065;
+  --teal-50: #e0f2f1;
+  --teal-300: #5eead4;
+  --teal-700: #0f766e;
+  --teal-950: #042f2e;
+  --pink-50: #fce7f3;
+  --pink-300: #f9a8d4;
+  --pink-700: #9d174d;
+  --pink-950: #500724;
+
+  /* Sombras: valores crudos solo aquí */
+  --shadow-color: rgb(17 20 24 / 0.08);
+  --shadow-color-strong: rgb(17 20 24 / 0.14);
+  --radius-lg: 1rem;
 
   /* Espacios: grilla de 8 pt con medio paso de 4 */
   --space-1: 0.25rem;  /* 4 px */
@@ -135,6 +159,32 @@
 
   --color-skeleton: var(--gray-100);
   --color-skeleton-shine: var(--gray-50);
+
+  /* Identidad */
+  --color-brand-bg: var(--green-700);
+  --color-brand-bg-deep: var(--green-900);
+  --color-on-brand: var(--gray-0);                  /* 6.5:1 sobre brand-bg */
+  --color-on-brand-muted: var(--green-50);          /* 5.8:1 sobre brand-bg */
+  --shadow-card: 0 1px 2px var(--shadow-color), 0 4px 12px var(--shadow-color);
+  --shadow-raised: 0 6px 20px var(--shadow-color-strong);
+
+  /* Categorías: fondo del ícono y color del ícono (decorativo, el nombre va escrito) */
+  --color-cat-food-bg: var(--orange-50);
+  --color-cat-food-fg: var(--orange-800);
+  --color-cat-transport-bg: var(--blue-50);
+  --color-cat-transport-fg: var(--blue-700);
+  --color-cat-housing-bg: var(--purple-50);
+  --color-cat-housing-fg: var(--purple-700);
+  --color-cat-utilities-bg: var(--teal-50);
+  --color-cat-utilities-fg: var(--teal-700);
+  --color-cat-leisure-bg: var(--pink-50);
+  --color-cat-leisure-fg: var(--pink-700);
+  --color-cat-other-bg: var(--gray-100);
+  --color-cat-other-fg: var(--gray-700);
+  --color-cat-work-bg: var(--green-50);
+  --color-cat-work-fg: var(--green-700);
+  --color-cat-other_income-bg: var(--amber-50);
+  --color-cat-other_income-fg: var(--amber-800);
 }
 
 /* ---------- 2 · SEMÁNTICOS · tema oscuro ---------- */
@@ -185,6 +235,30 @@
 
   --color-skeleton: var(--gray-800);
   --color-skeleton-shine: var(--gray-925);
+
+  --color-brand-bg: var(--green-950);
+  --color-brand-bg-deep: var(--gray-950);
+  --color-on-brand: var(--green-50);
+  --color-on-brand-muted: var(--green-300);
+  --shadow-color: rgb(0 0 0 / 0.35);
+  --shadow-color-strong: rgb(0 0 0 / 0.5);
+
+  --color-cat-food-bg: var(--orange-950);
+  --color-cat-food-fg: var(--orange-300);
+  --color-cat-transport-bg: var(--blue-950);
+  --color-cat-transport-fg: var(--blue-300);
+  --color-cat-housing-bg: var(--purple-950);
+  --color-cat-housing-fg: var(--purple-300);
+  --color-cat-utilities-bg: var(--teal-950);
+  --color-cat-utilities-fg: var(--teal-300);
+  --color-cat-leisure-bg: var(--pink-950);
+  --color-cat-leisure-fg: var(--pink-300);
+  --color-cat-other-bg: var(--gray-800);
+  --color-cat-other-fg: var(--gray-100);
+  --color-cat-work-bg: var(--green-950);
+  --color-cat-work-fg: var(--green-300);
+  --color-cat-other_income-bg: var(--amber-950);
+  --color-cat-other_income-fg: var(--amber-300);
 }
 
 /* ---------- 3 · COMPONENTE ---------- */
@@ -214,5 +288,8 @@
   --budget-marker-width: 3px;
 
   --card-padding: var(--space-4);
-  --card-radius: var(--radius-md);
+  --card-radius: var(--radius-lg);
+  --cat-icon-size: 2.5rem;
+  --content-max-width-wide: 72rem;
+  --content-max-width-narrow: 36rem;
 }
