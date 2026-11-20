@@ -77,20 +77,6 @@ export const CATEGORY_LABELS = Object.freeze(
   }),
 );
 
-/** Ícono decorativo de cada categoría (el nombre siempre va escrito al lado). */
-export const CATEGORY_ICONS = Object.freeze(
-  /** @type {Record<Category, string>} */ ({
-    food: '🍽️',
-    transport: '🚌',
-    housing: '🏠',
-    utilities: '💡',
-    leisure: '🎬',
-    other: '📦',
-    work: '💼',
-    other_income: '💰',
-  }),
-);
-
 /**
  * Categorías válidas para un tipo (R3).
  * @param {TransactionType} type
