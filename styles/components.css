@@ -1103,3 +1103,78 @@ textarea.field__control {
     overflow-x: visible;
   }
 }
+
+/* ---------- Barra fina de marca (revisión de la persona: sin banda grande) ---------- */
+.page-header {
+  padding-block: 0;
+  margin-bottom: 0;
+  color: var(--color-text);
+  background: none;
+  border-radius: 0;
+}
+
+.page-header__eyebrow,
+.page-header__lead {
+  color: var(--color-text-muted);
+}
+
+.page-header__body {
+  padding-block: var(--space-6) var(--space-2);
+}
+
+.page-header :focus-visible {
+  outline-color: var(--color-focus-ring);
+}
+
+.brand-bar {
+  display: flex;
+  align-items: center;
+  min-height: var(--brand-bar-height, 3rem);
+  color: var(--color-on-brand);
+  background: var(--color-brand-bg);
+}
+
+.brand-bar .brand {
+  margin: 0;
+}
+
+.brand-bar :focus-visible {
+  outline-color: var(--color-on-brand);
+}
+
+@media (min-width: 48rem) {
+  body {
+    padding-top: 0;
+  }
+
+  /* La barra verde queda fija arriba y el menú se dibuja sobre ella, a la derecha */
+  .brand-bar {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    min-height: var(--bottom-nav-height);
+  }
+
+  .bottom-nav {
+    background: transparent;
+    border-bottom: 0;
+    box-shadow: none;
+    pointer-events: none;
+  }
+
+  .bottom-nav__link {
+    pointer-events: auto;
+    color: var(--color-on-brand-muted);
+  }
+
+  .bottom-nav__link[aria-current="page"] {
+    color: var(--color-on-brand);
+    background: transparent;
+    border-bottom-color: var(--color-on-brand);
+  }
+
+  .bottom-nav__link:focus-visible {
+    outline-color: var(--color-on-brand);
+    outline-offset: -4px;
+  }
+}

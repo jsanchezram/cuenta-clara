@@ -90,12 +90,12 @@ Los nombres siguen el patrón `categoría-rol-variante`.
 | `--color-budget-*-fill`, `--color-budget-track`, `--color-budget-track-border` | Semántico | Barra de progreso |
 | `--color-income-text`, `--color-expense-text` | Semántico | Montos |
 | `--budget-bar-height`, `--list-row-min-height`, `--bottom-nav-height` | Componente | Medidas |
-| `--color-brand-bg`, `--color-brand-bg-deep`, `--color-on-brand` (6.5:1), `--color-on-brand-muted` (5.8:1) | Semántico | Banda de marca del encabezado (`.page-header`, `.brand`) |
+| `--color-brand-bg`, `--color-brand-bg-deep`, `--color-on-brand` (6.5:1), `--color-on-brand-muted` (5.8:1) | Semántico | Barra fina de marca (`.brand-bar`, `.brand`) y menú en laptop |
 | `--color-cat-{categoría}-bg` / `-fg` (las 8, de 4.7:1 a 7.4:1 en claro y 7.1:1 o más en oscuro) | Semántico | Ícono de categoría (`.cat-icon--food`…). Es decorativo, porque el nombre de la categoría siempre va escrito |
 | `--shadow-card`, `--shadow-raised`, `--radius-lg`, `--cat-icon-size` | Componente | Elevación y forma de las tarjetas, la lista y el resumen |
 
 **Identidad visual:**
-- Un verde profundo de marca en la banda del encabezado, con el logotipo "CuentaClara".
+- Una barra fina de marca (verde profundo) con el logotipo "CuentaClara"; en laptop la barra también lleva el menú. El título de cada pantalla va en texto oscuro sobre el fondo.
 - Tarjetas blancas con sombra suave.
 - La selección (chip activo y Gasto/Ingreso) se rellena con el color de acción y conserva el ✓, que es la señal que no depende del color.
 - Cada categoría tiene un ícono y un color. Los íconos están en `CATEGORY_ICONS` (`js/models/types.js`) y llevan `aria-hidden`.
