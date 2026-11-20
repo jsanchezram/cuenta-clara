@@ -1,8 +1,8 @@
 ---
 paths:
   - "**/*.html"
-  - "js/componentes/**/*.js"
-  - "js/pantallas/**/*.js"
+  - "js/components/**/*.js"
+  - "js/screens/**/*.js"
 ---
 # Reglas de HTML y accesibilidad (WCAG 2.2 AA)
 

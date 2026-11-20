@@ -17,7 +17,7 @@ Fuente de verdad de lo que se construye. Cada criterio tiene un código (`HU01-3
 | R2 | Fecha de hoy o anterior, dentro de los últimos 60 días (hoy cuenta como día 0). |
 | R3 | Categorías de gasto: Comida, Transporte, Vivienda, Servicios, Ocio y Otros. Categorías de ingreso: Trabajo y Otros ingresos. |
 | R4 | Descripción obligatoria, de 60 caracteres como máximo, sin contar los espacios de los extremos. |
-| R5 | Cada presupuesto está en uno de 4 estados según lo usado del límite: **Normal** (menos de 80 %), **Cerca del límite** (80 % o más y menos de 100 %), **Alcanzaste tu límite** (exactamente 100 %) y **Te pasaste por S/ X** (más de 100 %). El estado se lee en texto, no solo por color. |
+| R5 | Cada presupuesto está en uno de 4 estados según lo usado del límite: **Normal** (`NORMAL`, menos de 80 %), **Cerca del límite** (`NEAR`, 80 % o más y menos de 100 %), **Alcanzaste tu límite** (`REACHED`, exactamente 100 %) y **Te pasaste por S/ X** (`EXCEEDED`, más de 100 %). El estado se lee en texto, no solo por color. |
 | R6 | Solo se puede editar o eliminar un movimiento del mes en curso. Al editar se aplican las mismas validaciones que al registrar y, además, la fecha nueva también debe quedar en el mes en curso. |
 | R7 | El límite de un presupuesto cumple R1 (mayor que 0 y hasta S/ 10 000, con 2 decimales como máximo). |
 | R8 | Un límite vale desde el mes en que se define y se copia a los meses siguientes hasta que se cambie. Solo se edita el límite del mes en curso, y el cambio no altera los meses anteriores. |

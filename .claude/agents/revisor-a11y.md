@@ -1,6 +1,6 @@
 ---
 name: revisor-a11y
-description: Revisa una pantalla HTML de CuentaClara (y su js/pantallas y js/componentes) contra WCAG 2.2 AA sin modificar archivos. Úsalo después de crear o cambiar una pantalla o un componente.
+description: Revisa una pantalla HTML de CuentaClara (y su js/screens y js/components) contra WCAG 2.2 AA sin modificar archivos. Úsalo después de crear o cambiar una pantalla o un componente.
 tools: Read, Grep, Glob
 model: sonnet
 ---
