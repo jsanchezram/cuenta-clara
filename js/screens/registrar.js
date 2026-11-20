@@ -9,15 +9,15 @@ import { routes } from '../rutas.js';
 import { CATEGORY_LABELS, categoriesFor } from '../models/types.js';
 import { addDays, monthPeriod, currentMonth } from '../logic/period.js';
 import { todayInLima, formatDayWithYear } from '../utils/lima-date.js';
-import '../components/cc-calendario-rango.js';
+import '../components/ui/cc-calendario-rango.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
-import { watchHeader } from '../components/sticky-header.js';
-import { icon } from '../components/icons.js';
+import { watchHeader } from '../components/ui/sticky-header.js';
+import { icon } from '../components/ui/icons.js';
 
 /** @typedef {import('../models/types.js').Transaction} Transaction */
 /** @typedef {import('../models/types.js').TransactionType} TransactionType */
-/** @typedef {import('../components/cc-calendario-rango.js').CcCalendarioRango} CcCalendarioRango */
+/** @typedef {import('../components/ui/cc-calendario-rango.js').CcCalendarioRango} CcCalendarioRango */
 
 /** @param {string} id */
 const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));

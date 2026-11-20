@@ -4,17 +4,17 @@
  * Solo conecta ruta, acciones, store y componente; las reglas viven en js/logic.
  * La URL manda el mes (#/AAAA-MM); solo el mes en curso es editable (R8).
  */
-import '../components/cc-barra-presupuesto.js';
+import '../components/business/cc-barra-presupuesto.js';
 import { createBrowserApi } from '../api/cuentaclara-api.js';
 import { createBudgetActions } from '../state/budget.js';
 import { parseBudgetRoute } from '../rutas.js';
 import { currentMonth, shiftMonth, monthsOfYear } from '../logic/period.js';
 import { todayInLima, formatMonth, formatMonthName } from '../utils/lima-date.js';
 import { esc } from '../utils/html.js';
-import { watchHeader } from '../components/sticky-header.js';
+import { watchHeader } from '../components/ui/sticky-header.js';
 import { formatMoney } from '../utils/money.js';
 
-/** @typedef {import('../components/cc-barra-presupuesto.js').CcBarraPresupuesto} Card */
+/** @typedef {import('../components/business/cc-barra-presupuesto.js').CcBarraPresupuesto} Card */
 /** @typedef {import('../state/budget.js').BudgetState} BudgetState */
 /** @typedef {import('../models/types.js').ExpenseCategory} ExpenseCategory */
 

@@ -8,7 +8,7 @@
  *   para que un elemento enfocado nunca quede tapado por las barras (WCAG 2.4.11).
  * No conoce rutas, API ni store: la pantalla le pasa "hoy" (hora de Lima).
  */
-import { formatDayLong } from '../utils/lima-date.js';
+import { formatDayLong } from '../../utils/lima-date.js';
 
 /** @param {{ today?: string }} [options]  today en YYYY-MM-DD */
 export function watchHeader({ today } = {}) {

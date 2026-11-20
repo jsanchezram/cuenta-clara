@@ -14,8 +14,8 @@
  * Atributos: single
  * Eventos: cc-cambiar-rango { from, to } · en modo single, cc-elegir-fecha { date }
  */
-import { calendarWeeks, shiftMonth } from '../logic/period.js';
-import { addDays, daysInMonth, formatDayLong, formatMonth, weekdayMondayFirst } from '../utils/lima-date.js';
+import { calendarWeeks, shiftMonth } from '../../logic/period.js';
+import { addDays, daysInMonth, formatDayLong, formatMonth, weekdayMondayFirst } from '../../utils/lima-date.js';
 import { icon } from './icons.js';
 
 const WEEKDAYS = [['Lu', 'lunes'], ['Ma', 'martes'], ['Mi', 'miércoles'], ['Ju', 'jueves'], ['Vi', 'viernes'], ['Sá', 'sábado'], ['Do', 'domingo']];
