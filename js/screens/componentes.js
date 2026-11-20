@@ -11,6 +11,9 @@ import '../components/cc-calendario-rango.js';
 import { buildBudgetRows, sortByUrgency } from '../logic/budget.js';
 import { icon, ICON_NAMES } from '../components/icons.js';
 import { esc } from '../utils/html.js';
+import { watchHeader } from '../components/sticky-header.js';
+
+watchHeader();
 
 const toggle = /** @type {HTMLButtonElement | null} */ (document.getElementById('tema'));
 

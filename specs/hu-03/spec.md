@@ -103,6 +103,7 @@ A fin de mes Diego no sabe si se pasó del presupuesto. Necesita fijar un límit
 - **Dado** `presupuesto.html#/2026-10`,
 - **entonces** se ven los límites que estaban vigentes en octubre y los gastos de octubre, **sin** botones de editar ni quitar.
 - Hay "Mes anterior" y "Mes siguiente". "Mes siguiente" no pasa del mes en curso.
+- *(Ampliación tras la revisión visual)* El nombre del mes abre la hoja "Elige un mes": el año con ‹ › y los 12 meses, para saltar, por ejemplo, al año pasado sin tocar ‹ doce veces. Los meses futuros no se pueden elegir y el foco vuelve al nombre del mes al cerrarla.
 - Un texto indica: "Estás viendo un mes anterior: solo lectura."
 
 ### REQ-11 · Estados de carga y error

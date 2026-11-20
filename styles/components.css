@@ -15,6 +15,9 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Lo enfocado nunca queda tapado por las barras fijas (WCAG 2.4.11). --sticky-offset lo mide la pantalla */
+  scroll-padding-top: var(--sticky-offset, var(--brand-bar-height));
+  scroll-padding-bottom: var(--bottom-nav-height);
 }
 
 body {
@@ -131,8 +134,12 @@ a {
   justify-content: space-between;
 }
 
-/* ---------- Barra de marca y encabezado ---------- */
+/* ---------- Barra de marca y encabezado de la vista ---------- */
+/* Hija directa de <body>: así queda fija arriba en toda la página */
 .brand-bar {
+  position: sticky;
+  top: 0;
+  z-index: 6;
   display: flex;
   align-items: center;
   min-height: var(--brand-bar-height);
@@ -164,29 +171,126 @@ a {
   outline-color: var(--color-on-brand);
 }
 
-.page-header__body {
-  padding-block: var(--space-4) var(--space-1);
+.brand-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
+/* Al hacer scroll, el título grande sale de la pantalla y la barra lo muestra en pequeño */
+.brand-bar__title {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--color-on-brand);
+  opacity: 0;
+  transform: translateY(0.25rem);
+  transition: opacity var(--duration-fast), transform var(--duration-fast);
+}
+
+.is-condensed .brand-bar__title {
+  opacity: 1;
+  transform: none;
+}
+
+/* Encabezado de la vista, sobre el mismo fondo de la página: la fecha de hoy arriba y el título centrado,
+   con la palabra clave en el azul de la marca */
+.page-header__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding-block: var(--space-4) var(--space-2);
+  text-align: center;
+}
+
+/* Si la vista tiene controles fijos, van pegados al título */
+.page-header:has(+ .sticky-bar) .page-header__body {
+  padding-bottom: var(--space-1);
+}
+
+/* Línea sobre el título: la fecha de hoy (o el nombre de la sección en la vitrina) */
 .page-header__eyebrow {
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-accent-text);
 }
 
 /* Título de la vista: grande, con peso y tracking ajustado para que se lea como título */
 .page-header__title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-title);
+  line-height: var(--line-height-heading);
   letter-spacing: var(--letter-spacing-title);
 }
 
+/* La palabra clave del título ("movimientos", "presupuesto", "gasto") en el azul de la marca */
+.page-header__accent {
+  color: var(--color-title-accent);
+}
+
 .page-header__lead {
-  margin-top: var(--space-1);
+  max-width: 34ch;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+}
+
+/* Controles de la vista (período y filtros, mes): quedan fijos bajo la barra de marca,
+   con el mismo fondo de la página para tapar lo que pasa por debajo */
+.sticky-bar {
+  position: sticky;
+  top: var(--brand-bar-height);
+  z-index: 3;
+  background: var(--color-bg);
+  transition: box-shadow var(--duration-fast);
+}
+
+.sticky-bar__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+}
+
+/* Con la vista desplazada, la franja gana una sombra suave: se lee que el contenido pasa por debajo */
+.is-condensed .sticky-bar {
+  box-shadow: var(--shadow-header);
+}
+
+/* Los chips se deslizan hasta el borde de la pantalla */
+.sticky-bar .chip-group {
+  margin-inline: calc(-1 * var(--space-4));
+  padding-inline: var(--space-4);
+  scroll-padding-inline: var(--space-4);
+}
+
+/* Contenido de la vista */
+.page-body {
+  padding-top: var(--space-2);
+}
+
+/* Lugar de avisos (#flash, #notice): vacío no ocupa espacio ni suma el hueco del stack.
+   No es región viva: los anuncios van en un role="status" que existe desde la carga */
+.notice-slot:empty {
+  display: none;
+}
+
+/* Registrar: mientras la pantalla no sabe si crea o edita, el contenido no se ve (así no aparece
+   "Nuevo gasto" antes de "Editar movimiento"). Si el JavaScript fallara, se muestra igual a los 2 s */
+main[data-pending] {
+  visibility: hidden;
+  animation: reveal 0s 2s forwards;
+}
+
+@keyframes reveal {
+  to {
+    visibility: visible;
+  }
 }
 
 /* ---------- Navegación inferior (barra superior en laptop) ---------- */
@@ -294,6 +398,14 @@ a {
   padding-inline: var(--space-2);
 }
 
+/* Tonal: azul claro con texto azul, para acciones que deben verse sin competir con la principal */
+.btn--tonal {
+  --_bg: var(--color-selected-bg);
+  --_bg-hover: var(--color-selected-bg-hover);
+  --_fg: var(--color-selected-text);
+  --_border: var(--color-selected-border);
+}
+
 .btn--block {
   width: 100%;
 }
@@ -335,22 +447,6 @@ a {
 .icon-btn--disabled:hover,
 .icon-btn:disabled:hover {
   background: transparent;
-}
-
-/* Barra de acción en la zona del pulgar (Fitts): fija a todo el ancho, pegada sobre el menú inferior */
-.action-bar {
-  position: fixed;
-  inset-inline: 0;
-  bottom: var(--bottom-nav-height);
-  z-index: 4;
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-nav);
-}
-
-/* El formulario deja espacio para que la barra fija no tape el último campo */
-.form--with-action-bar {
-  padding-bottom: var(--action-bar-space);
 }
 
 /* ---------- Campos ---------- */
@@ -440,7 +536,7 @@ textarea.field__control {
 }
 
 .field__error::before {
-  content: "⚠ ";
+  content: "• ";
 }
 
 .fieldset {
@@ -483,14 +579,12 @@ textarea.field__control {
   cursor: pointer;
 }
 
+/* La opción elegida se distingue por el bloque relleno que sobresale y el peso del texto, no solo por el color */
 .segmented__input:checked + .segmented__label {
+  font-weight: var(--font-weight-semibold);
   color: var(--color-on-action);
   background: var(--color-action-primary);
   box-shadow: var(--shadow-card);
-}
-
-.segmented__input:checked + .segmented__label::before {
-  content: "✓";
 }
 
 .segmented__input:focus-visible + .segmented__label,
@@ -589,14 +683,12 @@ textarea.field__control {
   background: var(--color-surface-muted);
 }
 
+/* Activo: relleno sólido y texto más grueso frente al contorno de los demás (no solo el color) */
 .chip[aria-pressed="true"] {
+  font-weight: var(--font-weight-semibold);
   color: var(--color-on-action);
   background: var(--color-action-primary);
   border-color: var(--color-action-primary);
-}
-
-.chip[aria-pressed="true"]::before {
-  content: "✓";
 }
 
 /* ---------- Barra de mes / período: ‹ selector › en una sola fila ---------- */
@@ -604,13 +696,42 @@ textarea.field__control {
   display: flex;
   align-items: center;
   gap: var(--space-1);
+  min-height: var(--button-height);
+  padding-inline: var(--space-1);
+  background: var(--color-surface);
+  border: var(--border-width-1) solid var(--color-divider);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
 }
 
+/* El nombre del mes abre la hoja "Elige un mes" (saltar a otro año sin tocar ‹ una y otra vez) */
 .month-bar__label {
+  display: inline-flex;
   flex: 1;
-  max-width: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-width: 0;
+  min-height: var(--control-height);
+  padding-inline: var(--space-2);
+  font: inherit;
   font-weight: var(--font-weight-semibold);
-  text-align: center;
+  color: var(--color-text);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.month-bar__label:hover {
+  background: var(--color-surface-muted);
+}
+
+/* Ícono de calendario, igual que el selector de período de Movimientos */
+.month-bar__label .icon {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--color-accent-text);
 }
 
 .period-trigger {
@@ -762,13 +883,11 @@ textarea.field__control {
   inset: calc((var(--chip-visual-height) - var(--chip-height)) / 2) 0;
 }
 
+/* Activo: igual que un chip activo (relleno sólido y texto más grueso), no solo otro color */
 .option[aria-pressed="true"] {
-  color: var(--color-selected-text);
-  background: var(--color-selected-bg);
-}
-
-.option[aria-pressed="true"]::before {
-  content: "✓ ";
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-on-action);
+  background: var(--color-action-primary);
 }
 
 /* ---------- Calendario de rango ---------- */
@@ -866,61 +985,207 @@ textarea.field__control {
   background: transparent;
 }
 
+/* Hoja "Elige un mes": los 12 meses del año en 3 columnas. El mes que ves va relleno;
+   el mes en curso, en azul; los meses futuros no se pueden elegir */
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.month-grid__month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding-inline: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-pill);
+}
+
+a.month-grid__month:hover {
+  background: var(--color-selected-bg-hover);
+}
+
+.month-grid__month.is-this-month {
+  color: var(--color-accent-text);
+}
+
+.month-grid__month[aria-current="page"] {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-on-action);
+  background: var(--color-action-primary);
+}
+
+.month-grid__month[aria-disabled="true"] {
+  cursor: default;
+  opacity: 0.35;
+}
+
 .period-range {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-3);
 }
 
-/* ---------- Resumen del período: saldo arriba, gastos e ingresos abajo ---------- */
-.summary {
+/* ---------- Resumen destacado: la cifra principal de la vista en una tarjeta azul ----------
+   Movimientos: el saldo en grande y, debajo, ingresos y gastos en dos pozos.
+   Presupuesto (--single): lo usado de lo presupuestado, la barra del total y el aviso en una píldora blanca.
+   El signo y la etiqueta dicen qué es cada monto: aquí no se usa el color verde o rojo */
+.hero-summary {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 0;
-  overflow: hidden;
-  background: var(--color-surface);
-  border: var(--border-width-1) solid var(--color-divider);
-  border-radius: var(--card-radius);
-  box-shadow: var(--shadow-card);
-}
-
-.summary__item {
-  min-width: 0;
-  padding: var(--space-2) var(--space-3);
-}
-
-.summary__item--total {
-  display: flex;
-  grid-column: 1 / -1;
-  align-items: baseline;
-  justify-content: space-between;
   gap: var(--space-2);
-  background: var(--color-selected-bg);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-on-hero);
+  background: linear-gradient(135deg, var(--color-hero-bg), var(--color-hero-bg-end));
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-raised);
 }
 
-.summary__item:last-child {
-  border-left: var(--border-width-1) solid var(--color-divider);
+.hero-summary--single {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
 }
 
-.summary__label {
+.hero-summary__main {
+  grid-column: 1 / -1;
+  padding-bottom: var(--space-1);
+}
+
+.hero-summary__label {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--color-on-hero-muted);
 }
 
-.summary__value {
+/* En el celular, cifras contenidas; en laptop crecen (ver el breakpoint) */
+.hero-summary__value {
   margin: 0;
-  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-title);
   font-variant-numeric: tabular-nums;
-  overflow-wrap: anywhere;
 }
 
-.summary__item--total .summary__value {
-  font-size: var(--font-size-lg);
+/* Sin límites: el valor es una frase, no una cifra */
+.hero-summary__value--text {
+  font-size: var(--font-size-md);
+}
+
+.hero-summary__of {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: 0;
+  white-space: nowrap;
+  color: var(--color-on-hero-muted);
+}
+
+.hero-summary__stat {
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-hero-well);
+  border-radius: var(--radius-md);
+}
+
+.hero-summary__stat-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-on-hero-muted);
+}
+
+.hero-summary__stat-label .icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.hero-summary__stat-value {
+  margin: 0;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-selected-text);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra del total con el porcentaje al lado (la barra es decorativa: el texto dice las cifras) */
+.hero-summary__progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block: var(--space-1);
+}
+
+.hero-summary__bar {
+  flex: 1;
+  height: 0.5rem;
+  overflow: hidden;
+  background: var(--color-hero-track);
+  border-radius: var(--radius-pill);
+}
+
+.hero-summary__percent {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-summary__fill {
+  display: block;
+  /* --hero-value llega como estilo en línea: es un dato, no un color */
+  width: min(var(--hero-value, 0%), 100%);
+  height: 100%;
+  background: var(--color-on-hero);
+  border-radius: inherit;
+}
+
+/* Aviso en una píldora blanca: el texto dice el estado y el puntito lo refuerza */
+.hero-summary__badge {
+  --_fg: var(--color-budget-near-text);
+
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--_fg);
+  background: var(--color-surface);
+  border-radius: var(--radius-pill);
+}
+
+.hero-summary__badge::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: currentColor;
+  border-radius: var(--radius-pill);
+}
+
+.hero-summary__badge:empty {
+  display: none;
+}
+
+.hero-summary__badge--ok {
+  --_fg: var(--color-budget-normal-text);
+}
+
+.hero-summary__badge--info {
+  --_fg: var(--color-accent-text);
 }
 
 /* ---------- Monto con signo (el signo es el dato, el color refuerza) ---------- */
@@ -928,10 +1193,6 @@ textarea.field__control {
   font-weight: var(--font-weight-medium);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-}
-
-.summary .amount {
-  white-space: normal;
 }
 
 .amount--income {
@@ -1028,13 +1289,14 @@ cc-movimiento {
 .list-more {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: var(--space-2);
   padding-top: var(--space-1);
 }
 
 .list-more__count {
   font-size: var(--font-size-sm);
+  text-align: center;
   color: var(--color-text-muted);
 }
 
@@ -1064,37 +1326,6 @@ cc-movimiento {
   font-weight: var(--font-weight-medium);
 }
 
-/* Resumen del presupuesto: un número principal y el aviso debajo */
-.budget-summary {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.budget-summary__label,
-.budget-summary__amount {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.budget-summary__spent {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--letter-spacing-title);
-  color: var(--color-text);
-  font-variant-numeric: tabular-nums;
-}
-
-.budget-summary__attention {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-budget-near-text);
-}
-
-.budget-summary__attention--ok {
-  color: var(--color-budget-normal-text);
-}
-
 /* Cuadrícula intrínseca: 1 columna en el celular, 2 o 3 en laptop, sin breakpoints extra */
 .card-grid {
   display: grid;
@@ -1103,52 +1334,105 @@ cc-movimiento {
   gap: var(--space-3);
 }
 
-/* ---------- Presupuesto: tarjeta compacta (R5) ---------- */
-.budget-card {
+/* ---------- Presupuesto: una tarjeta por categoría, con la fila compacta adentro (R5) ---------- */
+.budget-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
 }
 
-.budget-card__head {
+.budget-list > cc-barra-presupuesto {
+  display: block;
+  padding-inline: var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-width-1) solid var(--color-divider);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-card);
+}
+
+/* Fila de presupuesto, como la de un movimiento: ícono · nombre con "S/ usado de S/ límite" debajo · % · ›.
+   Abajo, la barra y el estado. Toda la fila es el botón de editar ("enlace estirado") */
+.budget-row {
+  --cat-icon-size: 2.25rem;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--space-3);
+  padding-block: var(--space-3);
+}
+
+.budget-row__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.budget-row__head {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-}
-
-.budget-card__head .cat-icon {
-  --cat-icon-size: 2.25rem;
-}
-
-.budget-card__title {
-  flex: 1;
-  min-width: 0;
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
-}
-
-.budget-card__head .btn--link {
-  min-height: var(--control-height);
-  margin-right: calc(-1 * var(--space-2));
-  font-size: var(--font-size-sm);
-}
-
-.budget-card__figures {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
   gap: var(--space-2);
-  max-width: none;
+  min-height: var(--cat-icon-size);
+}
+
+.budget-row__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.budget-row__title {
   font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-heading);
+}
+
+.budget-row__figures {
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
-.budget-card__spent {
-  font-size: var(--font-size-md);
+/* Un monto nunca se parte entre dos líneas ("S/ 1" · "025.00") */
+.budget-row__money {
+  white-space: nowrap;
+}
+
+.budget-row__spent {
   font-weight: var(--font-weight-medium);
   color: var(--color-text);
+}
+
+.budget-row__percent {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.budget-row__chevron {
+  width: 1rem;
+  height: 1rem;
+  color: var(--color-text-muted);
+}
+
+/* Cubre toda la tarjeta, de borde a borde */
+.budget-row__action {
+  position: absolute;
+  inset: 0 calc(-1 * var(--space-4));
+  z-index: 1;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: var(--card-radius);
+  cursor: pointer;
+}
+
+.budget-row__action:focus-visible {
+  outline-offset: -2px;
 }
 
 /* Barra sólida (sin patrones): el estado se lee en el texto de abajo */
@@ -1182,21 +1466,24 @@ cc-movimiento {
   --_fill: var(--color-budget-exceeded-fill);
 }
 
+/* Estado en texto con un puntito del color del estado */
 .budget-status {
   --_fg: var(--color-budget-normal-text);
 
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-2);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--_fg);
 }
 
-.budget-status__icon {
+.budget-status__dot {
   flex: none;
-  width: 1.25em;
-  text-align: center;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: currentColor;
+  border-radius: var(--radius-pill);
 }
 
 .budget-status--near {
@@ -1238,7 +1525,7 @@ cc-movimiento {
 }
 
 .alert--success::before {
-  content: "✓ ";
+  content: "• ";
   font-weight: var(--font-weight-semibold);
 }
 
@@ -1248,7 +1535,7 @@ cc-movimiento {
 }
 
 .alert--error::before {
-  content: "⚠ ";
+  content: "• ";
   font-weight: var(--font-weight-semibold);
 }
 
@@ -1327,19 +1614,85 @@ cc-movimiento {
   }
 
   .page-header__body {
-    padding-block: var(--space-6) var(--space-2);
+    padding-block: var(--space-6) var(--space-3);
+  }
+
+  .page-header:has(+ .sticky-bar) .page-header__body {
+    padding-bottom: var(--space-2);
   }
 
   .page-header__title {
     font-size: var(--font-size-3xl);
   }
 
-  /* La barra de marca queda fija arriba y el menú se dibuja sobre ella, a la derecha */
+  /* La barra de marca lleva el menú, que se dibuja sobre ella a la derecha */
   .brand-bar {
-    position: sticky;
-    top: 0;
     z-index: 4;
     min-height: var(--bottom-nav-height);
+  }
+
+  /* En laptop la barra lleva el menú: el título condensado no hace falta */
+  .brand-bar__title {
+    display: none;
+  }
+
+  /* Controles en una fila: el período (o el mes) a la izquierda y los chips al lado */
+  .sticky-bar {
+    top: var(--bottom-nav-height);
+  }
+
+  .sticky-bar__inner {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    padding-block: var(--space-3);
+  }
+
+  .sticky-bar .period-trigger,
+  .sticky-bar .month-bar {
+    flex: 0 1 22rem;
+  }
+
+  .sticky-bar .chip-group {
+    flex: 1 1 24rem;
+    flex-wrap: wrap;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow-x: visible;
+  }
+
+  .page-body {
+    padding-top: var(--space-4);
+  }
+
+  .hero-summary--single,
+  .budget-list,
+  .budget-list + .list-more {
+    max-width: 48rem;
+  }
+
+  /* En laptop las cifras del resumen destacado crecen */
+  .hero-summary {
+    padding: var(--space-4);
+  }
+
+  .hero-summary__value {
+    font-size: var(--font-size-2xl);
+  }
+
+  .hero-summary__stat-value,
+  .hero-summary__badge {
+    font-size: var(--font-size-md);
+  }
+
+  .hero-summary__of,
+  .hero-summary__percent {
+    font-size: var(--font-size-sm);
+  }
+
+  html {
+    scroll-padding-bottom: 0;
   }
 
   .bottom-nav {
@@ -1384,7 +1737,7 @@ cc-movimiento {
     outline-offset: -4px;
   }
 
-  /* Movimientos: período, filtros y resumen a la izquierda; la lista a la derecha */
+  /* Movimientos: el resumen a la izquierda y la lista a la derecha */
   .layout {
     display: grid;
     grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
@@ -1401,22 +1754,6 @@ cc-movimiento {
     grid-column: 2;
   }
 
-  .layout .chip-group {
-    flex-wrap: wrap;
-    overflow-x: visible;
-  }
-
-  .action-bar {
-    position: static;
-    padding-inline: 0;
-    background: transparent;
-    box-shadow: none;
-  }
-
-  .form--with-action-bar {
-    padding-bottom: 0;
-  }
-
   /* La hoja se vuelve un diálogo centrado */
   .sheet {
     width: min(28rem, calc(100% - 2rem));
@@ -1426,5 +1763,24 @@ cc-movimiento {
 
   .sheet__inner::before {
     display: none;
+  }
+}
+
+/* Pantallas bajas (celular en horizontal o zoom alto): las barras dejan de estar fijas
+   para no tapar el contenido (WCAG 1.4.10) */
+@media (max-height: 30rem) {
+  html {
+    scroll-padding-top: 0;
+  }
+
+  .brand-bar,
+  .sticky-bar {
+    position: static;
+  }
+}
+
+@media (min-width: 48rem) and (max-height: 30rem) {
+  .bottom-nav {
+    position: absolute;
   }
 }

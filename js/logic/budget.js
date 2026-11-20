@@ -132,19 +132,28 @@ export function sortByUrgency(rows) {
 
 /**
  * REQ-04: resumen del mes. Solo suma las categorías que tienen límite.
+ * percent es lo usado del total presupuestado (en céntimos, como cada fila): llena la barra del resumen.
  * @param {BudgetRow[]} rows
- * @returns {{ attention: number, spent: number, limit: number, text: string }}
+ * @returns {{ attention: number, spent: number, limit: number, percent: number, text: string }}
  */
 export function budgetSummary(rows) {
   const limited = rows.filter((r) => r.limit !== null && r.status !== null);
   if (limited.length === 0) {
-    return { attention: 0, spent: 0, limit: 0, text: 'Aún no defines límites este mes. Define uno para recibir avisos.' };
+    return { attention: 0, spent: 0, limit: 0, percent: 0, text: 'Aún no defines límites este mes. Define uno para recibir avisos.' };
   }
   const attention = limited.filter((r) => r.status !== 'NORMAL').length;
-  const spent = toSoles(limited.reduce((sum, r) => sum + toCents(r.spent), 0));
-  const limit = toSoles(limited.reduce((sum, r) => sum + toCents(/** @type {number} */ (r.limit)), 0));
+  const spentCents = limited.reduce((sum, r) => sum + toCents(r.spent), 0);
+  const limitCents = limited.reduce((sum, r) => sum + toCents(/** @type {number} */ (r.limit)), 0);
+  const spent = toSoles(spentCents);
+  const limit = toSoles(limitCents);
   const head = attention === 0
     ? 'Todo bajo control'
     : `${attention} ${attention === 1 ? 'categoría necesita' : 'categorías necesitan'} atención`;
-  return { attention, spent, limit, text: `${head} · Gastaste ${formatMoney(spent)} de ${formatMoney(limit)} presupuestados` };
+  return {
+    attention,
+    spent,
+    limit,
+    percent: percentUsed(spentCents, limitCents),
+    text: `${head} · Gastaste ${formatMoney(spent)} de ${formatMoney(limit)} presupuestados`,
+  };
 }

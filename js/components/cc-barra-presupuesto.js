@@ -2,8 +2,9 @@
 /**
  * <cc-barra-presupuesto>: tarjeta del presupuesto de una categoría (HU03-1, HU03-2, HU03-4, R5)
  * con edición dentro de la tarjeta y confirmación para quitar el límite (HU-03 REQ-05..09).
- * Tarjeta compacta: ícono, nombre, "S/ usado de S/ límite", porcentaje, barra sólida y el estado
- * en texto con lo que queda o el exceso. El ícono del estado refuerza; el color no es la única señal.
+ * Fila compacta, con la misma estructura que la de un movimiento: ícono · nombre con "S/ usado de S/ límite"
+ * debajo · porcentaje · ›. Abajo, la barra sólida y el estado en texto con un puntito.
+ * Toda la fila es el botón de editar. El texto dice el estado; el color refuerza.
  * Usa clases de components.css, sin Shadow DOM ni CSS propio. No importa la API ni el store:
  * la pantalla decide y le pasa el estado con setState().
  *
@@ -31,7 +32,6 @@ import { icon } from './icons.js';
 /** @typedef {import('../logic/budget.js').BudgetRow} BudgetRow */
 /** @typedef {{ editing: boolean, confirmingRemoval: boolean, saving: boolean, error: string, draft: string }} CardState */
 
-const ICONS = /** @type {const} */ ({ NORMAL: '✓', NEAR: '⚠', REACHED: '●', EXCEEDED: '✕' });
 const MODIFIER = /** @type {const} */ ({ NORMAL: '', NEAR: 'near', REACHED: 'reached', EXCEEDED: 'exceeded' });
 
 export class CcBarraPresupuesto extends HTMLElement {
@@ -125,32 +125,34 @@ export class CcBarraPresupuesto extends HTMLElement {
     const editable = this.hasAttribute('editable');
     const hasLimit = r.limit !== null && r.status !== null;
 
-    const action = editable && !s.editing
-      ? `<button class="btn btn--link" type="button" data-action="edit-limit">${hasLimit ? 'Editar límite' : 'Definir límite'}<span class="visually-hidden"> de ${esc(label)}</span></button>`
+    const showAction = editable && !s.editing && !s.confirmingRemoval;
+    // Toda la fila es el botón de editar ("enlace estirado"): objetivo grande y sin texto subrayado
+    const action = showAction
+      ? `<button class="budget-row__action" type="button" data-action="edit-limit"><span class="visually-hidden">${hasLimit ? 'Editar límite' : 'Definir límite'} de ${esc(label)}</span></button>`
       : '';
+    const chevron = showAction ? icon('chevron-right', 'icon budget-row__chevron') : '';
 
-    let body;
+    let figures;
+    let bar = '';
+    let status;
+    let percentText = '';
     if (!hasLimit) {
-      body = `
-        <p class="budget-card__figures"><span><span class="budget-card__spent">${esc(formatMoney(r.spent))}</span> usados este mes</span></p>
-        <p class="budget-status budget-status--none"><span class="budget-status__icon" aria-hidden="true">○</span>Sin límite definido</p>`;
+      figures = `<span class="budget-row__money budget-row__spent">${esc(formatMoney(r.spent))}</span> usados`;
+      status = '<p class="budget-status budget-status--none"><span class="budget-status__dot" aria-hidden="true"></span>Sin límite definido</p>';
     } else {
-      const status = /** @type {import('../models/types.js').BudgetStatus} */ (r.status);
-      const mod = MODIFIER[status];
+      const st = /** @type {import('../models/types.js').BudgetStatus} */ (r.status);
+      const mod = MODIFIER[st];
       const percent = /** @type {number} */ (r.percent);
       const remaining = /** @type {number} */ (r.remaining);
       // "Lo que queda" siempre visible (HU03-1): en NEAR y REACHED el mensaje de R5 no lo dice
-      const detail = status === 'NEAR' || status === 'REACHED' ? ` · Quedan ${formatMoney(remaining)}` : '';
-      body = `
-        <p class="budget-card__figures">
-          <span><span class="budget-card__spent">${esc(formatMoney(r.spent))}</span> de ${esc(formatMoney(/** @type {number} */ (r.limit)))}</span>
-          <span>${percent} %</span>
-        </p>
-        <div class="budget-bar${mod ? ` budget-bar--${mod}` : ''}" role="progressbar" aria-label="Uso del presupuesto de ${esc(label)}"
+      const detail = st === 'NEAR' || st === 'REACHED' ? ` · Quedan ${formatMoney(remaining)}` : '';
+      figures = `<span class="budget-row__money budget-row__spent">${esc(formatMoney(r.spent))}</span> de <span class="budget-row__money">${esc(formatMoney(/** @type {number} */ (r.limit)))}</span>`;
+      bar = `<div class="budget-bar${mod ? ` budget-bar--${mod}` : ''}" role="progressbar" aria-label="Uso del presupuesto de ${esc(label)}"
              aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(percent, 100)}" aria-valuetext="${percent} % usado. ${esc(r.message)}">
           <span class="budget-bar__fill" style="--budget-value: ${percent}%"></span>
-        </div>
-        <p class="budget-status${mod ? ` budget-status--${mod}` : ''}"><span class="budget-status__icon" aria-hidden="true">${ICONS[status]}</span>${esc(r.message + detail)}</p>`;
+        </div>`;
+      status = `<p class="budget-status${mod ? ` budget-status--${mod}` : ''}"><span class="budget-status__dot" aria-hidden="true"></span>${esc(r.message + detail)}</p>`;
+      percentText = `<span class="budget-row__percent">${percent} %</span>`;
     }
 
     // REQ-05..08: edición dentro de la tarjeta
@@ -189,14 +191,22 @@ export class CcBarraPresupuesto extends HTMLElement {
     }
 
     this.innerHTML = `
-      <article class="card budget-card" aria-labelledby="${titleId}" data-category="${r.category}">
-        <div class="budget-card__head">
-          <span class="cat-icon">${icon(r.category)}</span>
-          <${level} class="budget-card__title" id="${titleId}">${esc(label)}</${level}>
-          ${action}
+      <article class="budget-row" aria-labelledby="${titleId}" data-category="${r.category}">
+        <span class="cat-icon">${icon(r.category)}</span>
+        <div class="budget-row__main">
+          <div class="budget-row__head">
+            <div class="budget-row__text">
+              <${level} class="budget-row__title" id="${titleId}">${esc(label)}</${level}>
+              <p class="budget-row__figures">${figures}</p>
+            </div>
+            ${percentText}
+            ${chevron}
+          </div>
+          ${bar}
+          ${status}
+          ${editor}
         </div>
-        ${body}
-        ${editor}
+        ${action}
       </article>`;
 
     this._wire();

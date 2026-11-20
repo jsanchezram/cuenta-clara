@@ -25,6 +25,9 @@ const PATHS = Object.freeze(/** @type {Record<string, string>} */ ({
   'chevron-left': 'M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z',
   'chevron-right': 'M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z',
   'chevron-down': 'M5.4 8.6 4 10l8 8 8-8-1.4-1.4-6.6 6.6z',
+  // Resumen de Movimientos: ↙ entra (ingresos) · ↗ sale (gastos)
+  'arrow-down-left': 'M17 18H6V7h2v7.6l8.3-8.3 1.4 1.4L9.4 16H17z',
+  'arrow-up-right': 'M7 6h11v11h-2V9.4l-8.3 8.3-1.4-1.4L14.6 8H7z',
   close: 'M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6z',
 }));
 

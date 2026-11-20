@@ -9,12 +9,12 @@ Las 3 heurísticas o leyes que guían el diseño, la pantalla donde se ven y có
 **Problema.** Diego registra con una mano, de pie, justo después de pagar. Si el botón Guardar es pequeño o queda arriba, fuera de la zona del pulgar, el registro se vuelve lento y se equivoca.
 
 **Aplicación:**
-- "Guardar" es la única acción primaria. Va fija abajo, a todo el ancho y mide 48 px de alto (`--button-height`).
+- "Guardar" es la única acción primaria. Va al final del formulario, a todo el ancho y mide 48 px de alto (`--button-height`): al terminar de llenar, cae en la mitad inferior, en la zona del pulgar. *(Antes iba fija sobre el menú; la persona prefirió que sea parte de la vista: bitácora #37.)*
 - "Eliminar" (destructiva) va lejos de Guardar, como botón secundario arriba del formulario, y además pide confirmación en la página.
 - Los objetivos táctiles miden 44 px o más (WCAG 2.5.8 pide 24 px como mínimo).
 - El tipo Gasto/Ingreso se elige con dos controles grandes, uno al lado del otro.
 
-**Cómo se comprueba:** a 360 px, Guardar queda visible sin hacer scroll y en la mitad inferior. DevTools muestra 48 px de alto.
+**Cómo se comprueba:** a 360 px, al llegar al final del formulario Guardar queda en la mitad inferior, a todo el ancho y sobre el menú. DevTools muestra 48 px de alto.
 
 ## 2. Heurística H1 · Visibilidad del estado del sistema · `presupuesto.html` y `movimientos.html`
 

@@ -35,17 +35,17 @@ Accesibilidad:
 | Atributos | `editable` (solo en el mes en curso, R8) · `heading-level="2\|3"` |
 | Eventos | `cc-editar-limite`, `cc-cancelar-limite`, `cc-guardar-limite { value }`, `cc-quitar-limite`, `cc-confirmar-quitar` y `cc-cancelar-quitar`, todos con `{ category }` |
 | Métodos | `setState({ editing, confirmingRemoval, saving, error, draft })` · `focusAction()` · `focusField()` · `focusConfirm()` · `focusRemove()` |
-| Clases que usa | `.card.budget-card`, `.budget-card__head`, `.budget-card__figures`, `.budget-bar--*`, `.budget-status--*`, `.cat-icon` |
+| Clases que usa | `.budget-row` (`__head`, `__text`, `__title`, `__figures`, `__money`, `__percent`, `__chevron`, `__action`), `.budget-bar--*`, `.budget-status--*`, `.cat-icon` |
 
-Tarjeta compacta. Muestra el ícono y el nombre, "S/ usado de S/ límite" y el porcentaje, una **barra sólida** y el estado en texto, con lo que queda o el exceso:
+Cada categoría es una **tarjeta independiente** (la da `.budget-list`) con la misma estructura que la fila de un movimiento: ícono · nombre con "S/ usado de S/ límite" debajo · porcentaje · ›. Abajo van la **barra sólida** y el estado en texto, con un puntito del color del estado y lo que queda o el exceso. Toda la tarjeta es el botón de editar (enlace estirado). Un monto nunca se parte entre dos líneas:
 
-| Estado (R5) | Ícono | Texto | Botón |
+| Estado (R5) | Puntito | Texto | Botón (toda la tarjeta) |
 |---|---|---|---|
-| `NORMAL` | ✓ | "Te quedan S/ 180.00" | Editar límite |
-| `NEAR` | ⚠ | "Cerca del límite · Quedan S/ 90.00" | Editar límite |
-| `REACHED` | ● | "Alcanzaste tu límite · Quedan S/ 0.00" | Editar límite |
-| `EXCEEDED` | ✕ | "Te pasaste por S/ 45.00" | Editar límite |
-| Sin límite | ○ | "Sin límite definido" + lo usado | Definir límite |
+| `NORMAL` | verde | "Te quedan S/ 180.00" | Editar límite |
+| `NEAR` | ámbar | "Cerca del límite · Quedan S/ 90.00" | Editar límite |
+| `REACHED` | naranja | "Alcanzaste tu límite · Quedan S/ 0.00" | Editar límite |
+| `EXCEEDED` | rojo | "Te pasaste por S/ 45.00" | Editar límite |
+| Sin límite | gris | "Sin límite definido" + lo usado | Definir límite |
 
 ### Edición dentro de la tarjeta (HU-03, REQ-05..09)
 

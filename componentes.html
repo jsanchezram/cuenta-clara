@@ -44,202 +44,221 @@
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="page-header">
-    <div class="brand-bar"><div class="container"><a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a></div></div>
-    <div class="container page-header__body">
-      <p class="page-header__eyebrow">Design system</p>
-      <h1 class="page-header__title">Vitrina de componentes</h1>
-      <p class="page-header__lead">Cada componente de CuentaClara en cada estado. Los colores salen solo de <code>styles/tokens.css</code>.</p>
-      <div class="cluster" style="margin-top: var(--space-3)">
-        <button class="btn btn--secondary" type="button" id="tema" aria-pressed="false">Tema oscuro</button>
-      </div>
+  <!-- Barra de marca: queda fija arriba en toda la página; al hacer scroll muestra el título de la vista -->
+  <header class="brand-bar">
+    <div class="container brand-bar__inner">
+      <a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a>
+      <p class="brand-bar__title" aria-hidden="true"></p>
     </div>
   </header>
 
-  <main id="contenido" class="container">
-
-    <!-- ===== Componentes de negocio en vivo (incluye los 4 estados de R5) ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-negocio">
-      <h2 id="t-negocio">Componentes de negocio (en vivo)</h2>
-      <p class="showcase-label">&lt;cc-movimiento&gt;: gasto e ingreso editables y un movimiento de un mes anterior</p>
-      <ul class="list" id="demo-movimientos"></ul>
-      <p class="showcase-label">&lt;cc-barra-presupuesto&gt;: los 4 estados de R5 (excedido, alcanzado, cerca, normal) y sin límite</p>
-      <div class="card-grid" id="demo-presupuesto"></div>
-      <p class="showcase-label">Eventos emitidos</p>
-      <ol class="field__hint" id="demo-eventos" role="log" aria-live="polite"><li>Activa "Editar", "Editar límite" o elige un rango en el calendario para ver el evento.</li></ol>
-    </section>
-
-    <!-- ===== Íconos ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-iconos">
-      <h2 id="t-iconos">Íconos sólidos y monocromos</h2>
-      <p class="showcase-label">Heredan el color del texto y son decorativos (aria-hidden): el nombre siempre va escrito.</p>
-      <ul class="showcase-icons" id="demo-iconos"></ul>
-    </section>
-
-    <!-- ===== Botones ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-botones">
-      <h2 id="t-botones">Botones</h2>
-      <p class="showcase-label">Variantes</p>
-      <div class="cluster">
-        <button class="btn btn--primary" type="button">Guardar</button>
-        <button class="btn btn--secondary" type="button">Cancelar</button>
-        <button class="btn btn--danger" type="button">Eliminar</button>
-        <button class="btn btn--link" type="button">Editar</button>
-        <button class="icon-btn" type="button"><!--icon:chevron-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg><span class="visually-hidden">Anterior</span></button>
-      </div>
-      <p class="showcase-label">Estados: deshabilitado y guardando</p>
-      <div class="cluster">
-        <button class="btn btn--primary" type="button" disabled>Guardar</button>
-        <button class="btn btn--primary" type="button" aria-disabled="true" aria-busy="true">Guardando…</button>
-      </div>
-      <p class="showcase-label">Bloque (acción primaria en la zona del pulgar)</p>
-      <button class="btn btn--primary btn--block" type="button">Guardar</button>
-    </section>
-
-    <!-- ===== Campos ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-campos">
-      <h2 id="t-campos">Campos de formulario</h2>
-
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Tipo de movimiento</legend>
-        <div class="segmented">
-          <input class="segmented__input" type="radio" name="v-tipo" id="v-gasto" value="expense" checked>
-          <label class="segmented__label" for="v-gasto">Gasto</label>
-          <input class="segmented__input" type="radio" name="v-tipo" id="v-ingreso" value="income">
-          <label class="segmented__label" for="v-ingreso">Ingreso</label>
-        </div>
-      </fieldset>
-
-      <div class="field">
-        <label class="field__label" for="v-monto">Monto (S/)</label>
-        <input class="field__control field__control--amount" id="v-monto" type="text" inputmode="decimal" aria-describedby="v-monto-hint" value="25.50">
-        <p class="field__hint" id="v-monto-hint">Hasta S/ 10 000, con 2 decimales como máximo.</p>
-      </div>
-
-      <div class="field">
-        <label class="field__label" for="v-monto-error">Monto con error (S/)</label>
-        <input class="field__control field__control--amount" id="v-monto-error" type="text" inputmode="decimal" aria-invalid="true" aria-describedby="v-monto-error-msg" value="12.345">
-        <p class="field__error" id="v-monto-error-msg">Usa como máximo 2 decimales.</p>
-      </div>
-
-      <fieldset class="fieldset">
-        <legend class="fieldset__legend">Categoría (mosaico con ícono)</legend>
-        <div class="tile-group">
-          <input class="tile__input" type="radio" name="v-cat" id="v-cat-food" checked><label class="tile" for="v-cat-food"><!--icon:food--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M3 11h18c0 4.97-4.03 9-9 9s-9-4.03-9-9zM6.5 4a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0zM11 3a1 1 0 0 1 2 0v5a1 1 0 0 1-2 0zM15.5 4a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0z"/></svg><span>Comida</span></label>
-          <input class="tile__input" type="radio" name="v-cat" id="v-cat-transport"><label class="tile" for="v-cat-transport"><!--icon:transport--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7 3h10a3 3 0 0 1 3 3v11a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H9v1.5a1.5 1.5 0 0 1-3 0V18H5a1 1 0 0 1-1-1V6a3 3 0 0 1 3-3zM6 7v4h12V7zM7.5 13.3a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM16.5 13.3a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg><span>Transporte</span></label>
-          <input class="tile__input" type="radio" name="v-cat" id="v-cat-housing"><label class="tile" for="v-cat-housing"><!--icon:housing--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M12 3 2.5 11H5v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9h2.5z"/></svg><span>Vivienda</span></label>
-          <input class="tile__input" type="radio" name="v-cat" id="v-cat-utilities"><label class="tile" for="v-cat-utilities"><!--icon:utilities--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M13.5 2 4.5 13.5H11L10 22l9.5-11.5H13z"/></svg><span>Servicios</span></label>
-          <input class="tile__input" type="radio" name="v-cat" id="v-cat-leisure"><label class="tile" for="v-cat-leisure"><!--icon:leisure--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M4 5h16a2 2 0 0 1 2 2v2.5a2.5 2.5 0 0 0 0 5V17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.5a2.5 2.5 0 0 0 0-5V7a2 2 0 0 1 2-2z"/></svg><span>Ocio</span></label>
-          <input class="tile__input" type="radio" name="v-cat" id="v-cat-other"><label class="tile" for="v-cat-other"><!--icon:other--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.5 4h3A1.5 1.5 0 0 1 10 5.5v3A1.5 1.5 0 0 1 8.5 10h-3A1.5 1.5 0 0 1 4 8.5v-3A1.5 1.5 0 0 1 5.5 4zM15.5 4h3A1.5 1.5 0 0 1 20 5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 14 8.5v-3A1.5 1.5 0 0 1 15.5 4zM5.5 14h3a1.5 1.5 0 0 1 1.5 1.5v3A1.5 1.5 0 0 1 8.5 20h-3A1.5 1.5 0 0 1 4 18.5v-3A1.5 1.5 0 0 1 5.5 14zM15.5 14h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3a1.5 1.5 0 0 1 1.5-1.5z"/></svg><span>Otros</span></label>
-        </div>
-      </fieldset>
-
-      <div class="field">
-        <label class="field__label" for="v-fecha">Fecha</label>
-        <input class="field__control" id="v-fecha" type="date" value="2026-11-20" min="2026-09-21" max="2026-11-20">
-      </div>
-
-      <div class="field">
-        <label class="field__label" for="v-descripcion">Descripción</label>
-        <textarea class="field__control" id="v-descripcion" maxlength="60" aria-describedby="v-descripcion-contador">Almuerzo menú</textarea>
-        <p class="field__counter" id="v-descripcion-contador">13/60</p>
-      </div>
-    </section>
-
-    <!-- ===== Período ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-periodo">
-      <h2 id="t-periodo">Período: selector a todo el ancho y hoja con atajos y calendario</h2>
-
-      <button class="period-trigger" type="button">
-          <!--icon:calendar--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zM5 10v9h14v-9zM7 12h3v3H7z"/></svg>
-          <span class="period-trigger__text">
-            <span class="period-trigger__value">Este mes</span>
-            <span class="period-trigger__range">1 – 30 nov 2026</span>
-          </span>
-          <!--icon:chevron-down--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.4 8.6 4 10l8 8 8-8-1.4-1.4-6.6 6.6z"/></svg>
-      </button>
-
-      <p class="showcase-label">La hoja (en la app se abre sobre la pantalla como diálogo modal)</p>
-      <div class="sheet sheet--inline">
-        <div class="sheet__inner">
-          <div class="sheet__header">
-            <h3 class="sheet__title">Elige un período</h3>
-            <button class="icon-btn" type="button"><!--icon:close--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6z"/></svg><span class="visually-hidden">Cerrar</span></button>
-          </div>
-          <div class="option-group" role="group" aria-label="Atajos de período">
-            <button class="option" type="button" aria-pressed="false">Hoy</button>
-            <button class="option" type="button" aria-pressed="false">Esta semana</button>
-            <button class="option" type="button" aria-pressed="true">Este mes</button>
-            <button class="option" type="button" aria-pressed="false">Mes anterior</button>
-          </div>
-          <cc-calendario-rango id="demo-calendario"></cc-calendario-rango>
-          <div class="sheet__footer">
-            <button class="btn btn--secondary" type="button">Cancelar</button>
-            <button class="btn btn--primary" type="button">Aplicar rango</button>
-          </div>
+  <main id="contenido">
+    <!-- Encabezado de la vista: título grande en una franja blanca; al hacer scroll pasa en pequeño a la barra de marca -->
+    <div class="page-header">
+      <div class="container page-header__body">
+        <p class="page-header__eyebrow">Design system</p>
+        <h1 class="page-header__title">Vitrina de <span class="page-header__accent">componentes</span></h1>
+        <p class="page-header__lead">Cada componente de CuentaClara en cada estado. Los colores salen solo de <code>styles/tokens.css</code>.</p>
+        <div class="cluster" style="justify-content: center; margin-top: var(--space-3)">
+          <button class="btn btn--secondary" type="button" id="tema" aria-pressed="false">Tema oscuro</button>
         </div>
       </div>
+    </div>
 
-      <p class="showcase-label">Filtro por categoría</p>
-      <div class="chip-group" role="group" aria-label="Filtrar por categoría (ejemplo)">
-        <button class="chip" type="button" aria-pressed="true">Todas</button>
-        <button class="chip" type="button" aria-pressed="false">Comida</button>
-        <button class="chip" type="button" aria-pressed="false">Transporte</button>
-        <button class="chip" type="button" aria-pressed="false">Vivienda</button>
-        <button class="chip" type="button" aria-pressed="false">Ocio</button>
-      </div>
-    </section>
+    <div class="container page-body">
 
-    <!-- ===== Resumen ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-resumen">
-      <h2 id="t-resumen">Resumen del período</h2>
-      <dl class="summary">
-        <div class="summary__item summary__item--total"><dt class="summary__label">Saldo</dt><dd class="summary__value">S/ 1 059.10</dd></div>
-        <div class="summary__item"><dt class="summary__label">Gastos</dt><dd class="summary__value amount amount--expense">− S/ 2 260.90</dd></div>
-        <div class="summary__item"><dt class="summary__label">Ingresos</dt><dd class="summary__value amount amount--income">+ S/ 3 320.00</dd></div>
-      </dl>
-    </section>
+      <!-- ===== Componentes de negocio en vivo (incluye los 4 estados de R5) ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-negocio">
+        <h2 id="t-negocio">Componentes de negocio (en vivo)</h2>
+        <p class="showcase-label">&lt;cc-movimiento&gt;: gasto e ingreso editables y un movimiento de un mes anterior</p>
+        <ul class="list" id="demo-movimientos"></ul>
+        <p class="showcase-label">&lt;cc-barra-presupuesto&gt;: los 4 estados de R5 (excedido, alcanzado, cerca, normal) y sin límite</p>
+        <div class="budget-list" id="demo-presupuesto"></div>
+        <p class="showcase-label">Eventos emitidos</p>
+        <ol class="field__hint" id="demo-eventos" role="log" aria-live="polite"><li>Activa "Editar", "Editar límite" o elige un rango en el calendario para ver el evento.</li></ol>
+      </section>
 
-    <!-- ===== Estados de vista ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-estados">
-      <h2 id="t-estados">Estados: carga, vacío, error y éxito</h2>
+      <!-- ===== Íconos ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-iconos">
+        <h2 id="t-iconos">Íconos sólidos y monocromos</h2>
+        <p class="showcase-label">Heredan el color del texto y son decorativos (aria-hidden): el nombre siempre va escrito.</p>
+        <ul class="showcase-icons" id="demo-iconos"></ul>
+      </section>
 
-      <p class="showcase-label">Cargando</p>
-      <div aria-busy="true">
-        <span class="skeleton" aria-hidden="true"></span>
-        <span class="skeleton" aria-hidden="true"></span>
-        <p class="field__hint">Cargando movimientos…</p>
-      </div>
-
-      <p class="showcase-label">Vacío</p>
-      <div class="state">
-        <p class="state__title">No hay movimientos en Ocio</p>
-        <p>Prueba con otra categoría o registra un gasto.</p>
-        <button class="btn btn--secondary" type="button">Ver todas las categorías</button>
-      </div>
-
-      <p class="showcase-label">Error</p>
-      <div class="state">
-        <p class="alert alert--error">No pudimos cargar tus movimientos.</p>
-        <button class="btn btn--primary" type="button">Reintentar</button>
-      </div>
-
-      <p class="showcase-label">Éxito (role="status")</p>
-      <div class="alert alert--success" role="status">Gasto registrado: S/ 15.00 en Comida</div>
-    </section>
-
-    <!-- ===== Confirmación en la página ===== -->
-    <section class="showcase-section stack" aria-labelledby="t-confirmar">
-      <h2 id="t-confirmar">Confirmación de eliminar</h2>
-      <div class="confirm stack" role="group" aria-labelledby="v-confirm-title">
-        <h3 class="confirm__title" id="v-confirm-title" tabindex="-1">¿Eliminar este movimiento?</h3>
-        <p>Almuerzo menú · S/ 15.00. Esta acción no se puede deshacer.</p>
+      <!-- ===== Botones ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-botones">
+        <h2 id="t-botones">Botones</h2>
+        <p class="showcase-label">Variantes</p>
         <div class="cluster">
-          <button class="btn btn--danger-solid" type="button">Sí, eliminar</button>
+          <button class="btn btn--primary" type="button">Guardar</button>
           <button class="btn btn--secondary" type="button">Cancelar</button>
+          <button class="btn btn--danger" type="button">Eliminar</button>
+          <button class="btn btn--link" type="button">Editar</button>
+          <button class="icon-btn" type="button"><!--icon:chevron-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg><span class="visually-hidden">Anterior</span></button>
         </div>
-      </div>
-    </section>
+        <p class="showcase-label">Estados: deshabilitado y guardando</p>
+        <div class="cluster">
+          <button class="btn btn--primary" type="button" disabled>Guardar</button>
+          <button class="btn btn--primary" type="button" aria-disabled="true" aria-busy="true">Guardando…</button>
+        </div>
+        <p class="showcase-label">Bloque (acción primaria en la zona del pulgar)</p>
+        <button class="btn btn--primary btn--block" type="button">Guardar</button>
+      </section>
+
+      <!-- ===== Campos ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-campos">
+        <h2 id="t-campos">Campos de formulario</h2>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset__legend">Tipo de movimiento</legend>
+          <div class="segmented">
+            <input class="segmented__input" type="radio" name="v-tipo" id="v-gasto" value="expense" checked>
+            <label class="segmented__label" for="v-gasto">Gasto</label>
+            <input class="segmented__input" type="radio" name="v-tipo" id="v-ingreso" value="income">
+            <label class="segmented__label" for="v-ingreso">Ingreso</label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label class="field__label" for="v-monto">Monto (S/)</label>
+          <input class="field__control field__control--amount" id="v-monto" type="text" inputmode="decimal" aria-describedby="v-monto-hint" value="25.50">
+          <p class="field__hint" id="v-monto-hint">Hasta S/ 10 000, con 2 decimales como máximo.</p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="v-monto-error">Monto con error (S/)</label>
+          <input class="field__control field__control--amount" id="v-monto-error" type="text" inputmode="decimal" aria-invalid="true" aria-describedby="v-monto-error-msg" value="12.345">
+          <p class="field__error" id="v-monto-error-msg">Usa como máximo 2 decimales.</p>
+        </div>
+
+        <fieldset class="fieldset">
+          <legend class="fieldset__legend">Categoría (mosaico con ícono)</legend>
+          <div class="tile-group">
+            <input class="tile__input" type="radio" name="v-cat" id="v-cat-food" checked><label class="tile" for="v-cat-food"><!--icon:food--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M3 11h18c0 4.97-4.03 9-9 9s-9-4.03-9-9zM6.5 4a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0zM11 3a1 1 0 0 1 2 0v5a1 1 0 0 1-2 0zM15.5 4a1 1 0 0 1 2 0v4a1 1 0 0 1-2 0z"/></svg><span>Comida</span></label>
+            <input class="tile__input" type="radio" name="v-cat" id="v-cat-transport"><label class="tile" for="v-cat-transport"><!--icon:transport--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7 3h10a3 3 0 0 1 3 3v11a1 1 0 0 1-1 1h-1v1.5a1.5 1.5 0 0 1-3 0V18H9v1.5a1.5 1.5 0 0 1-3 0V18H5a1 1 0 0 1-1-1V6a3 3 0 0 1 3-3zM6 7v4h12V7zM7.5 13.3a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM16.5 13.3a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4z"/></svg><span>Transporte</span></label>
+            <input class="tile__input" type="radio" name="v-cat" id="v-cat-housing"><label class="tile" for="v-cat-housing"><!--icon:housing--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M12 3 2.5 11H5v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9h2.5z"/></svg><span>Vivienda</span></label>
+            <input class="tile__input" type="radio" name="v-cat" id="v-cat-utilities"><label class="tile" for="v-cat-utilities"><!--icon:utilities--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M13.5 2 4.5 13.5H11L10 22l9.5-11.5H13z"/></svg><span>Servicios</span></label>
+            <input class="tile__input" type="radio" name="v-cat" id="v-cat-leisure"><label class="tile" for="v-cat-leisure"><!--icon:leisure--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M4 5h16a2 2 0 0 1 2 2v2.5a2.5 2.5 0 0 0 0 5V17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.5a2.5 2.5 0 0 0 0-5V7a2 2 0 0 1 2-2z"/></svg><span>Ocio</span></label>
+            <input class="tile__input" type="radio" name="v-cat" id="v-cat-other"><label class="tile" for="v-cat-other"><!--icon:other--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.5 4h3A1.5 1.5 0 0 1 10 5.5v3A1.5 1.5 0 0 1 8.5 10h-3A1.5 1.5 0 0 1 4 8.5v-3A1.5 1.5 0 0 1 5.5 4zM15.5 4h3A1.5 1.5 0 0 1 20 5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 14 8.5v-3A1.5 1.5 0 0 1 15.5 4zM5.5 14h3a1.5 1.5 0 0 1 1.5 1.5v3A1.5 1.5 0 0 1 8.5 20h-3A1.5 1.5 0 0 1 4 18.5v-3A1.5 1.5 0 0 1 5.5 14zM15.5 14h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a1.5 1.5 0 0 1-1.5-1.5v-3a1.5 1.5 0 0 1 1.5-1.5z"/></svg><span>Otros</span></label>
+          </div>
+        </fieldset>
+
+        <div class="field">
+          <label class="field__label" for="v-fecha">Fecha</label>
+          <input class="field__control" id="v-fecha" type="date" value="2026-11-20" min="2026-09-21" max="2026-11-20">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="v-descripcion">Descripción</label>
+          <textarea class="field__control" id="v-descripcion" maxlength="60" aria-describedby="v-descripcion-contador">Almuerzo menú</textarea>
+          <p class="field__counter" id="v-descripcion-contador">13/60</p>
+        </div>
+      </section>
+
+      <!-- ===== Período ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-periodo">
+        <h2 id="t-periodo">Período: selector a todo el ancho y hoja con atajos y calendario</h2>
+
+        <button class="period-trigger" type="button">
+            <!--icon:calendar--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zM5 10v9h14v-9zM7 12h3v3H7z"/></svg>
+            <span class="period-trigger__text">
+              <span class="period-trigger__value">Este mes</span>
+              <span class="period-trigger__range">1 – 30 nov 2026</span>
+            </span>
+            <!--icon:chevron-down--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.4 8.6 4 10l8 8 8-8-1.4-1.4-6.6 6.6z"/></svg>
+        </button>
+
+        <p class="showcase-label">La hoja (en la app se abre sobre la pantalla como diálogo modal)</p>
+        <div class="sheet sheet--inline">
+          <div class="sheet__inner">
+            <div class="sheet__header">
+              <h3 class="sheet__title">Elige un período</h3>
+              <button class="icon-btn" type="button"><!--icon:close--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6z"/></svg><span class="visually-hidden">Cerrar</span></button>
+            </div>
+            <div class="option-group" role="group" aria-label="Atajos de período">
+              <button class="option" type="button" aria-pressed="false">Hoy</button>
+              <button class="option" type="button" aria-pressed="false">Esta semana</button>
+              <button class="option" type="button" aria-pressed="true">Este mes</button>
+              <button class="option" type="button" aria-pressed="false">Mes anterior</button>
+            </div>
+            <cc-calendario-rango id="demo-calendario"></cc-calendario-rango>
+            <div class="sheet__footer">
+              <button class="btn btn--secondary" type="button">Cancelar</button>
+              <button class="btn btn--primary" type="button">Aplicar rango</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="showcase-label">Filtro por categoría</p>
+        <div class="chip-group" role="group" aria-label="Filtrar por categoría (ejemplo)">
+          <button class="chip" type="button" aria-pressed="true">Todas</button>
+          <button class="chip" type="button" aria-pressed="false">Comida</button>
+          <button class="chip" type="button" aria-pressed="false">Transporte</button>
+          <button class="chip" type="button" aria-pressed="false">Vivienda</button>
+          <button class="chip" type="button" aria-pressed="false">Ocio</button>
+        </div>
+      </section>
+
+      <!-- ===== Resumen ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-resumen">
+        <h2 id="t-resumen">Resumen del período</h2>
+        <dl class="hero-summary">
+          <div class="hero-summary__main"><dt class="hero-summary__label">Saldo</dt><dd class="hero-summary__value">S/ 1 059.10</dd></div>
+          <div class="hero-summary__stat"><dt class="hero-summary__stat-label"><!--icon:arrow-down-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M17 18H6V7h2v7.6l8.3-8.3 1.4 1.4L9.4 16H17z"/></svg>Ingresos</dt><dd class="hero-summary__stat-value">+ S/ 3 320.00</dd></div>
+          <div class="hero-summary__stat"><dt class="hero-summary__stat-label"><!--icon:arrow-up-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7 6h11v11h-2V9.4l-8.3 8.3-1.4-1.4L14.6 8H7z"/></svg>Gastos</dt><dd class="hero-summary__stat-value">− S/ 2 260.90</dd></div>
+        </dl>
+        <section class="hero-summary hero-summary--single" aria-label="Resumen del mes (ejemplo)">
+          <p class="hero-summary__label">Usado de tu presupuesto</p>
+          <p class="hero-summary__value">S/ 1 025.00 <span class="hero-summary__of">de S/ 1 250.00</span></p>
+          <div class="hero-summary__progress">
+            <div class="hero-summary__bar" aria-hidden="true"><span class="hero-summary__fill" style="--hero-value: 82%"></span></div>
+            <span class="hero-summary__percent">82 %</span>
+          </div>
+          <p class="hero-summary__badge">3 categorías necesitan atención</p>
+        </section>
+      </section>
+
+      <!-- ===== Estados de vista ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-estados">
+        <h2 id="t-estados">Estados: carga, vacío, error y éxito</h2>
+
+        <p class="showcase-label">Cargando</p>
+        <div aria-busy="true">
+          <span class="skeleton" aria-hidden="true"></span>
+          <span class="skeleton" aria-hidden="true"></span>
+          <p class="field__hint">Cargando movimientos…</p>
+        </div>
+
+        <p class="showcase-label">Vacío</p>
+        <div class="state">
+          <p class="state__title">No hay movimientos en Ocio</p>
+          <p>Prueba con otra categoría o registra un gasto.</p>
+          <button class="btn btn--secondary" type="button">Ver todas las categorías</button>
+        </div>
+
+        <p class="showcase-label">Error</p>
+        <div class="state">
+          <p class="alert alert--error">No pudimos cargar tus movimientos.</p>
+          <button class="btn btn--primary" type="button">Reintentar</button>
+        </div>
+
+        <p class="showcase-label">Éxito (role="status")</p>
+        <div class="alert alert--success" role="status">Gasto registrado: S/ 15.00 en Comida</div>
+      </section>
+
+      <!-- ===== Confirmación en la página ===== -->
+      <section class="showcase-section stack" aria-labelledby="t-confirmar">
+        <h2 id="t-confirmar">Confirmación de eliminar</h2>
+        <div class="confirm stack" role="group" aria-labelledby="v-confirm-title">
+          <h3 class="confirm__title" id="v-confirm-title" tabindex="-1">¿Eliminar este movimiento?</h3>
+          <p>Almuerzo menú · S/ 15.00. Esta acción no se puede deshacer.</p>
+          <div class="cluster">
+            <button class="btn btn--danger-solid" type="button">Sí, eliminar</button>
+            <button class="btn btn--secondary" type="button">Cancelar</button>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
 
   <nav class="bottom-nav" aria-label="Principal">

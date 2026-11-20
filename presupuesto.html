@@ -14,42 +14,85 @@
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="page-header">
-    <div class="brand-bar"><div class="container"><a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a></div></div>
-    <div class="container page-header__body">
-      <h1 class="page-header__title">Tu presupuesto</h1>
-      <p class="page-header__lead">Te avisamos antes de que te pases en cada categoría.</p>
+  <!-- Barra de marca: queda fija arriba en toda la página; al hacer scroll muestra el título de la vista -->
+  <header class="brand-bar">
+    <div class="container brand-bar__inner">
+      <a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a>
+      <p class="brand-bar__title" aria-hidden="true"></p>
     </div>
   </header>
 
-  <main id="contenido" class="container stack stack--compact">
-    <!-- REQ-10 · Navegación de mes en una sola fila: ‹ mes › -->
-    <nav class="month-bar" id="month-nav" aria-label="Cambiar de mes">
-      <a class="icon-btn" id="prev-month" href="#"><!--icon:chevron-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg><span class="visually-hidden">Mes anterior</span></a>
-      <p class="month-bar__label" id="month-label">&nbsp;</p>
-      <a class="icon-btn" id="next-month" href="#"><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Mes siguiente</span></a>
-      <span class="icon-btn icon-btn--disabled" id="next-month-off" hidden><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Mes siguiente (no hay meses futuros)</span></span>
-    </nav>
+  <main id="contenido">
+    <!-- Encabezado de la vista: título grande en una franja blanca; al hacer scroll pasa en pequeño a la barra de marca -->
+    <div class="page-header">
+      <div class="container page-header__body">
+        <p class="page-header__eyebrow" data-today>&nbsp;</p>
+        <h1 class="page-header__title">Tu <span class="page-header__accent">presupuesto</span></h1>
+        <p class="page-header__lead">Te avisamos antes de que te pases.</p>
+      </div>
+    </div>
 
-    <!-- REQ-10 · Meses anteriores en solo lectura -->
-    <p class="alert" id="readonly-note" hidden>Estás viendo un mes anterior: solo lectura.</p>
+    <!-- REQ-10 · Navegación de mes en una sola fila (‹ mes ›), fija bajo la barra de marca -->
+    <div class="sticky-bar">
+      <div class="container sticky-bar__inner">
+        <nav class="month-bar" id="month-nav" aria-label="Cambiar de mes">
+          <a class="icon-btn" id="prev-month" href="#"><!--icon:chevron-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg><span class="visually-hidden">Mes anterior</span></a>
+          <!-- El nombre del mes abre la hoja para saltar a cualquier mes (por ejemplo, al año pasado) -->
+          <button class="month-bar__label" type="button" id="month-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="month-sheet">
+            <!--icon:calendar--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zM5 10v9h14v-9zM7 12h3v3H7z"/></svg>
+            <span id="month-label">&nbsp;</span><span class="visually-hidden">, elegir otro mes</span>
+          </button>
+          <a class="icon-btn" id="next-month" href="#"><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Mes siguiente</span></a>
+          <span class="icon-btn icon-btn--disabled" id="next-month-off" hidden><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Mes siguiente (no hay meses futuros)</span></span>
+        </nav>
+      </div>
+    </div>
 
-    <!-- REQ-04 · Resumen del mes: un número principal y el aviso debajo -->
-    <section class="card budget-summary" id="summary" aria-label="Resumen del mes">
-      <p class="budget-summary__label" id="summary-label">Gastaste en categorías con límite</p>
-      <p class="budget-summary__amount" id="summary-amount">—</p>
-      <p class="budget-summary__attention" id="summary-attention"></p>
-    </section>
+    <div class="container page-body stack stack--compact">
+      <!-- REQ-10 · Meses anteriores en solo lectura -->
+      <p class="alert" id="readonly-note" hidden>Estás viendo un mes anterior: solo lectura.</p>
 
-    <!-- Anuncios: resumen al cargar y confirmaciones -->
-    <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
+      <!-- REQ-04 · Resumen del mes en la tarjeta destacada: lo usado de lo presupuestado, la barra del total y el aviso -->
+      <section class="hero-summary hero-summary--single" id="summary" aria-label="Resumen del mes">
+        <p class="hero-summary__label" id="summary-label">Usado de tu presupuesto</p>
+        <p class="hero-summary__value" id="summary-amount">—</p>
+        <div class="hero-summary__progress" id="summary-bar">
+          <div class="hero-summary__bar" aria-hidden="true"><span class="hero-summary__fill" id="summary-fill"></span></div>
+          <span class="hero-summary__percent" id="summary-percent"></span>
+        </div>
+        <p class="hero-summary__badge" id="summary-attention"></p>
+      </section>
 
-    <section class="stack stack--sm" aria-labelledby="cards-title">
-      <h2 class="list-title" id="cards-title" tabindex="-1">Categorías</h2>
-      <!-- REQ-02 · REQ-03 · REQ-11 · Tarjetas por urgencia y estados de carga y error -->
-      <div class="card-grid" id="cards" aria-busy="true"></div>
-      <div class="list-more" id="cards-more"></div>
-    </section>
+      <!-- Anuncios: resumen al cargar y confirmaciones -->
+      <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
+
+      <section class="stack stack--sm" aria-labelledby="cards-title">
+        <h2 class="list-title" id="cards-title" tabindex="-1">Categorías</h2>
+        <!-- REQ-02 · REQ-03 · REQ-11 · Tarjetas por urgencia y estados de carga y error -->
+        <div class="budget-list" id="cards" aria-busy="true"></div>
+        <div class="list-more" id="cards-more"></div>
+      </section>
+
+      <!-- REQ-10 · Hoja "Elige un mes": el año con ‹ › y los 12 meses; los meses futuros no se pueden elegir -->
+      <dialog class="sheet" id="month-sheet" aria-labelledby="month-sheet-title">
+        <div class="sheet__inner">
+          <div class="sheet__header">
+            <h2 class="sheet__title" id="month-sheet-title">Elige un mes</h2>
+          </div>
+          <div class="calendar">
+            <div class="calendar__header">
+              <button class="icon-btn" type="button" id="prev-year" data-year="-1"><!--icon:chevron-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg><span class="visually-hidden">Año anterior</span></button>
+              <p class="calendar__title" id="sheet-year" aria-live="polite">&nbsp;</p>
+              <button class="icon-btn" type="button" id="next-year" data-year="1"><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Año siguiente</span></button>
+            </div>
+            <ul class="month-grid" id="month-grid" aria-labelledby="sheet-year"></ul>
+          </div>
+          <div class="sheet__footer">
+            <button class="btn btn--secondary" type="button" data-close>Cancelar</button>
+          </div>
+        </div>
+      </dialog>
+    </div>
   </main>
 
   <nav class="bottom-nav" aria-label="Principal">
