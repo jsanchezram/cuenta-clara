@@ -8,7 +8,7 @@ import {
   validateDescription,
   validateTransaction,
   canEdit,
-} from '../js/logic/rules.js';
+} from '../../js/logic/rules.js';
 
 const TODAY = '2026-11-20';
 

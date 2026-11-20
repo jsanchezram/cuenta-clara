@@ -7,7 +7,7 @@ import {
   budgetMessage,
   effectiveLimit,
   buildBudgetRows,
-} from '../js/logic/budget.js';
+} from '../../js/logic/budget.js';
 
 // ---------- R5 · Estados (en céntimos) ----------
 test('R5: menos de 80 % es NORMAL', () => {
@@ -83,7 +83,7 @@ test('buildBudgetRows suma solo gastos del mes por categoría y marca las que no
 });
 
 // ---------- HU-03 · orden, resumen y límites quitados ----------
-import { sortByUrgency, budgetSummary } from '../js/logic/budget.js';
+import { sortByUrgency, budgetSummary } from '../../js/logic/budget.js';
 
 /** @param {string} category @param {any} status @param {number | null} percent @param {number | null} [limit] @param {number} [spent] */
 const row = (category, status, percent, limit = 100, spent = 0) =>

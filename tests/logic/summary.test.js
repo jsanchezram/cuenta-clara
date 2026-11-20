@@ -1,9 +1,9 @@
 // @ts-check
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { filterTransactions, totals, sortByDateDesc } from '../js/logic/summary.js';
+import { filterTransactions, totals, sortByDateDesc } from '../../js/logic/summary.js';
 
-/** @type {import('../js/models/types.js').Transaction[]} */
+/** @type {import('../../js/models/types.js').Transaction[]} */
 const list = [
   { id: 'a', type: 'expense', category: 'food', amount: 0.1, date: '2026-11-18', description: 'Chicle', createdAt: '2026-11-18T09:00:00-05:00', updatedAt: '' },
   { id: 'b', type: 'expense', category: 'food', amount: 0.2, date: '2026-11-18', description: 'Caramelo', createdAt: '2026-11-18T10:00:00-05:00', updatedAt: '' },

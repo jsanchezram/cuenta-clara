@@ -8,10 +8,10 @@ import {
   toTransactionDTO,
   toTransactionPatch,
   toBudget,
-} from '../js/contracts/mappers.js';
-import { toCents, formatMoney } from '../js/utils/money.js';
+} from '../../js/contracts/mappers.js';
+import { toCents, formatMoney } from '../../js/utils/money.js';
 
-/** @type {import('../js/contracts/dto.js').TransactionDTO} */
+/** @type {import('../../js/contracts/dto.js').TransactionDTO} */
 const lunchDTO = {
   id: 'txn_0025',
   type: 'EXPENSE',
@@ -117,7 +117,7 @@ test('formatMoney usa S/, separador de miles con espacio y 2 decimales', () => {
 });
 
 // ---------- HU-03 · registros de presupuesto (REQ-09) ----------
-import { toBudgetRecord } from '../js/contracts/mappers.js';
+import { toBudgetRecord } from '../../js/contracts/mappers.js';
 
 test('toBudgetRecord marca como quitado un registro con deleted_at', () => {
   const base = { category: /** @type {const} */ ('LEISURE'), limit: 15000, effective_from: '2026-11', created_at: '', updated_at: '' };
