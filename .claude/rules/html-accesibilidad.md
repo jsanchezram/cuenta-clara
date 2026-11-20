@@ -1,0 +1,34 @@
+---
+paths:
+  - "**/*.html"
+  - "js/componentes/**/*.js"
+  - "js/pantallas/**/*.js"
+---
+# Reglas de HTML y accesibilidad (WCAG 2.2 AA)
+
+- `<html lang="es-PE">`, un solo `<h1>` por página, landmarks (`header`, `nav`, `main`) y un enlace "Saltar al contenido".
+- El menú marca la página actual con `aria-current="page"`.
+- Cada campo tiene un `<label for>` visible. Las pistas van con `aria-describedby`.
+- Los grupos de opciones (tipo, atajos) van en `fieldset` + `legend` o en `role="group"` con nombre.
+- Errores:
+  - Cada campo con error lleva `aria-invalid="true"` y `aria-describedby` apuntando a su mensaje.
+  - Al enviar, el foco va al primer campo con error.
+  - Nunca se borra lo escrito.
+- Botones de filtro y atajo con `aria-pressed`. El activo lleva además una señal visible distinta del color (✓ o borde).
+- Mensajes:
+  - Confirmaciones con `role="status"`.
+  - `role="alert"` solo para errores que interrumpen.
+- Carga:
+  - Contenedor con `aria-busy="true"`.
+  - Skeleton con `aria-hidden="true"`.
+  - Texto visible: "Cargando…".
+- Barra de presupuesto con `<progress>` o `role="progressbar"`, con `aria-valuenow` y un texto visible del estado: "Cerca del límite", "Alcanzaste tu límite" o "Te pasaste por S/ X".
+- Los botones que se repiten por fila llevan texto oculto con `.visually-hidden` (por ejemplo "Editar Almuerzo menú").
+- Confirmación en la página:
+  - Al abrirla, el foco va a su título.
+  - "Cancelar" devuelve el foco al botón que la abrió.
+- Objetivos táctiles de 44 px o más. Se prueba a 360 px y a 1024 × 768, sin scroll horizontal.
+- Inputs para el celular:
+  - Monto: `inputmode="decimal"`.
+  - Fecha: `type="date"` con `min` y `max`.
+  - Siempre con `enterkeyhint`.
