@@ -58,3 +58,31 @@ Cada prompt tiene 6 bloques y se puntúa con la rúbrica de clase. Cada bloque v
 | **Total** | **12/12** | |
 
 **Corrección en el punto de control del plan:** después de guardar, Claude propuso conservar tipo, categoría **y fecha**. Se corrigió para que la fecha vuelva a hoy (bitácora #14).
+
+---
+
+## P-3 · HU-03 Presupuesto por categoría · AI-First (B4, ejecución)
+
+Antes de este prompt se aprobaron tres paquetes:
+- B1, la entrevista de 6 preguntas, produjo `specs/hu-03/spec.md`.
+- B2 produjo `plan.md`.
+- B3 produjo `tasks.md`.
+
+```
+[OBJETIVO] Implementar HU-03 ejecutando @specs/hu-03/tasks.md (T1→T15) hasta que presupuesto.html cumpla REQ-01..12.
+[CONTEXTO] @specs/hu-03/spec.md y @specs/hu-03/plan.md: aprobados, son la fuente de verdad · @docs/api/contrato-v1.md · @js/logic/budget.js · @js/components/cc-barra-presupuesto.js · @js/screens/movimientos.js (patrón de ruta, foco y estados).
+[RESTRICCIONES] Nada fuera de la spec. Solo los archivos del plan. No modificar movimientos/registrar ni debilitar pruebas existentes. Sin commit ni push automáticos: un commit por tarea lo apruebo yo.
+[TERMINADO + VERIFICACIÓN] 1) node --test en verde (las 83 existentes y las nuevas). 2) node scripts/verificar-hu03.mjs N/N. 3) revisor-a11y sin "No cumple". 4) Chrome a 360 px: #/2026-11, #/2026-10, ?fallo=presupuesto.
+[FORMA DE TRABAJO] Edit automatically. Una tarea a la vez: ejecutar su verificación, marcar la casilla con el resultado y seguir. Si una verificación falla 2 veces seguidas, detenerse. Registrar en specs/hu-03/decisiones.md cada decisión tomada sin preguntar.
+[REPORTE] Tabla REQ-01..12 · estado · evidencia (archivo:línea o prueba), decisiones tomadas y la lista de la prueba manual T16.
+```
+
+| Bloque | Puntos | Por qué |
+|---|---|---|
+| Objetivo | 2 | Historia, paquete de tareas y resultado verificable (REQ-01..12) |
+| Contexto | 2 | spec y plan aprobados como fuente de verdad, más 4 referencias con @ |
+| Restricciones | 2 | Nada fuera de la spec, archivos del plan, qué no se toca y la regla de commits |
+| Terminado + verificación | 2 | 4 criterios con comandos y conteos |
+| Forma de trabajo | 2 | Modo, una tarea a la vez, cuándo detenerse y el registro de decisiones |
+| Reporte | 2 | Tabla por requisito con evidencia, decisiones y prueba manual |
+| **Total** | **12/12** | Cumple el mínimo de AI-First |
