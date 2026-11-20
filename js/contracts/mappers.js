@@ -127,3 +127,13 @@ export function toBudget(dto) {
   require(typeof dto.effective_from === 'string' && MONTH_RE.test(dto.effective_from), name, 'effective_from', dto.effective_from);
   return { category, limit: toSoles(dto.limit), effectiveFrom: dto.effective_from };
 }
+
+/**
+ * Registro del historial de límites, incluidos los quitados (HU-03, REQ-09).
+ * Solo lo usa la API para calcular el límite vigente; la UI recibe Budget.
+ * @param {BudgetDTO} dto
+ * @returns {import('../logic/budget.js').BudgetRecord}
+ */
+export function toBudgetRecord(dto) {
+  return { ...toBudget(dto), removed: dto.deleted_at != null };
+}

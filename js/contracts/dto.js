@@ -47,6 +47,7 @@
  * @property {string} effective_from  YYYY-MM
  * @property {string} created_at
  * @property {string} updated_at
+ * @property {string | null} [deleted_at]  opcional (HU-03): límite quitado desde effective_from
  */
 
 /** @typedef {'VALIDATION_ERROR' | 'NOT_FOUND' | 'OUTSIDE_CURRENT_MONTH' | 'SERVER_ERROR'} ErrorCodeDTO */
