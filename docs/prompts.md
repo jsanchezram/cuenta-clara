@@ -33,3 +33,28 @@ Cada prompt tiene 6 bloques y se puntúa con la rúbrica de clase. Cada bloque v
 | Forma de trabajo | 2 | Skill con punto de control, un archivo a la vez y cuándo detenerse |
 | Reporte | 2 | Tabla con evidencia archivo:línea y pruebas manuales |
 | **Total** | **12/12** | No repite reglas de CLAUDE.md (hex, WCAG y tokens se dan por sabidos) |
+
+---
+
+## P-2 · HU-02 Registrar, editar y eliminar · AI-Augmented
+
+```
+[OBJETIVO] Implementar HU-02: registrar.html registra un gasto o ingreso, edita uno existente con ?id= y lo elimina con confirmación en la página.
+[CONTEXTO] @docs/historias-de-usuario.md (HU02-1..8, R1–R4, R6) · @docs/wireframes/02-registrar.png · @js/logic/rules.js (validateTransaction, canEdit) · @js/api/cuentaclara-api.js (create/get/update/delete, ApiError.fields) · @styles/components.css (.field, .segmented, .action-bar, .confirm, .alert)
+[RESTRICCIONES] Crear registrar.html, js/screens/registrar.js y js/state/transaction-form.js. No modificar logic, api, contracts ni pruebas. Sin CSS nuevo. Sin confirm(): la confirmación va en la página.
+[TERMINADO + VERIFICACIÓN] 1) HU02-1..8 se cumplen. 2) node --test en verde. 3) Enviar vacío: 4 errores junto al campo, foco al monto y nada borrado. 4) ?id= de octubre → mensaje y sin guardar. 5) ?fallo=guardar conserva lo escrito. 6) revisor-a11y sin "No cumple".
+[FORMA DE TRABAJO] /nueva-pantalla HU-02: plan primero y esperar el OK. Un archivo a la vez. Si una regla choca con la API, detenerse y preguntar.
+[REPORTE] Tabla criterio · estado · archivo:línea, y la lista de pruebas manuales.
+```
+
+| Bloque | Puntos | Por qué |
+|---|---|---|
+| Objetivo | 2 | Historia y 3 resultados observables (registrar, editar, eliminar) |
+| Contexto | 2 | 5 referencias con @, las reglas que aplican y las funciones clave |
+| Restricciones | 2 | 3 archivos permitidos, capas que no se tocan, sin CSS nuevo y sin `confirm()` |
+| Terminado + verificación | 2 | 6 criterios numerados con casos concretos y comandos |
+| Forma de trabajo | 2 | Skill con punto de control, un archivo a la vez y cuándo detenerse |
+| Reporte | 2 | Tabla con evidencia y pruebas manuales |
+| **Total** | **12/12** | |
+
+**Corrección en el punto de control del plan:** después de guardar, Claude propuso conservar tipo, categoría **y fecha**. Se corrigió para que la fecha vuelva a hoy (bitácora #14).

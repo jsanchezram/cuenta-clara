@@ -805,6 +805,7 @@ textarea.field__control {
 
 /* ---------- Estados de vista: vacío y error ---------- */
 .state {
+  overflow-wrap: anywhere;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -843,6 +844,7 @@ textarea.field__control {
 
 /* ---------- Confirmación en la página ---------- */
 .confirm {
+  overflow-wrap: anywhere;
   padding: var(--card-padding);
   background: var(--color-danger-bg);
   border: var(--border-width-2) solid var(--color-danger-border);
