@@ -51,13 +51,21 @@ export function budgetMessage(status, remaining) {
 }
 
 /**
- * R8: el límite vigente en un mes es el de mayor effectiveFrom ≤ mes.
- * @param {Budget[]} history
+ * Registro del historial de límites. `removed` indica que el límite se quitó desde ese mes (HU-03, REQ-09).
+ * @typedef {Budget & { removed: boolean }} BudgetRecord
+ */
+
+/**
+ * R8: el límite vigente en un mes es el registro de mayor effectiveFrom ≤ mes.
+ * Si ese registro está quitado (`removed`), la categoría no tiene límite ese mes.
+ * @template {Budget & { removed?: boolean }} T
+ * @param {T[]} history
  * @param {ExpenseCategory} category
  * @param {string} month YYYY-MM
- * @returns {Budget | null}
+ * @returns {T | null}
  */
 export function effectiveLimit(history, category, month) {
+  /** @type {T | null} */
   let best = null;
   for (const b of history) {
     if (b.category === category && b.effectiveFrom <= month && (!best || b.effectiveFrom > best.effectiveFrom)) best = b;
@@ -104,4 +112,39 @@ export function buildBudgetRows(budgets, transactions) {
       message: budgetMessage(status, remaining),
     };
   });
+}
+
+const URGENCY = /** @type {Record<BudgetStatus, number>} */ ({ EXCEEDED: 0, REACHED: 1, NEAR: 2, NORMAL: 3 });
+
+/**
+ * REQ-03: excedido, alcanzado, cerca, normal y al final sin límite.
+ * Dentro de un mismo estado, mayor porcentaje primero; sin límite conserva el orden recibido.
+ * @param {BudgetRow[]} rows
+ * @returns {BudgetRow[]}
+ */
+export function sortByUrgency(rows) {
+  const rank = (/** @type {BudgetRow} */ r) => (r.status === null ? 4 : URGENCY[r.status]);
+  return rows
+    .map((r, index) => ({ r, index }))
+    .sort((a, b) => rank(a.r) - rank(b.r) || (b.r.percent ?? 0) - (a.r.percent ?? 0) || a.index - b.index)
+    .map(({ r }) => r);
+}
+
+/**
+ * REQ-04: resumen del mes. Solo suma las categorías que tienen límite.
+ * @param {BudgetRow[]} rows
+ * @returns {{ attention: number, spent: number, limit: number, text: string }}
+ */
+export function budgetSummary(rows) {
+  const limited = rows.filter((r) => r.limit !== null && r.status !== null);
+  if (limited.length === 0) {
+    return { attention: 0, spent: 0, limit: 0, text: 'Aún no defines límites este mes. Define uno para recibir avisos.' };
+  }
+  const attention = limited.filter((r) => r.status !== 'NORMAL').length;
+  const spent = toSoles(limited.reduce((sum, r) => sum + toCents(r.spent), 0));
+  const limit = toSoles(limited.reduce((sum, r) => sum + toCents(/** @type {number} */ (r.limit)), 0));
+  const head = attention === 0
+    ? 'Todo bajo control'
+    : `${attention} ${attention === 1 ? 'categoría necesita' : 'categorías necesitan'} atención`;
+  return { attention, spent, limit, text: `${head} · Gastaste ${formatMoney(spent)} de ${formatMoney(limit)} presupuestados` };
 }

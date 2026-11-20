@@ -53,7 +53,8 @@ export const routes = Object.freeze({
   register: () => 'registrar.html',
   /** @param {string} id */
   edit: (id) => `registrar.html?id=${encodeURIComponent(id)}`,
-  budget: () => 'presupuesto.html',
+  /** @param {string} [month] YYYY-MM */
+  budget: (month) => `presupuesto.html${month ? `#/${month}` : ''}`,
   /** Hash para location.hash en movimientos.html. */
   transactionsHash,
 });
@@ -96,4 +97,18 @@ export function parseTransactionsRoute(hash, today) {
   const category = categoryPart ? slugToCategory(categoryPart) : null;
   const canonical = transactionsHash(period, category);
   return { period, category, hash: canonical, corrected: canonical !== `#/${raw}` || extra.length > 0 };
+}
+
+/**
+ * Lee la ruta de presupuesto.html (HU-03, REQ-01 y REQ-10): #/AAAA-MM.
+ * Un mes inválido o futuro se corrige al mes en curso.
+ * @param {string} hash
+ * @param {string} today  YYYY-MM-DD
+ * @returns {{ month: string, hash: string, corrected: boolean }}
+ */
+export function parseBudgetRoute(hash, today) {
+  const raw = hash.replace(/^#\/?/, '');
+  const valid = MONTH_RE.test(raw) && raw <= currentMonth(today);
+  const month = valid ? raw : currentMonth(today);
+  return { month, hash: `#/${month}`, corrected: !valid };
 }

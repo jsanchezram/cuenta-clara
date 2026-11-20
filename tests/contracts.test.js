@@ -115,3 +115,21 @@ test('formatMoney usa S/, separador de miles con espacio y 2 decimales', () => {
   assert.equal(formatMoney(15.5), 'S/ 15.50');
   assert.equal(formatMoney(-45), 'S/ 45.00');
 });
+
+// ---------- HU-03 · registros de presupuesto (REQ-09) ----------
+import { toBudgetRecord } from '../js/contracts/mappers.js';
+
+test('toBudgetRecord marca como quitado un registro con deleted_at', () => {
+  const base = { category: /** @type {const} */ ('LEISURE'), limit: 15000, effective_from: '2026-11', created_at: '', updated_at: '' };
+  assert.deepEqual(toBudgetRecord(base), { category: 'leisure', limit: 150, effectiveFrom: '2026-11', removed: false });
+  assert.deepEqual(toBudgetRecord({ ...base, deleted_at: '2026-11-20T12:00:00-05:00' }), {
+    category: 'leisure', limit: 150, effectiveFrom: '2026-11', removed: true,
+  });
+});
+
+test('toBudgetRecord valida el límite igual que toBudget', () => {
+  assert.throws(
+    () => toBudgetRecord({ category: 'FOOD', limit: 0, effective_from: '2026-11', created_at: '', updated_at: '', deleted_at: null }),
+    ContractError,
+  );
+});

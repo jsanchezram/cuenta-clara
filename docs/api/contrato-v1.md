@@ -73,6 +73,7 @@ Es la API que tendría CuentaClara. **No existe:** la simula `js/api/cuentaclara
 | `limit` | entero | Céntimos, con la misma regla que `amount` (R7). |
 | `effective_from` | `YYYY-MM` | Mes desde el que vale el límite. Para un mes M, el límite vigente es el registro con el mayor `effective_from ≤ M` (R8). |
 | `created_at`, `updated_at` | ISO 8601 | Auditoría. |
+| `deleted_at` | ISO 8601 o `null` (**opcional**, agregado por HU-03) | Si está lleno, el límite fue **quitado** desde `effective_from`: para un mes M, si el registro vigente tiene `deleted_at`, la categoría no tiene límite ese mes. Es un cambio aditivo: un registro sin el campo equivale a `null`. |
 
 ## Endpoints
 
@@ -174,6 +175,22 @@ Respuestas:
 
 Es `PUT` y no `PATCH` porque el límite es el único campo editable.
 
+### `DELETE /api/v1/budgets/{category}`
+
+Quita el límite de una categoría **desde el mes en curso** (HU-03, REQ-09). Es una eliminación lógica que respeta R8:
+- Si existe un registro con `effective_from` = mes en curso, se llena su `deleted_at`.
+- Si no existe, se crea uno con ese mes, el último `limit` y `deleted_at` lleno.
+
+Los meses anteriores conservan su límite. Volver a definir el límite en el mismo mes con `PUT` reemplaza el registro y deja `deleted_at` en `null`.
+
+| Respuesta | Cuándo |
+|---|---|
+| `204 No Content` | Límite quitado |
+| `404 NOT_FOUND` | La categoría no tiene un límite vigente en el mes en curso |
+| `422 VALIDATION_ERROR` | La categoría no es de gasto |
+
+`GET /budgets?month=` no devuelve las categorías cuyo registro vigente está quitado.
+
 ## Errores
 
 Todos los errores tienen la misma forma:
@@ -194,7 +211,7 @@ Todos los errores tienen la misma forma:
 | `code` | HTTP | `message` (para mostrar) | `fields` |
 |---|---|---|---|
 | `VALIDATION_ERROR` | 422 | "Revisa los campos marcados." | Sí: campo → mensaje |
-| `NOT_FOUND` | 404 | "No encontramos ese movimiento." | No |
+| `NOT_FOUND` | 404 | "No encontramos ese movimiento." (o "Esa categoría no tiene límite este mes." en presupuestos) | No |
 | `OUTSIDE_CURRENT_MONTH` | 409 | "Solo puedes editar o eliminar movimientos de este mes." | No |
 | `SERVER_ERROR` | 500 | "Tuvimos un problema. Intenta de nuevo." | No |
 

@@ -35,6 +35,7 @@
 | `limit` `15000` | `limit` `150` | ÷ 100 y se valida que sea entero entre 1 y 1 000 000 (R7) | — |
 | `effective_from` `"2026-11"` | `effectiveFrom` `"2026-11"` | camelCase y se valida `YYYY-MM` | R8 |
 | `created_at`, `updated_at` | — | Se descartan | La UI no los muestra |
+| `deleted_at` | `removed` (solo en `BudgetRecord`) | `!= null` → `true` | La API lo usa para calcular el límite vigente; la UI solo ve presupuestos activos (`Budget`) |
 
 ## Error
 

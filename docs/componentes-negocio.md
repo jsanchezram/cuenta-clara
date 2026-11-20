@@ -28,8 +28,8 @@ Accesibilidad:
 |---|---|
 | Propiedades | `row: BudgetRow` (de `buildBudgetRows`) |
 | Atributos | `editable` (solo en el mes en curso, R8) · `heading-level="2\|3"` |
-| Eventos | `cc-editar-limite { category }` |
-| Métodos | `focusAction()`: devuelve el foco a "Editar límite" al cerrar el formulario |
+| Eventos | `cc-editar-limite`, `cc-cancelar-limite`, `cc-guardar-limite { value }`, `cc-quitar-limite`, `cc-confirmar-quitar` y `cc-cancelar-quitar`, todos con `{ category }` |
+| Métodos | `setState({ editing, confirmingRemoval, saving, error, draft })` · `focusAction()` · `focusField()` · `focusConfirm()` · `focusRemove()` |
 | Clases que usa | `.card`, `.budget-figures`, `.budget-bar--*`, `.budget-status--*`, `.budget-meta` |
 
 | Estado (R5) | Barra | Ícono | Texto | Botón |
@@ -44,3 +44,14 @@ Accesibilidad:
 - `role="progressbar"`, con `aria-valuenow` acotado a 100 y un `aria-valuetext` que dice el porcentaje real y el estado, por ejemplo "130 % usado. Te pasaste por S/ 45.00".
 - El título de la tarjeta le da nombre al `article` mediante `aria-labelledby`.
 - El botón tiene un texto oculto con la categoría: "Editar límite de Ocio".
+
+### Edición dentro de la tarjeta (HU-03, REQ-05..09)
+
+| Estado de la tarjeta | Qué pinta | Eventos |
+|---|---|---|
+| `editing` | Campo "Límite mensual de X" con `draft`, Guardar, Cancelar y, si tiene límite, Quitar límite | `cc-guardar-limite`, `cc-cancelar-limite` (también con Escape), `cc-quitar-limite` |
+| `editing` + `error` | El mismo campo con `aria-invalid` y el mensaje debajo; el valor escrito se conserva | — |
+| `saving` | "Guardando…" / "Quitando…" con `aria-disabled`, sin perder el foco | — |
+| `confirmingRemoval` | Confirmación en la página: "¿Quitar el límite de X?", con "Sí, quitar" y "Cancelar" | `cc-confirmar-quitar`, `cc-cancelar-quitar` (también con Escape) |
+
+El componente no decide qué se guarda: solo avisa. La pantalla llama a las acciones del store y le devuelve el estado con `setState()`. El foco lo mueve la pantalla con los métodos `focus*()`, buscando la tarjeta por categoría, porque las tarjetas se reordenan por urgencia.

@@ -154,3 +154,45 @@ test('shiftSeed corre los datos al mes en curso y ajusta a hoy lo que quedaría 
   // sin cambio cuando hoy ya está en el último mes de los datos
   assert.deepEqual(shiftSeed(seed, '2026-11-20'), seed);
 });
+
+// ---------- HU-03 · quitar un límite (REQ-07, REQ-09) ----------
+
+test('REQ-09: quitar un límite lo saca desde el mes en curso y conserva los meses anteriores', async () => {
+  const { api } = makeApi();
+  await api.removeBudget('utilities');
+  assert.equal((await api.listBudgets('2026-11')).some((b) => b.category === 'utilities'), false);
+  assert.equal((await api.listBudgets('2027-03')).some((b) => b.category === 'utilities'), false);
+  assert.equal((await api.listBudgets('2026-10')).find((b) => b.category === 'utilities')?.limit, 300);
+});
+
+test('REQ-09: quitar un límite definido este mes marca ese registro con deleted_at', async () => {
+  const { api, storage } = makeApi();
+  await api.removeBudget('leisure'); // Ocio tiene un registro de noviembre
+  const stored = JSON.parse(storage.dump().get('cuentaclara.v1.budgets') ?? '[]');
+  const nov = stored.filter((/** @type {any} */ b) => b.category === 'LEISURE' && b.effective_from === '2026-11');
+  assert.equal(nov.length, 1);
+  assert.equal(nov[0].deleted_at, '2026-11-20T12:00:00-05:00');
+  assert.equal((await api.listBudgets('2026-10')).find((b) => b.category === 'leisure')?.limit, 200);
+});
+
+test('REQ-07: volver a definir un límite quitado en el mismo mes lo reactiva', async () => {
+  const { api } = makeApi();
+  await api.removeBudget('food');
+  await api.saveBudget('food', 450);
+  assert.equal((await api.listBudgets('2026-11')).find((b) => b.category === 'food')?.limit, 450);
+});
+
+test('REQ-09: quitar una categoría sin límite responde NOT_FOUND', async () => {
+  const { api } = makeApi();
+  await assert.rejects(api.removeBudget('housing'), { code: 'NOT_FOUND' });
+});
+
+test('shiftSeed también corre deleted_at de un límite quitado', () => {
+  const withRemoved = {
+    transactions: seed.transactions,
+    budgets: [{ category: 'FOOD', limit: 60000, effective_from: '2026-11', created_at: '2026-11-01T09:00:00-05:00', updated_at: '2026-11-01T09:00:00-05:00', deleted_at: '2026-11-02T09:00:00-05:00' }],
+  };
+  const shifted = shiftSeed(/** @type {any} */ (withRemoved), '2026-12-05');
+  assert.equal(shifted.budgets[0].effective_from, '2026-12');
+  assert.equal(shifted.budgets[0].deleted_at, '2026-12-02T09:00:00-05:00');
+});
