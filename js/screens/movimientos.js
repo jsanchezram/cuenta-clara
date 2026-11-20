@@ -16,6 +16,7 @@ import { periodFromShortcut, periodUnit, shortcutOf, validateRange } from '../lo
 import { addDays, todayInLima, formatMonth, formatDayShort, formatDayWithYear, isValidDate } from '../utils/lima-date.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
+import { watchHeader } from '../components/sticky-header.js';
 
 /** @typedef {import('../models/types.js').Period} Period */
 /** @typedef {import('../models/types.js').Category} Category */
@@ -36,6 +37,7 @@ const SHORTCUT_LABELS = { TODAY: 'Hoy', WEEK: 'Esta semana', MONTH: 'Este mes', 
 
 export function mountTransactions() {
   const today = todayInLima(new Date());
+  watchHeader({ today });
   const api = createBrowserApi();
   const actions = createTransactionsActions(api);
 
@@ -150,7 +152,7 @@ export function mountTransactions() {
     const shown = Math.min(visibleCount, total);
     if (shown < total) {
       more.innerHTML = `<p class="list-more__count">Mostrando ${shown} de ${total}</p>
-        <button class="btn btn--secondary" type="button" data-action="more">Cargar más</button>`;
+        <button class="btn btn--tonal btn--block" type="button" data-action="more">Cargar más</button>`;
     } else {
       more.innerHTML = total > PAGE_SIZE ? `<p class="list-more__count">Mostrando los ${total} movimientos</p>` : '';
     }
