@@ -24,8 +24,8 @@
 
   <!-- data-pending: la pantalla aún no sabe si crea o edita; lo quita cuando pinta su estado real -->
   <main id="contenido" data-pending>
-    <!-- Encabezado de la vista: título grande en una franja blanca; al hacer scroll pasa en pequeño a la barra de marca -->
-    <div class="page-header">
+    <!-- Encabezado de la vista: la fecha de hoy y el título; al hacer scroll, el título pasa en pequeño a la barra de marca -->
+    <div class="page-header page-header--center">
       <div class="container container--narrow page-header__body">
         <p class="page-header__eyebrow" data-today>&nbsp;</p>
         <h1 class="page-header__title" id="page-title" tabindex="-1">Nuevo <span class="page-header__accent">gasto</span></h1>
@@ -39,7 +39,7 @@
       <!-- Mensajes de la página: carga, no encontrado, mes cerrado, éxito -->
       <div id="notice" class="stack notice-slot"></div>
 
-      <form class="stack" id="form" novalidate aria-labelledby="page-title">
+      <form class="stack form-card" id="form" novalidate aria-labelledby="page-title">
         <p class="alert alert--error" id="form-failure" role="alert"></p>
 
         <!-- [HU02-1] Tipo con controles nativos -->
