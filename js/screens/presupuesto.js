@@ -8,9 +8,10 @@ import '../components/cc-barra-presupuesto.js';
 import { createBrowserApi } from '../api/cuentaclara-api.js';
 import { createBudgetActions } from '../state/budget.js';
 import { parseBudgetRoute } from '../rutas.js';
-import { currentMonth, shiftMonth } from '../logic/period.js';
-import { todayInLima, formatMonth } from '../utils/lima-date.js';
+import { currentMonth, shiftMonth, monthsOfYear } from '../logic/period.js';
+import { todayInLima, formatMonth, formatMonthName } from '../utils/lima-date.js';
 import { esc } from '../utils/html.js';
+import { watchHeader } from '../components/sticky-header.js';
 import { formatMoney } from '../utils/money.js';
 
 /** @typedef {import('../components/cc-barra-presupuesto.js').CcBarraPresupuesto} Card */
@@ -24,7 +25,10 @@ const capitalize = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
 export function mountBudget() {
   const today = todayInLima(new Date());
+  watchHeader({ today });
   const thisMonth = currentMonth(today);
+  /** Mes que se está viendo (lo fija la ruta). */
+  let viewedMonth = thisMonth;
   const actions = createBudgetActions(createBrowserApi());
   const cardsRegion = $('cards');
   const announcer = $('announcer');
@@ -47,6 +51,7 @@ export function mountBudget() {
     const route = parseBudgetRoute(location.hash, today);
     if (route.corrected) history.replaceState(null, '', route.hash);
     showAll = false;
+    viewedMonth = route.month;
     paintMonth(route.month);
     actions.load(route.month);
   }
@@ -147,23 +152,35 @@ export function mountBudget() {
   function paintSummary(summary) {
     const amount = $('summary-amount');
     const attention = $('summary-attention');
+    const bar = $('summary-bar');
     if (!summary) {
+      amount.className = 'hero-summary__value';
       amount.textContent = '—';
       attention.textContent = '';
+      bar.hidden = true;
       return;
     }
     if (summary.limit === 0) {
-      $('summary-label').textContent = 'Aún no defines límites este mes';
-      amount.textContent = 'Define uno para recibir avisos.';
-      attention.textContent = '';
+      // En un mes anterior no se pueden definir límites (R8): el texto no invita a hacerlo
+      const past = viewedMonth !== thisMonth;
+      $('summary-label').textContent = 'Presupuesto del mes';
+      amount.className = 'hero-summary__value hero-summary__value--text';
+      amount.textContent = past ? 'Este mes no tuvo límites' : 'Aún no defines límites';
+      attention.className = 'hero-summary__badge hero-summary__badge--info';
+      attention.textContent = past ? 'Los límites se definen en el mes en curso' : 'Define uno para recibir avisos';
+      bar.hidden = true;
       return;
     }
-    $('summary-label').textContent = 'Gastaste en categorías con límite';
-    amount.innerHTML = `<span class="budget-summary__spent">${esc(formatMoney(summary.spent))}</span> de ${esc(formatMoney(summary.limit))}`;
-    attention.className = `budget-summary__attention${summary.attention === 0 ? ' budget-summary__attention--ok' : ''}`;
+    $('summary-label').textContent = 'Usado de tu presupuesto';
+    amount.className = 'hero-summary__value';
+    amount.innerHTML = `${esc(formatMoney(summary.spent))} <span class="hero-summary__of">de ${esc(formatMoney(summary.limit))}</span>`;
+    bar.hidden = false;
+    $('summary-fill').style.setProperty('--hero-value', `${summary.percent}%`);
+    $('summary-percent').textContent = `${summary.percent} %`;
+    attention.className = `hero-summary__badge${summary.attention === 0 ? ' hero-summary__badge--ok' : ''}`;
     attention.textContent = summary.attention === 0
-      ? '✓ Todo bajo control'
-      : `⚠ ${summary.attention} ${summary.attention === 1 ? 'categoría necesita' : 'categorías necesitan'} atención`;
+      ? 'Todo bajo control'
+      : `${summary.attention} ${summary.attention === 1 ? 'categoría necesita' : 'categorías necesitan'} atención`;
   }
 
   /**
@@ -179,7 +196,7 @@ export function mountBudget() {
     order.forEach((c, i) => { /** @type {Card} */ (cards.get(c)).hidden = !showAll && i >= CARD_PAGE; });
     const hiddenCount = showAll ? 0 : Math.max(0, order.length - CARD_PAGE);
     $('cards-more').innerHTML = hiddenCount
-      ? `<button class="btn btn--secondary" type="button" data-action="more">Ver ${hiddenCount} ${hiddenCount === 1 ? 'categoría' : 'categorías'} más</button>`
+      ? `<button class="btn btn--tonal btn--block" type="button" data-action="more">Ver ${hiddenCount} ${hiddenCount === 1 ? 'categoría' : 'categorías'} más</button>`
       : '';
   }
 
@@ -236,6 +253,70 @@ export function mountBudget() {
       focusTitleAfterLoad = true; // el botón desaparece al recargar
       actions.retry();
     }
+  });
+
+  // ---------- REQ-10 · Hoja "Elige un mes": saltar a cualquier mes sin tocar ‹ una y otra vez ----------
+
+  const monthSheet = /** @type {HTMLDialogElement} */ ($('month-sheet'));
+  const monthTrigger = /** @type {HTMLButtonElement} */ ($('month-trigger'));
+  const prevYear = /** @type {HTMLButtonElement} */ ($('prev-year'));
+  const nextYear = /** @type {HTMLButtonElement} */ ($('next-year'));
+  const thisYear = Number(thisMonth.slice(0, 4));
+  let sheetYear = thisYear;
+
+  /** Los 12 meses del año de la hoja: enlaces a su ruta; los meses futuros no se pueden elegir. */
+  function paintMonthGrid() {
+    $('sheet-year').textContent = String(sheetYear);
+    nextYear.disabled = sheetYear >= thisYear;
+    $('month-grid').innerHTML = monthsOfYear(sheetYear)
+      .map((month) => {
+        const name = capitalize(formatMonthName(month));
+        if (month > thisMonth) {
+          return `<li><span class="month-grid__month" aria-disabled="true">${name}<span class="visually-hidden"> de ${sheetYear}, todavía no llega</span></span></li>`;
+        }
+        const isThis = month === thisMonth;
+        return `<li><a class="month-grid__month${isThis ? ' is-this-month' : ''}" href="#/${month}"${month === viewedMonth ? ' aria-current="page"' : ''}>${name}<span class="visually-hidden"> de ${sheetYear}${isThis ? ', mes en curso' : ''}</span></a></li>`;
+      })
+      .join('');
+  }
+
+  function openMonthSheet() {
+    sheetYear = Number(viewedMonth.slice(0, 4));
+    paintMonthGrid();
+    monthSheet.showModal();
+    monthTrigger.setAttribute('aria-expanded', 'true');
+    /** @type {HTMLElement | null} */ (monthSheet.querySelector('[aria-current="page"]') ?? monthSheet.querySelector('a.month-grid__month'))?.focus();
+  }
+
+  // Cierre determinista (el evento "close" del diálogo no siempre llega): el foco vuelve al botón del mes
+  function closeMonthSheet() {
+    if (monthSheet.open) monthSheet.close();
+    monthTrigger.setAttribute('aria-expanded', 'false');
+    monthTrigger.focus();
+  }
+
+  monthTrigger.addEventListener('click', openMonthSheet);
+  monthSheet.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    closeMonthSheet();
+  });
+  monthSheet.addEventListener('click', (e) => {
+    const target = /** @type {HTMLElement} */ (e.target);
+    if (target === monthSheet || target.closest('[data-close]')) {
+      closeMonthSheet();
+      return;
+    }
+    const yearButton = /** @type {HTMLButtonElement | null} */ (target.closest('[data-year]'));
+    if (yearButton) {
+      if (yearButton.disabled) return;
+      sheetYear += Number(yearButton.dataset.year);
+      paintMonthGrid();
+      // Si el botón quedó deshabilitado (llegaste al año en curso), el foco pasa al otro
+      if (yearButton.disabled) prevYear.focus();
+      return;
+    }
+    // Un mes: el enlace cambia el hash (la URL manda) y la hoja se cierra
+    if (target.closest('a.month-grid__month')) closeMonthSheet();
   });
 
   // ---------- Arranque ----------
