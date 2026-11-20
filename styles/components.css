@@ -82,11 +82,12 @@ a {
   color: var(--color-text);
   background: var(--color-surface);
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-raised);
 }
 
+/* La sombra solo cuando se ve: oculto arriba, su sombra manchaba la esquina de la barra de marca */
 .skip-link:focus {
   top: var(--space-2);
+  box-shadow: var(--shadow-raised);
 }
 
 .icon {
@@ -208,7 +209,7 @@ a {
 }
 
 /* Si la vista tiene controles fijos, van pegados al título */
-.page-header:has(+ .sticky-bar) .page-header__body {
+.page-header:has(+ .page-body .sticky-bar) .page-header__body {
   padding-bottom: var(--space-1);
 }
 
@@ -246,6 +247,9 @@ a {
   position: sticky;
   top: var(--brand-bar-height);
   z-index: 3;
+  /* de borde a borde: sale del margen lateral del contenedor */
+  margin-inline: calc(-1 * var(--space-4));
+  padding-inline: var(--space-4);
   background: var(--color-bg);
   transition: box-shadow var(--duration-fast);
 }
@@ -254,7 +258,7 @@ a {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding-block: var(--space-2);
+  padding-block: var(--space-2) var(--space-1);
 }
 
 /* Con la vista desplazada, la franja gana una sombra suave: se lee que el contenido pasa por debajo */
@@ -272,6 +276,17 @@ a {
 /* Contenido de la vista */
 .page-body {
   padding-top: var(--space-2);
+}
+
+/* Movimientos y Presupuesto empiezan con los controles fijos, que ya traen su espacio */
+.page-body.layout {
+  padding-top: 0;
+}
+
+/* Panel de controles y resumen: en el celular no genera caja (sus partes van en el flujo y los
+   controles quedan fijos arriba); en laptop es la columna fija de la izquierda */
+.layout__panel {
+  display: contents;
 }
 
 /* Lugar de avisos (#flash, #notice): vacío no ocupa espacio ni suma el hueco del stack.
@@ -1621,8 +1636,19 @@ cc-movimiento {
     padding-block: var(--space-6) var(--space-3);
   }
 
-  .page-header:has(+ .sticky-bar) .page-header__body {
+  .page-header:has(+ .page-body .sticky-bar) .page-header__body {
     padding-bottom: var(--space-2);
+  }
+
+  /* En laptop el título va a la izquierda, alineado con el panel; Registrar lo mantiene centrado */
+  .page-header__body {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .page-header--center .page-header__body {
+    align-items: center;
+    text-align: center;
   }
 
   .page-header__title {
@@ -1640,40 +1666,18 @@ cc-movimiento {
     display: none;
   }
 
-  /* Controles en una fila: el período (o el mes) a la izquierda y los chips al lado */
-  .sticky-bar {
-    top: var(--bottom-nav-height);
-  }
-
-  .sticky-bar__inner {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-3);
-    padding-block: var(--space-3);
-  }
-
-  .sticky-bar .period-trigger,
-  .sticky-bar .month-bar {
-    flex: 0 1 22rem;
-  }
-
-  .sticky-bar .chip-group {
-    flex: 1 1 24rem;
-    flex-wrap: wrap;
-    margin-inline: 0;
-    padding-inline: 0;
-    overflow-x: visible;
-  }
-
-  .page-body {
+  .page-body,
+  .page-body.layout {
     padding-top: var(--space-4);
   }
 
-  .hero-summary--single,
-  .budget-list,
-  .budget-list + .list-more {
-    max-width: 48rem;
+  /* Registrar: el formulario va en una tarjeta */
+  .form-card {
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: var(--border-width-1) solid var(--color-divider);
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-card);
   }
 
   /* En laptop las cifras del resumen destacado crecen */
@@ -1741,21 +1745,51 @@ cc-movimiento {
     outline-offset: -4px;
   }
 
-  /* Movimientos: el resumen a la izquierda y la lista a la derecha */
+  /* Panel fijo a la izquierda (controles y resumen) y el contenido a la derecha, que es lo único
+     que se desplaza. Un aviso (#flash) ocupa las dos columnas */
   .layout {
     display: grid;
     grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
     align-items: start;
-    gap: var(--space-3) var(--space-8);
+    gap: var(--space-4) var(--space-8);
   }
 
   .layout > * {
+    grid-column: 2;
+  }
+
+  .layout > .notice-slot {
+    grid-column: 1 / -1;
+  }
+
+  .layout__panel {
+    position: sticky;
+    top: calc(var(--bottom-nav-height) + var(--space-4));
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
     grid-column: 1;
   }
 
-  .layout > .layout__main {
-    grid-row: 1 / span 12;
-    grid-column: 2;
+  /* Dentro del panel, los controles ya no son una franja: el panel entero es el que queda fijo */
+  .layout__panel .sticky-bar {
+    position: static;
+    margin-inline: 0;
+    padding-inline: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  .layout__panel .sticky-bar__inner {
+    gap: var(--space-3);
+    padding-block: 0;
+  }
+
+  .layout__panel .chip-group {
+    flex-wrap: wrap;
+    margin-inline: 0;
+    padding-inline: 0;
+    overflow-x: visible;
   }
 
   /* La hoja se vuelve un diálogo centrado */
@@ -1778,7 +1812,8 @@ cc-movimiento {
   }
 
   .brand-bar,
-  .sticky-bar {
+  .sticky-bar,
+  .layout__panel {
     position: static;
   }
 }

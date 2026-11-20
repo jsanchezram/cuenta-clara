@@ -28,11 +28,13 @@ export function watchHeader({ today } = {}) {
   syncTitle();
   new MutationObserver(syncTitle).observe(title, { childList: true, characterData: true, subtree: true });
 
+  // Solo cuenta lo que de verdad queda fijo arriba: en laptop los controles van en el panel lateral
   const measure = () => {
-    const offset = bar.offsetHeight + (sticky?.offsetHeight ?? 0) + 8;
-    document.documentElement.style.setProperty('--sticky-offset', `${offset}px`);
+    const stickyHeight = sticky && getComputedStyle(sticky).position === 'sticky' ? sticky.offsetHeight : 0;
+    document.documentElement.style.setProperty('--sticky-offset', `${bar.offsetHeight + stickyHeight + 8}px`);
   };
   measure();
+  window.addEventListener('resize', measure);
   if ('ResizeObserver' in window) {
     const observer = new ResizeObserver(measure);
     observer.observe(bar);
