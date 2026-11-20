@@ -11,6 +11,7 @@ import { parseBudgetRoute } from '../rutas.js';
 import { currentMonth, shiftMonth } from '../logic/period.js';
 import { todayInLima, formatMonth } from '../utils/lima-date.js';
 import { esc } from '../utils/html.js';
+import { formatMoney } from '../utils/money.js';
 
 /** @typedef {import('../components/cc-barra-presupuesto.js').CcBarraPresupuesto} Card */
 /** @typedef {import('../state/budget.js').BudgetState} BudgetState */
@@ -34,26 +35,39 @@ export function mountBudget() {
   /** @type {Readonly<BudgetState> | null} */
   let previous = null;
   let focusTitleAfterLoad = false;
+  /** Primero se ven las categorías más urgentes; el resto con "Ver más". */
+  const CARD_PAGE = 4;
+  let showAll = false;
+  /** @type {ExpenseCategory[]} */
+  let currentOrder = [];
 
   // ---------- Ruta (REQ-01, REQ-10) ----------
 
   function onRouteChange() {
     const route = parseBudgetRoute(location.hash, today);
     if (route.corrected) history.replaceState(null, '', route.hash);
+    showAll = false;
     paintMonth(route.month);
     actions.load(route.month);
   }
 
-  /** @param {string} month */
+  /**
+   * Barra ‹ mes › compacta. Los enlaces se actualizan en su lugar (no se recrean) para no perder el foco.
+   * @param {string} month
+   */
   function paintMonth(month) {
     const label = capitalize(formatMonth(month));
-    $('month-eyebrow').textContent = label;
+    $('month-label').textContent = label;
     document.title = `Presupuesto · ${label} · CuentaClara`;
     $('readonly-note').hidden = month === thisMonth;
-    const next = month >= thisMonth
-      ? '<span class="month-nav__link month-nav__link--disabled">Mes siguiente →<span class="visually-hidden"> (no hay meses futuros)</span></span>'
-      : `<a class="month-nav__link" href="#/${shiftMonth(month, 1)}">Mes siguiente →</a>`;
-    $('month-nav').innerHTML = `<a class="month-nav__link" href="#/${shiftMonth(month, -1)}">← Mes anterior</a>${next}`;
+    const prev = /** @type {HTMLAnchorElement} */ ($('prev-month'));
+    const next = /** @type {HTMLAnchorElement} */ ($('next-month'));
+    prev.href = `#/${shiftMonth(month, -1)}`;
+    const atCurrent = month >= thisMonth;
+    if (atCurrent && document.activeElement === next) prev.focus();
+    next.hidden = atCurrent;
+    $('next-month-off').hidden = !atCurrent;
+    if (!atCurrent) next.href = `#/${shiftMonth(month, 1)}`;
   }
 
   // ---------- Pintar desde el estado ----------
@@ -71,7 +85,8 @@ export function mountBudget() {
         <span class="skeleton" aria-hidden="true"></span>
         <span class="skeleton" aria-hidden="true"></span>
         <p class="field__hint">Cargando presupuesto…</p>`;
-      $('summary-text').textContent = '—';
+      paintSummary(null);
+      $('cards-more').innerHTML = '';
       previous = state;
       return;
     }
@@ -84,15 +99,15 @@ export function mountBudget() {
           <p class="alert alert--error" role="alert">No pudimos cargar tu presupuesto.</p>
           <button class="btn btn--primary" type="button" data-action="retry">Reintentar</button>
         </div>`;
-      $('summary-text').textContent = '—';
+      paintSummary(null);
+      $('cards-more').innerHTML = '';
       if (focusTitleAfterLoad) { focusTitleAfterLoad = false; $('cards-title').focus(); }
       previous = state;
       return;
     }
 
     // REQ-04: resumen
-    // Cada monto en .amount (white-space: nowrap) para que 'S/ 1 250.00' no se parta en el espacio de miles
-    $('summary-text').innerHTML = esc(state.summary?.text ?? '').replace(/S\/ [\d ]+\.\d{2}/g, (m) => `<span class="amount">${m}</span>`);
+    paintSummary(state.summary);
 
     // REQ-02, REQ-03: una tarjeta por categoría, en el orden por urgencia del store
     const editable = state.month === thisMonth;
@@ -117,11 +132,69 @@ export function mountBudget() {
       });
     }
     if (order.join() !== currentOrder.join()) cardsRegion.append(...order.map((c) => /** @type {Card} */ (cards.get(c))));
+    paintMore(state, order);
 
     announce(state);
     manageFocus(state);
     previous = state;
   }
+
+  /**
+   * REQ-04: número principal (gastado de lo presupuestado) y el aviso debajo.
+   * El texto completo de budgetSummary se anuncia en la región viva.
+   * @param {BudgetState['summary']} summary
+   */
+  function paintSummary(summary) {
+    const amount = $('summary-amount');
+    const attention = $('summary-attention');
+    if (!summary) {
+      amount.textContent = '—';
+      attention.textContent = '';
+      return;
+    }
+    if (summary.limit === 0) {
+      $('summary-label').textContent = 'Aún no defines límites este mes';
+      amount.textContent = 'Define uno para recibir avisos.';
+      attention.textContent = '';
+      return;
+    }
+    $('summary-label').textContent = 'Gastaste en categorías con límite';
+    amount.innerHTML = `<span class="budget-summary__spent">${esc(formatMoney(summary.spent))}</span> de ${esc(formatMoney(summary.limit))}`;
+    attention.className = `budget-summary__attention${summary.attention === 0 ? ' budget-summary__attention--ok' : ''}`;
+    attention.textContent = summary.attention === 0
+      ? '✓ Todo bajo control'
+      : `⚠ ${summary.attention} ${summary.attention === 1 ? 'categoría necesita' : 'categorías necesitan'} atención`;
+  }
+
+  /**
+   * Muestra las CARD_PAGE más urgentes y el botón "Ver más". Si hay que editar o enfocar
+   * una tarjeta escondida, se muestran todas para no perder el foco.
+   * @param {Readonly<BudgetState>} state
+   * @param {ExpenseCategory[]} order
+   */
+  function paintMore(state, order) {
+    currentOrder = order;
+    const index = (/** @type {ExpenseCategory | null} */ c) => (c ? order.indexOf(c) : -1);
+    if ([state.editing, state.confirmingRemoval, state.focusTarget].some((c) => index(c) >= CARD_PAGE)) showAll = true;
+    order.forEach((c, i) => { /** @type {Card} */ (cards.get(c)).hidden = !showAll && i >= CARD_PAGE; });
+    const hiddenCount = showAll ? 0 : Math.max(0, order.length - CARD_PAGE);
+    $('cards-more').innerHTML = hiddenCount
+      ? `<button class="btn btn--secondary" type="button" data-action="more">Ver ${hiddenCount} ${hiddenCount === 1 ? 'categoría' : 'categorías'} más</button>`
+      : '';
+  }
+
+  $('cards-more').addEventListener('click', (e) => {
+    if (!/** @type {HTMLElement} */ (e.target).closest('[data-action="more"]')) return;
+    showAll = true;
+    const firstHidden = currentOrder[CARD_PAGE];
+    currentOrder.forEach((c) => { /** @type {Card} */ (cards.get(c)).hidden = false; });
+    $('cards-more').innerHTML = '';
+    const card = firstHidden ? cards.get(firstHidden) : undefined;
+    if (card) {
+      card.tabIndex = -1;
+      card.focus();
+    }
+  });
 
   /** @param {Readonly<BudgetState>} state */
   function announce(state) {
