@@ -10,7 +10,7 @@
  * Eventos:
  *   cc-editar { id }          al activar "Editar", antes de navegar
  */
-import { CATEGORY_LABELS } from '../models/types.js';
+import { CATEGORY_ICONS, CATEGORY_LABELS } from '../models/types.js';
 import { formatDayShort } from '../utils/lima-date.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
@@ -43,7 +43,7 @@ export class CcMovimiento extends HTMLElement {
   }
 
   connectedCallback() {
-    this.classList.add('list-row');
+    this.classList.add('list-row', 'list-row--icon');
     this.render();
   }
 
@@ -59,6 +59,7 @@ export class CcMovimiento extends HTMLElement {
       : '';
 
     this.innerHTML = `
+      <span class="cat-icon cat-icon--${t.category}" aria-hidden="true">${CATEGORY_ICONS[t.category]}</span>
       <div>
         <p class="list-row__title">${esc(t.description)}</p>
         <p class="list-row__meta">${esc(CATEGORY_LABELS[t.category])} · ${esc(formatDayShort(t.date))} · ${typeLabel}</p>

@@ -22,7 +22,7 @@
  * Métodos de foco:
  *   focusAction() · focusField() · focusConfirm() · focusRemove()
  */
-import { CATEGORY_LABELS } from '../models/types.js';
+import { CATEGORY_ICONS, CATEGORY_LABELS } from '../models/types.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
 
@@ -194,7 +194,10 @@ export class CcBarraPresupuesto extends HTMLElement {
     this.innerHTML = `
       <article class="card stack stack--sm" aria-labelledby="${titleId}" data-category="${r.category}">
         <div class="card__header">
-          <${level} class="card__title" id="${titleId}">${esc(label)}</${level}>
+          <div class="card__title-group">
+            <span class="cat-icon cat-icon--${r.category}" aria-hidden="true">${CATEGORY_ICONS[r.category]}</span>
+            <${level} class="card__title" id="${titleId}">${esc(label)}</${level}>
+          </div>
           ${action}
         </div>
         ${body}
