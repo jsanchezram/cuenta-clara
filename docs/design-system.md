@@ -54,6 +54,11 @@ En el tema oscuro todos los pares de texto pasan de 7:1.
 - Primitivas: `.container` (máximo 40rem, con 16 px a los lados), `.stack` (vertical, con gap de token) y `.cluster` (fila que se envuelve).
 - **Un solo breakpoint:** `@media (min-width: 48rem)`. Se diseña mobile-first desde 360 px.
 - Navegación inferior fija. La acción primaria va en `.action-bar`, pegada encima de ella, en la zona del pulgar.
+- **Escritorio (≥ 48rem, la laptop de Diego):**
+  - El menú inferior pasa a ser una barra superior y el contenido se amplía a 72rem.
+  - `.layout` (Movimientos): período, filtros y resumen a la izquierda (22rem) y la lista a la derecha.
+  - `.card-grid` (Presupuesto): las tarjetas van en 2 columnas.
+  - `.container--narrow` (Registrar): el formulario se centra con 36rem.
 
 ## 4. Componentes
 
@@ -85,6 +90,15 @@ Los nombres siguen el patrón `categoría-rol-variante`.
 | `--color-budget-*-fill`, `--color-budget-track`, `--color-budget-track-border` | Semántico | Barra de progreso |
 | `--color-income-text`, `--color-expense-text` | Semántico | Montos |
 | `--budget-bar-height`, `--list-row-min-height`, `--bottom-nav-height` | Componente | Medidas |
+| `--color-brand-bg`, `--color-brand-bg-deep`, `--color-on-brand` (6.5:1), `--color-on-brand-muted` (5.8:1) | Semántico | Banda de marca del encabezado (`.page-header`, `.brand`) |
+| `--color-cat-{categoría}-bg` / `-fg` (las 8, de 4.7:1 a 7.4:1 en claro y 7.1:1 o más en oscuro) | Semántico | Ícono de categoría (`.cat-icon--food`…). Es decorativo, porque el nombre de la categoría siempre va escrito |
+| `--shadow-card`, `--shadow-raised`, `--radius-lg`, `--cat-icon-size` | Componente | Elevación y forma de las tarjetas, la lista y el resumen |
+
+**Identidad visual:**
+- Un verde profundo de marca en la banda del encabezado, con el logotipo "CuentaClara".
+- Tarjetas blancas con sombra suave.
+- La selección (chip activo y Gasto/Ingreso) se rellena con el color de acción y conserva el ✓, que es la señal que no depende del color.
+- Cada categoría tiene un ícono y un color. Los íconos están en `CATEGORY_ICONS` (`js/models/types.js`) y llevan `aria-hidden`.
 
 ## 6. Estados de UI
 
