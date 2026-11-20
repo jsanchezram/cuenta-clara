@@ -49,8 +49,8 @@ Fuente de verdad de lo que se construye. Cada criterio tiene un código (`HU01-3
 | HU01-4 | El período y el filtro viven en la URL. Abrir o recargar la URL muestra lo mismo, así que la ruta se puede compartir. Hay tres formas: **mes** `#/2026-11/comida`, **día** `#/2026-11-20/comida` y **rango** `#/2026-11-01..2026-11-15/comida`. Sin categoría, la ruta muestra "Todas" (`#/2026-11`). |
 | HU01-5 | Se muestran el total de gastos, el total de ingresos y el saldo (ingresos − gastos) de lo que está filtrado. |
 | HU01-6 | En la vista de mes hay enlaces "Mes anterior" y "Mes siguiente". No se puede pasar del mes en curso. |
-| HU01-12 | Hay **atajos de período**: "Hoy", "Esta semana" (de lunes a hoy), "Este mes" y "Personalizado". El atajo activo se marca con `aria-pressed="true"`, y cada atajo actualiza la URL. |
-| HU01-13 | **Rango personalizado:** campos "Desde" y "Hasta" con etiqueta visible. Se valida que desde ≤ hasta y que hasta ≤ hoy, con el error junto al campo. Al aplicar, la URL cambia a la forma de rango. |
+| HU01-12 | **Selector de período: un solo componente desplegable.** Un botón muestra el período actual (por ejemplo "Este mes ▾") con `aria-expanded`. Al abrirlo aparecen los atajos "Hoy", "Esta semana" (de lunes a hoy) y "Este mes", y el rango "Desde" / "Hasta" con el botón "Aplicar rango". El atajo activo lleva ✓ y `aria-pressed="true"`. Elegir un atajo o aplicar un rango actualiza la URL y cierra el panel. Escape también lo cierra. En ambos casos, el foco vuelve al botón. |
+| HU01-13 | **Rango personalizado:** "Desde" y "Hasta" tienen etiqueta visible. Se valida que desde ≤ hasta y que hasta ≤ hoy, con el error junto al campo y sin cerrar el panel. Al aplicar, la URL cambia a la forma de rango. |
 | HU01-7 | **Carga:** se muestra un skeleton, el texto "Cargando movimientos…" y `aria-busy="true"`. |
 | HU01-8 | **Vacío:** si no hay movimientos en el mes o en la categoría, se muestra un mensaje y una acción ("Registrar un movimiento" o "Ver todas las categorías"). |
 | HU01-9 | **Error:** se muestra "No pudimos cargar tus movimientos." y un botón "Reintentar". El error se puede simular con `?fallo=movimientos`. |

@@ -23,21 +23,34 @@ Límite: **2000 caracteres por prompt**. El prompt maestro arma las 3 pantallas 
 [6 · ESTADOS] Movimientos: carga (skeleton), vacío ("No hay movimientos en Ocio" + "Ver todas") y error ("No pudimos cargar tus movimientos." + Reintentar). Registrar: error junto a cada campo, "Guardando…" y confirmación "Gasto registrado: S/ 15.00 en Comida" con "Registrar otro". Botones ≥ 44 px, etiqueta visible en cada campo y estados nunca solo por color.
 ```
 
-## Iteraciones
+## Iteraciones usadas
 
-Un cambio por prompt, nombrando la pantalla y el elemento, y terminando con "No cambies nada más". Ejemplos de correcciones típicas; usa solo las que necesites y anota las reales:
+Cada prompt nombra la pantalla y el elemento y termina con "No cambies nada más".
 
 | # | Prompt | Por qué |
 |---|---|---|
-| I-1 | En Presupuesto, cada estado debe distinguirse sin color: agrega un ícono y el texto del estado junto a la barra en las 5 tarjetas. No cambies nada más. | WCAG 1.4.1 · R5 |
-| I-2 | En Registrar, el botón "Guardar" debe quedar fijo abajo, a todo el ancho y de 48 px, en la zona del pulgar. No cambies nada más. | Fitts |
-| I-3 | En Movimientos, el chip de categoría activo debe llevar un check ✓ además del fondo. No cambies nada más. | WCAG 1.4.1 · HU01-3 |
-| _real_ | _(anota aquí los prompts que usaste de verdad)_ | |
+| I-1 | En Registrar agrega 2 variantes de la pantalla: 1) Error: envío con monto "12.345" y descripción vacía; cada campo con borde marcado, ícono y mensaje debajo ("Usa como máximo 2 decimales.", "Escribe una descripción."), sin borrar lo escrito. 2) Guardado: botón "Guardando…" deshabilitado y luego el mensaje "Gasto registrado: S/ 15.00 en Comida" con los botones "Registrar otro" y "Ver movimientos". No cambies nada más. | H1 · H9 · HU02-3 · HU02-4 |
+| I-2 | En Registrar agrega la variante de edición: título "Editar movimiento", campos con "Almuerzo menú · Comida · S/ 15.00 · 18/11/2026" y el botón secundario "Eliminar" arriba, lejos de Guardar. Al pulsarlo aparece una confirmación dentro de la página (no un pop-up): "¿Eliminar Almuerzo menú · S/ 15.00? No se puede deshacer." con "Sí, eliminar" y "Cancelar". No cambies nada más. | HU02-5 · HU02-7 · Fitts · H5 |
+| I-3 | En Movimientos agrega 3 variantes de la lista: 1) Carga: skeleton de 3 filas y el texto "Cargando movimientos…". 2) Vacío con el filtro Ocio: "No hay movimientos en Ocio" y el botón "Ver todas las categorías". 3) Error: "No pudimos cargar tus movimientos." con el botón "Reintentar". No cambies nada más. | H1 · HU01-7..9 |
+| I-4 | En Movimientos, como noviembre 2026 es el mes en curso, muestra "Mes siguiente →" deshabilitado (texto gris claro y sin subrayado) con la nota oculta "No hay meses futuros". No cambies nada más. | HU01-6 |
+| I-5 | En Presupuesto las barras de Transporte (100 %) y Ocio (130 %) se ven iguales. Para Ocio usa otro patrón (cuadriculado) y una marca vertical en el 100 % que muestre el exceso. Muestra también la tarjeta Vivienda con "Sin límite definido" y el botón "Definir límite". No cambies nada más. | R5 · WCAG 1.4.1 · HU03-4 |
+| I-6 | Marca con un check "✓" delante del texto la opción seleccionada en: el atajo "Este mes", el chip "Todas" y "Gasto" en Registrar. No cambies nada más. | WCAG 1.4.1 · HU01-3 |
+| I-7 | La sección "Hoy / Esta semana / Este mes / Personalizado" debe ser un solo componente que, al abrirse, permita seleccionar un rango de fechas o un atajo (hoy, semana, mes). No cambies nada más. | H8 · Hick · decisión propia (bitácora #7) |
+
+I-2 a I-6 se enviaron juntas en un solo prompt para ahorrar créditos. Figma Make aplicó los 5 cambios sin tocar el resto.
 
 ## Revisión HITL de los wireframes
 
-Copia aquí y en `docs/bitacora-hitl.md` lo que corregiste o rechazaste de lo que generó Figma Make.
-
 | Pantalla | Qué viste (evidencia) | Regla | Decisión | Acción |
 |---|---|---|---|---|
-| | | | | |
+| Presupuesto | Estados con texto, ícono, barra con rayas y "% usado" | R5 · WCAG 1.4.1 | ✅ Aprobar | — |
+| Registrar | Guardar fijo abajo, a todo el ancho; etiqueta visible en cada campo | Fitts · WCAG 3.3.2 | ✅ Aprobar | — |
+| Registrar | Sin errores, sin "Guardando…" y sin confirmación | H1 · H9 | ✏️ Corregir | I-1 |
+| Registrar | Sin modo edición ni eliminar | HU02-5 · HU02-7 | ✏️ Corregir | I-2 |
+| Registrar | Fecha 18/11/2025 (año equivocado) | H2 | ✏️ Corregir | Quedó en 18/11/2026 |
+| Movimientos | Sin estados de carga, vacío ni error | H1 | ✏️ Corregir | I-3 |
+| Movimientos | "Mes siguiente →" activo en el mes en curso | HU01-6 | ✏️ Corregir | I-4 |
+| Movimientos | "S/ 1,800.00" con coma frente a "S/ 3 200.00" con espacio | H4 · CC-6 | ✏️ Corregir | Point and edit (verificar) |
+| Presupuesto | Ocio (130 %) y Transporte (100 %) con la misma barra | R5 · WCAG 1.4.1 | ✏️ Corregir | I-5 |
+| Todas | Selección marcada solo con fondo gris | WCAG 1.4.1 | ✏️ Corregir | I-6 |
+| Movimientos | 4 botones de atajo que ocupan media pantalla | H8 · Hick | ✏️ Corregir | I-7: un solo desplegable |
