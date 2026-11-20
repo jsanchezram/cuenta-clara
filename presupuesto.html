@@ -70,11 +70,14 @@
       <!-- Anuncios: resumen al cargar y confirmaciones -->
       <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
 
-      <section class="stack stack--sm" aria-labelledby="cards-title">
+      <section class="stack stack--sm layout__main" aria-labelledby="cards-title">
         <h2 class="list-title" id="cards-title" tabindex="-1">Categorías</h2>
         <!-- REQ-02 · REQ-03 · REQ-11 · Tarjetas por urgencia y estados de carga y error -->
-        <div class="budget-list" id="cards" aria-busy="true"></div>
-        <div class="list-more" id="cards-more"></div>
+        <!-- En laptop, las categorías y "Ver más" tienen su propio scroll -->
+        <div class="layout__scroll stack stack--sm">
+          <div class="budget-list" id="cards" aria-busy="true"></div>
+          <div class="list-more" id="cards-more"></div>
+        </div>
       </section>
 
       <!-- REQ-10 · Hoja "Elige un mes": el año con ‹ › y los 12 meses; los meses futuros no se pueden elegir -->

@@ -1792,6 +1792,50 @@ cc-movimiento {
     overflow-x: visible;
   }
 
+  /* Una sola pantalla de alto: la página no se desplaza. La lista (o las categorías) tiene su propio
+     scroll, con "Cargar más" al final; el panel de la izquierda queda quieto */
+  body:has(.page-body.layout) {
+    padding-bottom: 0;
+  }
+
+  main:has(> .page-body.layout) {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--bottom-nav-height));
+    height: calc(100dvh - var(--bottom-nav-height));
+  }
+
+  .page-body.layout {
+    flex: 1;
+    min-height: 0;
+    grid-template-rows: minmax(0, 1fr);
+    padding-bottom: var(--space-6);
+  }
+
+  .layout:has(> .notice-slot:not(:empty)) {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .layout__main {
+    align-self: stretch;
+    min-height: 0;
+  }
+
+  .layout__scroll {
+    /* relative: los textos ocultos (position: absolute) quedan dentro del scroll y no estiran la página */
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* barra delgada con su espacio reservado: la lista no salta cuando aparece tras "Cargar más" */
+    scrollbar-width: thin;
+    scrollbar-gutter: stable;
+    /* aire para que la sombra de las tarjetas no se corte en el borde del scroll */
+    margin-inline: calc(-1 * var(--space-2));
+    padding: 0 var(--space-2) var(--space-2);
+  }
+
   /* La hoja se vuelve un diálogo centrado */
   .sheet {
     width: min(28rem, calc(100% - 2rem));
@@ -1815,6 +1859,15 @@ cc-movimiento {
   .sticky-bar,
   .layout__panel {
     position: static;
+  }
+
+  /* y la vista vuelve a desplazarse entera, sin scroll interno */
+  main:has(> .page-body.layout) {
+    height: auto;
+  }
+
+  .layout__scroll {
+    overflow-y: visible;
   }
 }
 
