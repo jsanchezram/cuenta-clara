@@ -24,7 +24,7 @@ Verificación base, después de cada tarea: `node --test` en verde. Desde T11, t
 | T13 | Armazón de la página | `presupuesto.html` | REQ-01, 04, 10, 11, 12 | `verificar-hu03`: los chequeos de la página pasan | [x] verificar-hu03: HU03-1..4 pasan (12/14; faltan HU03-5 y HU03-13, la pantalla) |
 | T14 | Pantalla: conecta ruta, acciones, store y componente, y gestiona el foco | `js/screens/presupuesto.js` | REQ-01..12 | `node --test` + `verificar-hu03` N/N + prueba en Chrome a 360 px (`#/2026-11`, `#/2026-10`, `?fallo=presupuesto`) | [x] 102/102 · verificar-hu03 14/14 · Chrome a 360 px: los 8 pasos de T16 se cumplen con clics simulados, `?fallo=presupuesto` con Reintentar y foco en "Categorías", sin scroll horizontal |
 | T15 | Revisión de accesibilidad con el subagente revisor-a11y y corrección de cada "No cumple" | (los que indique) | REQ-12 | Sin "No cumple" | [x] El revisor encontró 1 "No cumple": el foco se perdía mientras guardaba o quitaba porque la tarjeta se repintaba entera. Se corrigió en 2 intentos (el primero no consideraba que también cambiaba `draft`). Verificado en Chrome: foco en "Guardando…"/"Quitando…" y luego en "Editar límite"/"Definir límite". 102/102 · 14/14 |
-| T16 | **Prueba manual de la persona** | — | REQ-01..12 | La lista de abajo, hecha a mano | [ ] |
+| T16 | **Prueba manual de la persona** | — | REQ-01..12 | La lista de abajo, hecha a mano | [x] La persona dio el OK para continuar. Los 8 pasos se habían verificado antes con clics simulados en Chrome a 360 px. La revisión visual de la persona se hace después de la rama de identidad visual |
 
 ## T16 · Prueba manual (la hace Diego, a 360 px y solo con teclado)
 
