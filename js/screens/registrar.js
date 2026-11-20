@@ -43,7 +43,6 @@ export function mountRegister() {
   const description = /** @type {HTMLTextAreaElement} */ ($('description'));
   const saveButton = /** @type {HTMLButtonElement} */ ($('save-button'));
   const notice = $('notice');
-  const deleteZone = $('delete-zone');
   const deleteButton = /** @type {HTMLButtonElement} */ ($('delete-button'));
   const confirmBox = $('confirm');
 
@@ -210,7 +209,9 @@ export function mountRegister() {
 
     const blocked = ['loading', 'notFound', 'locked', 'loadError'].includes(state.status);
     form.hidden = blocked;
-    deleteZone.hidden = blocked || !editing || state.status === 'deleted';
+    // [HU02-7] Eliminar solo al editar, junto a Guardar (mitad y mitad); si se oculta, su confirmación también
+    deleteButton.hidden = !editing || state.status === 'deleted';
+    if (deleteButton.hidden) confirmBox.hidden = true;
 
     // Mensajes que reemplazan al formulario
     if (state.status === 'loading') {

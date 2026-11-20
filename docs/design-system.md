@@ -85,6 +85,7 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 | `.list`, `.list-row`, `.list-more` | Fila compacta (`<cc-movimiento>`) y "Cargar más" de a 8 |
 | `.cat-icon` | Ícono de categoría: azul de marca sobre un círculo azul claro |
 | `.budget-list`, `.budget-row`, `.budget-bar`, `.budget-status` | Una tarjeta por categoría con la fila compacta (como la de un movimiento), la barra sólida y el estado en texto con un puntito |
+| `.form-actions`, `.sheet__footer` | Fila de acciones con botones de igual ancho: uno solo va a todo el ancho; dos, mitad y mitad (Eliminar · Guardar, Sí, eliminar · Cancelar, Cancelar · Aplicar) |
 | `.alert` (`--success`, `--error`), `.state`, `.skeleton`, `.confirm` | Mensajes, vacío o error, carga y confirmación de eliminar en la página |
 | `.brand-bar`, `.brand`, `.bottom-nav`, `.page-header` (`__eyebrow` con la fecha, `__title`, `__accent`), `.sticky-bar`, `.page-body`, `.notice-slot`, `main[data-pending]`, `.skip-link`, `.visually-hidden` | Estructura y accesibilidad. `.notice-slot` vacío no ocupa lugar; `data-pending` oculta la vista hasta que la pantalla pinta su estado real |
 

@@ -70,7 +70,7 @@ Fuente de verdad de lo que se construye. Cada criterio tiene un código (`HU01-3
 | HU02-4 | Mientras se guarda, el botón está deshabilitado y dice "Guardando…". Al terminar, una confirmación con `role="status"` dice qué se guardó (por ejemplo "Gasto registrado: S/ 25.50 en Comida") y ofrece "Registrar otro" y "Ver movimientos". |
 | HU02-5 | **Editar:** `registrar.html?id=<id>` carga el movimiento, el título dice "Editar movimiento" y aplica las mismas validaciones. La fecha solo puede quedar en el mes en curso (R6): el campo limita `min` al día 1 del mes, y si se sale de ese rango el error dice "Al editar, la fecha debe ser de este mes." |
 | HU02-6 | Si el `id` no existe o el movimiento no es del mes en curso, se muestra un mensaje que lo explica y no se puede guardar ni eliminar (R6). |
-| HU02-7 | **Eliminar** solo aparece al editar. Pide confirmación **en la página**, sin `confirm()`, mostrando la descripción y el monto. El foco va a la confirmación. "Cancelar" devuelve el foco a "Eliminar". Al confirmar, se vuelve a la lista con un mensaje. |
+| HU02-7 | **Eliminar** solo aparece al editar, al final del formulario y junto a Guardar, mitad y mitad (Guardar a la derecha). *(Antes iba arriba del formulario; cambió tras la revisión de la persona.)* Pide confirmación **en la página**, sin `confirm()`, mostrando la descripción y el monto. El foco va a la confirmación. "Cancelar" devuelve el foco a "Eliminar". Al confirmar, se vuelve a la lista con un mensaje. |
 | HU02-8 | Si la API falla al guardar o eliminar, se muestra un error y se conservan los datos escritos. El fallo se puede simular con `?fallo=guardar`. |
 
 ## HU-03 · Presupuesto por categoría · `presupuesto.html` · AI-First

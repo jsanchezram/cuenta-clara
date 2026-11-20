@@ -842,9 +842,13 @@ textarea.field__control {
   color: var(--color-text-muted);
 }
 
+/* Fila de acciones con botones de igual ancho: con uno solo va a todo el ancho; con dos, mitad y mitad.
+   Registrar: Guardar solo al crear; Eliminar y Guardar al editar. Hojas: Cancelar, o Cancelar y Aplicar */
+.form-actions,
 .sheet__footer {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
   gap: var(--space-3);
 }
 
