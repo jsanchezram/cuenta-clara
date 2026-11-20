@@ -39,21 +39,6 @@
       <!-- Mensajes de la página: carga, no encontrado, mes cerrado, éxito -->
       <div id="notice" class="stack notice-slot"></div>
 
-      <!-- [HU02-7] Eliminar: solo al editar, lejos de Guardar -->
-      <div id="delete-zone" class="stack" hidden>
-        <div class="cluster">
-          <button class="btn btn--danger" type="button" id="delete-button">Eliminar movimiento</button>
-        </div>
-        <div class="confirm stack" id="confirm" role="group" aria-labelledby="confirm-title" hidden>
-          <h2 class="confirm__title" id="confirm-title" tabindex="-1">¿Eliminar este movimiento?</h2>
-          <p id="confirm-detail"></p>
-          <div class="cluster">
-            <button class="btn btn--danger-solid" type="button" id="confirm-yes">Sí, eliminar</button>
-            <button class="btn btn--secondary" type="button" id="confirm-no">Cancelar</button>
-          </div>
-        </div>
-      </div>
-
       <form class="stack" id="form" novalidate aria-labelledby="page-title">
         <p class="alert alert--error" id="form-failure" role="alert"></p>
 
@@ -107,8 +92,20 @@
           <p class="field__error" id="description-error"></p>
         </div>
 
-        <!-- [HU02-4] Acción primaria al final del formulario, a todo el ancho -->
-        <button class="btn btn--primary btn--block" type="submit" id="save-button">Guardar</button>
+        <!-- [HU02-4] [HU02-7] Acciones al final: Guardar a todo el ancho; al editar, Eliminar y Guardar mitad y mitad
+             (Guardar a la derecha, en la zona del pulgar). Eliminar pide confirmación en la página -->
+        <div class="form-actions">
+          <button class="btn btn--danger" type="button" id="delete-button" hidden>Eliminar<span class="visually-hidden"> movimiento</span></button>
+          <button class="btn btn--primary" type="submit" id="save-button">Guardar</button>
+        </div>
+        <div class="confirm stack" id="confirm" role="group" aria-labelledby="confirm-title" hidden>
+          <h2 class="confirm__title" id="confirm-title" tabindex="-1">¿Eliminar este movimiento?</h2>
+          <p id="confirm-detail"></p>
+          <div class="form-actions">
+            <button class="btn btn--danger-solid" type="button" id="confirm-yes">Sí, eliminar</button>
+            <button class="btn btn--secondary" type="button" id="confirm-no">Cancelar</button>
+          </div>
+        </div>
       </form>
 
       <!-- Hoja de la fecha: atajos y calendario de un día (no permite fechas futuras ni fuera de R2/R6) -->
