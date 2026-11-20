@@ -9,7 +9,7 @@ Verificación base, después de cada tarea: `node --test` en verde. Desde T11, t
 
 | # | Tarea | Archivo | Requisitos | Verificación | Estado |
 |---|---|---|---|---|---|
-| T1 | Contrato: `DELETE /budgets/{category}`, `deleted_at` opcional y fila en la tabla de mapeo | `docs/api/contrato-v1.md`, `docs/api/mapeo-v1.md` | REQ-09 | El contrato documenta el endpoint, sus respuestas y la regla de vigencia | [ ] |
+| T1 | Contrato: `DELETE /budgets/{category}`, `deleted_at` opcional y fila en la tabla de mapeo | `docs/api/contrato-v1.md`, `docs/api/mapeo-v1.md` | REQ-09 | El contrato documenta el endpoint, sus respuestas y la regla de vigencia | [x] Contrato documenta DELETE, respuestas y vigencia |
 | T2 | Pruebas de `toBudgetRecord`: registro activo y quitado | `tests/contracts.test.js` | REQ-09 | Las pruebas nuevas fallan (todavía no hay implementación) | [ ] |
 | T3 | `BudgetDTO.deleted_at` y `toBudgetRecord` | `js/contracts/dto.js` y `js/contracts/mappers.js` (un cambio por archivo) | REQ-09 | `node --test`: las pruebas de T2 pasan | [ ] |
 | T4 | Pruebas de `sortByUrgency`, `budgetSummary` y `effectiveLimit` con registro quitado | `tests/budget.test.js` | REQ-03, 04, 09 | Las pruebas nuevas fallan | [ ] |
