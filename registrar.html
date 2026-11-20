@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Registra un gasto o ingreso en segundos, o corrige uno de este mes.">
   <title>Registrar · CuentaClara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="styles/tokens.css">
   <link rel="stylesheet" href="styles/components.css">
 </head>
@@ -13,9 +16,9 @@
 
   <header class="page-header">
     <div class="brand-bar"><div class="container"><a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a></div></div>
-    <div class="container page-header__body">
-    <p class="page-header__eyebrow" id="eyebrow">Nuevo movimiento</p>
-    <h1 class="page-header__title" id="page-title" tabindex="-1">Registrar</h1>
+    <div class="container container--narrow page-header__body">
+      <p class="page-header__eyebrow" id="eyebrow">Nuevo movimiento</p>
+      <h1 class="page-header__title" id="page-title" tabindex="-1">Registrar</h1>
     </div>
   </header>
 
@@ -41,7 +44,7 @@
       </div>
     </div>
 
-    <form class="stack" id="form" novalidate aria-labelledby="page-title">
+    <form class="stack form--with-action-bar" id="form" novalidate aria-labelledby="page-title">
       <p class="alert alert--error" id="form-failure" role="alert"></p>
 
       <!-- [HU02-1] Tipo con controles nativos -->
@@ -56,29 +59,34 @@
         <p class="field__error" id="type-error"></p>
       </fieldset>
 
-      <!-- [HU02-2] Campos -->
+      <!-- [HU02-2] Monto a todo el ancho; la moneda va en la etiqueta -->
       <div class="field">
-        <label class="field__label" for="amount">Monto</label>
-        <div class="field__money">
-          <span class="field__prefix" aria-hidden="true">S/</span>
-          <input class="field__control" type="text" id="amount" name="amount" inputmode="decimal" autocomplete="off"
-                 enterkeyhint="next" placeholder="0.00" aria-describedby="amount-hint amount-error">
-        </div>
+        <label class="field__label" for="amount">Monto (S/)</label>
+        <input class="field__control field__control--amount" type="text" id="amount" name="amount" inputmode="decimal" autocomplete="off"
+               enterkeyhint="next" placeholder="0.00" aria-describedby="amount-hint amount-error">
         <p class="field__hint" id="amount-hint">Hasta S/ 10 000, con 2 decimales como máximo.</p>
         <p class="field__error" id="amount-error"></p>
       </div>
 
+      <!-- [HU02-1] Categoría en mosaico con ícono (un toque, sin desplegable) -->
+      <fieldset class="fieldset" id="category-group">
+        <legend class="fieldset__legend">Categoría</legend>
+        <div class="tile-group" id="category-options"></div>
+        <p class="field__error" id="category-error"></p>
+      </fieldset>
+
+      <!-- [HU02-2] Fecha: abre la hoja con atajos y calendario, igual que el período de Movimientos -->
       <div class="field">
-        <label class="field__label" for="date">Fecha</label>
-        <input class="field__control" type="date" id="date" name="date" enterkeyhint="next" aria-describedby="date-hint date-error">
+        <label class="field__label" id="date-label" for="date-trigger">Fecha</label>
+        <button class="field__control date-trigger" type="button" id="date-trigger" aria-haspopup="dialog" aria-expanded="false"
+                aria-controls="date-sheet" aria-labelledby="date-label date-value" aria-describedby="date-hint date-error">
+          <!--icon:calendar--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zM5 10v9h14v-9zM7 12h3v3H7z"/></svg>
+          <span class="date-trigger__value" id="date-value">Hoy</span>
+          <!--icon:chevron-down--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.4 8.6 4 10l8 8 8-8-1.4-1.4-6.6 6.6z"/></svg>
+        </button>
+        <input type="hidden" id="date" name="date">
         <p class="field__hint" id="date-hint">Hoy o hasta 60 días atrás.</p>
         <p class="field__error" id="date-error"></p>
-      </div>
-
-      <div class="field">
-        <label class="field__label" for="category">Categoría</label>
-        <select class="field__control" id="category" name="category" aria-describedby="category-error"></select>
-        <p class="field__error" id="category-error"></p>
       </div>
 
       <div class="field">
@@ -94,13 +102,28 @@
         <button class="btn btn--primary btn--block" type="submit" id="save-button">Guardar</button>
       </div>
     </form>
+
+    <!-- Hoja de la fecha: atajos y calendario de un día (no permite fechas futuras ni fuera de R2/R6) -->
+    <dialog class="sheet" id="date-sheet" aria-labelledby="date-sheet-title">
+      <div class="sheet__inner">
+        <div class="sheet__header">
+          <h2 class="sheet__title" id="date-sheet-title">Elige la fecha</h2>
+          <button class="icon-btn" type="button" data-close><!--icon:close--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19l5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6L19 6.4 17.6 5 12 10.6z"/></svg><span class="visually-hidden">Cerrar</span></button>
+        </div>
+        <div class="option-group" role="group" aria-label="Atajos de fecha">
+          <button class="option" type="button" data-day="0" aria-pressed="false">Hoy</button>
+          <button class="option" type="button" data-day="-1" aria-pressed="false">Ayer</button>
+        </div>
+        <cc-calendario-rango id="date-calendar" single></cc-calendario-rango>
+      </div>
+    </dialog>
   </main>
 
   <nav class="bottom-nav" aria-label="Principal">
     <ul class="bottom-nav__list">
-      <li><a class="bottom-nav__link" href="movimientos.html"><span class="bottom-nav__icon" aria-hidden="true">≡</span>Movimientos</a></li>
-      <li><a class="bottom-nav__link" href="registrar.html" aria-current="page"><span class="bottom-nav__icon" aria-hidden="true">＋</span>Registrar</a></li>
-      <li><a class="bottom-nav__link" href="presupuesto.html"><span class="bottom-nav__icon" aria-hidden="true">◔</span>Presupuesto</a></li>
+      <li><a class="bottom-nav__link" href="movimientos.html"><!--icon:list--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M4 5h16v2H4zM4 11h16v2H4zM4 17h16v2H4z"/></svg>Movimientos</a></li>
+      <li><a class="bottom-nav__link" href="registrar.html" aria-current="page"><!--icon:plus--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z"/></svg>Registrar</a></li>
+      <li><a class="bottom-nav__link" href="presupuesto.html"><!--icon:pie--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11 4a9 9 0 1 0 9 9h-9zM13 2v9h9a9 9 0 0 0-9-9z"/></svg>Presupuesto</a></li>
     </ul>
   </nav>
 

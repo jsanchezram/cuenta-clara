@@ -8,18 +8,21 @@ import { createFormActions } from '../state/transaction-form.js';
 import { routes } from '../rutas.js';
 import { CATEGORY_LABELS, categoriesFor } from '../models/types.js';
 import { addDays, monthPeriod, currentMonth } from '../logic/period.js';
-import { todayInLima } from '../utils/lima-date.js';
+import { todayInLima, formatDayLong } from '../utils/lima-date.js';
+import '../components/cc-calendario-rango.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
+import { icon } from '../components/icons.js';
 
 /** @typedef {import('../models/types.js').Transaction} Transaction */
 /** @typedef {import('../models/types.js').TransactionType} TransactionType */
+/** @typedef {import('../components/cc-calendario-rango.js').CcCalendarioRango} CcCalendarioRango */
 
 /** @param {string} id */
 const $ = (id) => /** @type {HTMLElement} */ (document.getElementById(id));
 
 /** Orden de los campos en la página: el foco va al primero con error. */
-const FIELD_ORDER = ['type', 'amount', 'date', 'category', 'description'];
+const FIELD_ORDER = ['type', 'amount', 'category', 'date', 'description'];
 
 export function mountRegister() {
   const today = todayInLima(new Date());
@@ -29,8 +32,12 @@ export function mountRegister() {
 
   const form = /** @type {HTMLFormElement} */ ($('form'));
   const amount = /** @type {HTMLInputElement} */ ($('amount'));
-  const date = /** @type {HTMLInputElement} */ ($('date'));
-  const category = /** @type {HTMLSelectElement} */ ($('category'));
+  const date = /** @type {HTMLInputElement} */ ($('date')); // valor oculto YYYY-MM-DD
+  const dateTrigger = /** @type {HTMLButtonElement} */ ($('date-trigger'));
+  const dateSheet = /** @type {HTMLDialogElement} */ ($('date-sheet'));
+  const dateCalendar = /** @type {CcCalendarioRango} */ ($('date-calendar'));
+  let minDate = addDays(today, -60);
+  const categoryOptions = $('category-options');
   const description = /** @type {HTMLTextAreaElement} */ ($('description'));
   const saveButton = /** @type {HTMLButtonElement} */ ($('save-button'));
   const notice = $('notice');
@@ -45,14 +52,20 @@ export function mountRegister() {
 
   // ---------- Campos ----------
 
-  /** [HU02-1] las categorías cambian según el tipo (R3) */
+  /** @returns {HTMLInputElement[]} */
+  const categoryRadios = () => [...form.querySelectorAll('input[name="category"]')].map((el) => /** @type {HTMLInputElement} */ (el));
+  const selectedCategory = () => categoryRadios().find((r) => r.checked)?.value ?? '';
+
+  /**
+   * [HU02-1] las categorías cambian según el tipo (R3).
+   * Mosaico de radios nativos con ícono: un toque, sin desplegable que se salga de la pantalla a 360 px.
+   */
   function fillCategories() {
-    const previous = category.value;
-    const options = categoriesFor(currentType());
-    category.innerHTML = `<option value="">Selecciona una categoría</option>${options
-      .map((c) => `<option value="${c}">${esc(CATEGORY_LABELS[c])}</option>`)
-      .join('')}`;
-    category.value = options.includes(/** @type {any} */ (previous)) ? previous : '';
+    const previous = selectedCategory();
+    categoryOptions.innerHTML = categoriesFor(currentType())
+      .map((c) => `<input class="tile__input" type="radio" name="category" id="category-${c}" value="${c}" aria-describedby="category-error"${c === previous ? ' checked' : ''}>
+        <label class="tile" for="category-${c}">${icon(c)}<span>${esc(CATEGORY_LABELS[c])}</span></label>`)
+      .join('');
   }
 
   function updateCounter() {
@@ -61,10 +74,11 @@ export function mountRegister() {
 
   /** @param {'create' | 'edit'} mode */
   function setDateLimits(mode) {
-    date.max = today;
     // [HU02-5] al editar, solo fechas del mes en curso (R6); al registrar, hasta 60 días atrás (R2)
     const sixtyDaysAgo = addDays(today, -60);
-    date.min = mode === 'edit' ? monthPeriod(currentMonth(today)).from : sixtyDaysAgo;
+    minDate = mode === 'edit' ? monthPeriod(currentMonth(today)).from : sixtyDaysAgo;
+    dateCalendar.today = today;
+    dateCalendar.min = minDate;
     $('date-hint').textContent = mode === 'edit' ? 'Al editar, la fecha debe ser de este mes.' : 'Hoy o hasta 60 días atrás.';
   }
 
@@ -72,9 +86,10 @@ export function mountRegister() {
   function fillForm(t) {
     /** @type {HTMLInputElement} */ ($(`type-${t.type}`)).checked = true;
     fillCategories();
-    category.value = t.category;
+    const radio = /** @type {HTMLInputElement | null} */ (document.getElementById(`category-${t.category}`));
+    if (radio) radio.checked = true;
     amount.value = t.amount.toFixed(2);
-    date.value = t.date;
+    setDate(t.date);
     description.value = t.description;
     updateCounter();
   }
@@ -82,7 +97,7 @@ export function mountRegister() {
   function readForm() {
     return {
       type: currentType(),
-      category: category.value,
+      category: selectedCategory(),
       amount: amount.value,
       date: date.value,
       description: description.value,
@@ -95,8 +110,9 @@ export function mountRegister() {
     for (const field of FIELD_ORDER) {
       const message = errors[field] ?? '';
       $(`${field}-error`).textContent = message;
-      // En el grupo Tipo, aria-invalid va en cada radio (no aplica a un fieldset)
-      const controls = field === 'type' ? [...form.querySelectorAll('input[name="type"]')] : [$(field)];
+      // En los grupos de radios (Tipo y Categoría), aria-invalid va en cada radio (no aplica a un fieldset)
+      const group = field === 'type' || field === 'category';
+      const controls = group ? [...form.querySelectorAll(`input[name="${field}"]`)] : [field === 'date' ? dateTrigger : $(field)];
       for (const control of controls) {
         if (message) control.setAttribute('aria-invalid', 'true');
         else control.removeAttribute('aria-invalid');
@@ -108,9 +124,61 @@ export function mountRegister() {
   function focusFirstError(errors) {
     const first = FIELD_ORDER.find((f) => errors[f]);
     if (!first) return;
-    const target = first === 'type' ? /** @type {HTMLElement} */ (form.querySelector('input[name="type"]')) : $(first);
-    target.focus();
+    const target = first === 'type' || first === 'category'
+      ? /** @type {HTMLElement | null} */ (form.querySelector(`input[name="${first}"]:checked`) ?? form.querySelector(`input[name="${first}"]`))
+      : first === 'date' ? dateTrigger : $(first);
+    target?.focus();
   }
+
+  // ---------- Fecha: botón que abre la hoja con atajos y calendario (misma línea que Movimientos) ----------
+
+  /** @param {string} value YYYY-MM-DD */
+  function setDate(value) {
+    date.value = value;
+    const label = value === today ? 'Hoy' : value === addDays(today, -1) ? 'Ayer' : formatDayLong(value);
+    $('date-value').textContent = label.charAt(0).toUpperCase() + label.slice(1);
+  }
+
+  function openDateSheet() {
+    dateCalendar.value = { from: date.value, to: date.value };
+    dateSheet.querySelectorAll('[data-day]').forEach((b) => {
+      const day = addDays(today, Number(b.getAttribute('data-day')));
+      b.setAttribute('aria-pressed', String(day === date.value));
+      /** @type {HTMLButtonElement} */ (b).disabled = day < minDate; // al editar el día 1, "Ayer" ya es otro mes (R6)
+    });
+    dateSheet.showModal();
+    dateTrigger.setAttribute('aria-expanded', 'true');
+    /** @type {HTMLElement | null} */ (dateSheet.querySelector('[data-day][aria-pressed="true"]') ?? dateSheet.querySelector('[data-day]'))?.focus();
+  }
+
+  /** Cierra la hoja de fecha y devuelve el foco al campo (sin depender del evento "close"). */
+  function closeDateSheet() {
+    if (dateSheet.open) dateSheet.close();
+    dateTrigger.setAttribute('aria-expanded', 'false');
+    dateTrigger.focus();
+  }
+
+  dateTrigger.addEventListener('click', openDateSheet);
+  dateSheet.addEventListener('cancel', (e) => {
+    e.preventDefault();
+    closeDateSheet();
+  });
+  dateSheet.addEventListener('click', (e) => {
+    const target = /** @type {HTMLElement} */ (e.target);
+    if (target === dateSheet || target.closest('[data-close]')) {
+      closeDateSheet();
+      return;
+    }
+    const option = /** @type {HTMLButtonElement | null} */ (target.closest('[data-day]'));
+    if (option && !option.disabled) {
+      setDate(addDays(today, Number(option.getAttribute('data-day'))));
+      closeDateSheet();
+    }
+  });
+  dateCalendar.addEventListener('cc-elegir-fecha', (e) => {
+    setDate(/** @type {CustomEvent<{ date: string }>} */ (e).detail.date);
+    closeDateSheet();
+  });
 
   // ---------- Pintar desde el estado ----------
 
@@ -218,7 +286,7 @@ export function mountRegister() {
     if (state.status === 'saved' && lastStatus !== 'saved') {
       amount.value = '';
       description.value = '';
-      date.value = today;
+      setDate(today);
       updateCounter();
       /** @type {HTMLElement | null} */ (notice.querySelector('[data-action="another"]'))?.focus();
     }
@@ -282,7 +350,7 @@ export function mountRegister() {
   // ---------- Arranque ----------
 
   setDateLimits(id ? 'edit' : 'create');
-  date.value = today;
+  setDate(today);
   fillCategories();
   actions.store.subscribe((state) => {
     if (state.status === 'ready' && state.original && lastStatus === 'loading') fillForm(state.original);
