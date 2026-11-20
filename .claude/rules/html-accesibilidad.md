@@ -27,7 +27,7 @@ paths:
 - Confirmación en la página:
   - Al abrirla, el foco va a su título.
   - "Cancelar" devuelve el foco al botón que la abrió.
-- Objetivos táctiles de 44 px o más. Se prueba a 360 px y a 1024 × 768, sin scroll horizontal.
+- Objetivos táctiles de 44 px o más en el celular; en laptop, 40 px (WCAG 2.5.8 pide 24 px). Se prueba a 360 px y a 1024 × 768, sin scroll horizontal.
 - Inputs para el celular:
   - Monto: `inputmode="decimal"`.
   - Fecha: `type="date"` con `min` y `max`.
