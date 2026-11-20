@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tus gastos e ingresos del período, con filtro por categoría y total.">
+  <title>Movimientos · CuentaClara</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="container page-header">
+    <p class="page-header__eyebrow" id="period-eyebrow">&nbsp;</p>
+    <h1 class="page-header__title">Tus movimientos</h1>
+  </header>
+
+  <main id="contenido" class="container stack">
+    <!-- [HU01-12] Selector de período: un solo componente desplegable -->
+    <div class="period-picker">
+      <button class="period-picker__trigger" type="button" id="period-trigger" aria-expanded="false" aria-controls="period-panel">
+        <span><span class="period-picker__caption">Período</span><span class="period-picker__value" id="period-value">Este mes</span></span>
+      </button>
+      <div class="period-picker__panel stack" id="period-panel" hidden>
+        <p class="field__label" id="shortcuts-label">Elige un atajo</p>
+        <div class="period-picker__shortcuts" role="group" aria-labelledby="shortcuts-label">
+          <button class="chip" type="button" data-shortcut="TODAY" aria-pressed="false">Hoy</button>
+          <button class="chip" type="button" data-shortcut="WEEK" aria-pressed="false">Esta semana</button>
+          <button class="chip" type="button" data-shortcut="MONTH" aria-pressed="false">Este mes</button>
+        </div>
+        <!-- [HU01-13] Rango personalizado -->
+        <form class="stack stack--sm" id="range-form" novalidate aria-labelledby="range-label">
+          <p class="field__label" id="range-label">O elige un rango de fechas</p>
+          <div class="period-picker__range">
+            <div class="field">
+              <label class="field__label" for="range-from">Desde</label>
+              <input class="field__control" type="date" id="range-from" name="from" aria-describedby="range-from-error" enterkeyhint="next">
+              <p class="field__error" id="range-from-error"></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="range-to">Hasta</label>
+              <input class="field__control" type="date" id="range-to" name="to" aria-describedby="range-to-error" enterkeyhint="done">
+              <p class="field__error" id="range-to-error"></p>
+            </div>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">Aplicar rango</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- [HU01-6] Navegación de mes (solo en la vista de mes) -->
+    <nav class="month-nav" id="month-nav" aria-label="Cambiar de mes">
+      <a class="month-nav__link" id="prev-month" href="#">← Mes anterior</a>
+      <a class="month-nav__link" id="next-month" href="#">Mes siguiente →</a>
+    </nav>
+
+    <!-- [HU01-3] Filtro por categoría -->
+    <div class="chip-group" id="category-chips" role="group" aria-label="Filtrar por categoría"></div>
+
+    <!-- [HU01-5] Totales de lo filtrado -->
+    <dl class="summary" id="summary" aria-label="Resumen del período">
+      <div class="summary__item"><dt class="summary__label">Gastos</dt><dd class="summary__value amount amount--expense" id="total-expenses">—</dd></div>
+      <div class="summary__item"><dt class="summary__label">Ingresos</dt><dd class="summary__value amount amount--income" id="total-income">—</dd></div>
+      <div class="summary__item summary__item--total"><dt class="summary__label">Saldo</dt><dd class="summary__value" id="total-balance">—</dd></div>
+    </dl>
+
+    <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
+
+    <section class="stack stack--sm" aria-labelledby="list-title">
+      <h2 class="card__title" id="list-title">Movimientos</h2>
+      <!-- [HU01-7..9] Lista y estados de carga, vacío y error -->
+      <div id="list-region" aria-busy="true"></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Principal">
+    <ul class="bottom-nav__list">
+      <li><a class="bottom-nav__link" href="movimientos.html" aria-current="page"><span class="bottom-nav__icon" aria-hidden="true">≡</span>Movimientos</a></li>
+      <li><a class="bottom-nav__link" href="registrar.html"><span class="bottom-nav__icon" aria-hidden="true">＋</span>Registrar</a></li>
+      <li><a class="bottom-nav__link" href="presupuesto.html"><span class="bottom-nav__icon" aria-hidden="true">◔</span>Presupuesto</a></li>
+    </ul>
+  </nav>
+
+  <script type="module">
+    import { mountTransactions } from './js/screens/movimientos.js';
+    mountTransactions();
+  </script>
+</body>
+</html>
