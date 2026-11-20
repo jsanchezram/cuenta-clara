@@ -7,53 +7,33 @@ Exportados:
 - `02-registrar.png` (HU-02)
 - `03-presupuesto.png` (HU-03)
 
-## Prompt maestro
+Límite autoimpuesto: **1000 caracteres por prompt**. El prompt maestro arma la base y cada iteración agrega **un solo cambio**.
+
+## Prompt maestro (≤ 1000 caracteres)
 
 ```
-[1 · CONTEXTO] Wireframes de CuentaClara, una app web para registrar gastos personales y controlar
-un presupuesto mensual por categoría. Moneda: soles (S/ 25.50). Español de Perú, tratando de tú.
-
-[2 · USUARIO] Diego, diseñador freelance. Registra cada gasto en el celular, con una mano, justo
-después de pagar, en menos de 15 segundos. Revisa el resumen del mes en la laptop.
-
-[3 · PANTALLAS] 3 pantallas móviles de 360 px, con un menú inferior común: Movimientos · Registrar · Presupuesto.
- 1) Movimientos: título con el período, atajos "Hoy / Esta semana / Este mes / Personalizado",
-    "Mes anterior / Mes siguiente", filtro de categorías en chips con scroll, resumen
-    (Gastos, Ingresos, Saldo) y lista de movimientos (fecha, descripción, categoría, monto con − o +, botón Editar).
- 2) Registrar: selector Gasto / Ingreso, Monto, Fecha, Categoría, Descripción con contador 0/60,
-    botón "Guardar" fijo abajo y a todo el ancho. En modo edición: título "Editar movimiento" y botón
-    "Eliminar" lejos de Guardar.
- 3) Presupuesto: una tarjeta por categoría de gasto con límite, usado, restante, una barra de progreso,
-    el texto del estado y el botón "Editar límite".
-
-[4 · CONTENIDO] Usa datos reales:
- "Almuerzo menú · Comida · 18 nov · − S/ 15.00",
- "Taxi a reunión · Transporte · 17 nov · − S/ 22.50",
- "Pago proyecto logo · Trabajo · 15 nov · + S/ 1 800.00".
- Presupuestos: Comida S/ 600 (usado S/ 510, "Cerca del límite"); Transporte S/ 200 (usado S/ 200,
- "Alcanzaste tu límite"); Ocio S/ 150 (usado S/ 195, "Te pasaste por S/ 45.00");
- Servicios S/ 300 (usado S/ 120, "Te quedan S/ 180.00"); Vivienda: "Sin límite definido".
-
-[5 · FIDELIDAD] Solo grises, cajas con X para íconos y 360 px. Es una app, no una landing: sin hero,
-sin ilustraciones, sin testimonios ni gráficos decorativos.
-
-[6 · ESTADOS] Agrega estos estados:
- - Movimientos: carga (skeleton), vacío ("No hay movimientos en Ocio" + "Ver todas las categorías") y error
-   ("No pudimos cargar tus movimientos." + Reintentar).
- - Registrar: error junto a cada campo, botón "Guardando…" y confirmación "Gasto registrado: S/ 15.00 en Comida"
-   con "Registrar otro" y "Ver movimientos". Confirmación de eliminar dentro de la página, no en un pop-up del sistema.
- - Presupuesto: los 4 estados de la barra, cada uno con su texto (el estado no depende del color).
-Botones de 44 px o más y etiqueta visible en cada campo.
+[1 · CONTEXTO] Wireframes de CuentaClara: app para registrar gastos y controlar un presupuesto mensual. Soles (S/), español de Perú, de tú.
+[2 · USUARIO] Diego, freelance: registra en el celular con una mano justo tras pagar, en < 15 s.
+[3 · PANTALLAS] 3 pantallas móviles de 360 px con menú inferior Movimientos · Registrar · Presupuesto.
+1) Movimientos: atajos Hoy/Semana/Mes/Personalizado, chips de categoría, Gastos · Ingresos · Saldo y lista.
+2) Registrar: Gasto/Ingreso, monto, fecha, categoría, descripción 0/60 y Guardar fijo abajo.
+3) Presupuesto: una tarjeta por categoría con barra, usado de límite y estado en texto.
+[4 · CONTENIDO] "Almuerzo menú · Comida · − S/ 15.00". Comida S/ 510 de 600: "Cerca del límite". Transporte 200 de 200: "Alcanzaste tu límite". Ocio 195 de 150: "Te pasaste por S/ 45.00".
+[5 · FIDELIDAD] Solo grises, 360 px, sin hero.
+[6 · ESTADOS] Carga, vacío, error con Reintentar y error junto al campo. Botones ≥ 44 px. El estado nunca solo por color.
 ```
 
-## Iteraciones
+## Iteraciones sugeridas
 
-Un cambio por prompt, terminando con "No cambies nada más".
+Un cambio por prompt, terminando con "No cambies nada más". Usa solo las que hagan falta: cada prompt gasta créditos.
 
 | # | Prompt | Por qué |
 |---|---|---|
-| I-1 | _(anotar aquí el prompt real)_ | _(regla que lo motivó, ej. H1, WCAG 1.4.1, Fitts)_ |
-| I-2 | | |
+| I-1 | En Registrar agrega el modo edición: título "Editar movimiento" y botón "Eliminar" arriba, lejos de Guardar. Al pulsarlo, una confirmación dentro de la página: "¿Eliminar Almuerzo menú · S/ 15.00?" con "Sí, eliminar" y "Cancelar". No cambies nada más. | HU02-7 · Fitts (lo destructivo lejos) · H5 |
+| I-2 | En Registrar agrega el estado después de guardar: botón "Guardando…" y luego el mensaje "Gasto registrado: S/ 15.00 en Comida" con "Registrar otro" y "Ver movimientos". No cambies nada más. | HU02-4 · H1 |
+| I-3 | En Movimientos, cada fila muestra fecha, descripción, categoría y monto con signo: "−" en gastos y "+" en ingresos. Agrega "Pago proyecto logo · Trabajo · + S/ 1 800.00" y el botón "Editar" en cada fila. No cambies nada más. | HU01-2 · WCAG 1.4.1 |
+| I-4 | En Presupuesto agrega Servicios "S/ 120 de 300 · Te quedan S/ 180.00" y Vivienda "Sin límite definido" con el botón "Definir límite". No cambies nada más. | HU03-4 · R5 (los 4 estados) |
+| _real_ | _(anota aquí los prompts que usaste de verdad, si difieren)_ | |
 
 ## Revisión HITL de los wireframes
 
