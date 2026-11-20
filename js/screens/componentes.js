@@ -2,11 +2,14 @@
 /**
  * Vitrina del design system:
  * - alterna el tema claro u oscuro, para revisar que cada componente funcione en ambos sin tocar components.css;
- * - monta los componentes de negocio con datos de ejemplo y registra los eventos que emiten.
+ * - monta los componentes en vivo con datos de ejemplo y registra los eventos que emiten;
+ * - muestra todos los íconos.
  */
 import '../components/cc-movimiento.js';
 import '../components/cc-barra-presupuesto.js';
-import { buildBudgetRows } from '../logic/budget.js';
+import '../components/cc-calendario-rango.js';
+import { buildBudgetRows, sortByUrgency } from '../logic/budget.js';
+import { icon, ICON_NAMES } from '../components/icons.js';
 import { esc } from '../utils/html.js';
 
 const toggle = /** @type {HTMLButtonElement | null} */ (document.getElementById('tema'));
@@ -38,7 +41,7 @@ transactions.forEach((t, i) => {
   el.editHref = i < 2 ? '#t-negocio' : null;
 });
 
-const rows = buildBudgetRows(
+const rows = sortByUrgency(buildBudgetRows(
   [
     { category: 'utilities', limit: 300, effectiveFrom: '2026-10' },
     { category: 'food', limit: 600, effectiveFrom: '2026-10' },
@@ -52,7 +55,7 @@ const rows = buildBudgetRows(
     { type: 'expense', category: 'leisure', amount: 195 },
     { type: 'expense', category: 'housing', amount: 1200 },
   ],
-).filter((r) => r.category !== 'other');
+)).filter((r) => r.category !== 'other');
 
 const budgets = document.getElementById('demo-presupuesto');
 for (const row of rows) {
@@ -62,6 +65,15 @@ for (const row of rows) {
   budgets?.append(el);
   el.row = row;
 }
+
+const calendar = /** @type {import('../components/cc-calendario-rango.js').CcCalendarioRango | null} */ (document.getElementById('demo-calendario'));
+if (calendar) {
+  calendar.today = '2026-11-20';
+  calendar.value = { from: '2026-11-09', to: '2026-11-15' };
+}
+
+const gallery = document.getElementById('demo-iconos');
+if (gallery) gallery.innerHTML = ICON_NAMES.map((name) => `<li><span class="cat-icon">${icon(name)}</span>${esc(name)}</li>`).join('');
 
 const log = document.getElementById('demo-eventos');
 /** @param {string} text */
@@ -73,5 +85,6 @@ function record(text) {
   }
   log.insertAdjacentHTML('beforeend', `<li>${esc(text)}</li>`);
 }
-document.addEventListener('cc-editar', (e) => record(`cc-editar ${JSON.stringify(/** @type {CustomEvent} */ (e).detail)}`));
-document.addEventListener('cc-editar-limite', (e) => record(`cc-editar-limite ${JSON.stringify(/** @type {CustomEvent} */ (e).detail)}`));
+for (const name of ['cc-editar', 'cc-editar-limite', 'cc-cambiar-rango']) {
+  document.addEventListener(name, (e) => record(`${name} ${JSON.stringify(/** @type {CustomEvent} */ (e).detail)}`));
+}
