@@ -2,7 +2,7 @@
 
 Herramienta: Figma Make. Baja fidelidad, en grises, con marco de 360 px.
 
-Exportados desde la versión publicada, con Chrome DevTools a 360 × 800 ("Capturar captura de pantalla"; 450 px reales por el escalado de 125 %):
+Exportados desde la versión publicada, con Chrome DevTools a 360 × 800:
 - `01-movimientos.png` (HU-01)
 - `02-registrar.png` (HU-02)
 - `03-presupuesto.png` (HU-03)
