@@ -112,10 +112,16 @@ export function weekdayMondayFirst(date) {
 
 const WEEKDAYS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
 
-/** "viernes 20 de noviembre de 2026" (nombre accesible de un día del calendario) @param {string} date */
-export function formatDayLong(date) {
+/**
+ * "viernes 20 de noviembre de 2026" (nombre accesible de un día del calendario).
+ * Sin el año, "viernes 20 de noviembre" (la fecha de hoy en el encabezado de cada vista).
+ * @param {string} date
+ * @param {boolean} [withYear]
+ */
+export function formatDayLong(date, withYear = true) {
   const [y, m, d] = parts(date);
-  return `${WEEKDAYS[weekdayMondayFirst(date)]} ${d} de ${MONTHS[m - 1]} de ${y}`;
+  const day = `${WEEKDAYS[weekdayMondayFirst(date)]} ${d} de ${MONTHS[m - 1]}`;
+  return withYear ? `${day} de ${y}` : day;
 }
 
 /** "18 nov" @param {string} date */
@@ -133,4 +139,9 @@ export function formatDayWithYear(date) {
 export function formatMonth(month) {
   const [y, m] = month.split('-').map(Number);
   return `${MONTHS[m - 1]} ${y}`;
+}
+
+/** "junio" (sin el año: la cuadrícula de meses ya muestra el año arriba) @param {string} month YYYY-MM */
+export function formatMonthName(month) {
+  return MONTHS[Number(month.slice(5, 7)) - 1];
 }

@@ -31,6 +31,15 @@ export function shiftMonth(month, delta) {
 }
 
 /**
+ * Los 12 meses de un año, de enero a diciembre: la cuadrícula de la hoja "Elige un mes" de Presupuesto.
+ * @param {number} year
+ * @returns {string[]}  "YYYY-MM"
+ */
+export function monthsOfYear(year) {
+  return Array.from({ length: 12 }, (_, i) => `${year}-${String(i + 1).padStart(2, '0')}`);
+}
+
+/**
  * @param {PeriodShortcut} shortcut
  * @param {string} today
  * @returns {Period}

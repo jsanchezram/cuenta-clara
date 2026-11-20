@@ -131,3 +131,15 @@ test('REQ-09: un límite quitado deja sin límite desde ese mes y conserva los a
   assert.equal(effectiveLimit(records, 'food', '2026-11')?.removed, true);
   assert.equal(effectiveLimit(records, 'food', '2027-02')?.removed, true);
 });
+
+test('REQ-04: el resumen da el porcentaje usado del total presupuestado (barra del resumen)', () => {
+  const s = budgetSummary([
+    row('leisure', 'EXCEEDED', 130, 150, 195),
+    row('transport', 'REACHED', 100, 200, 200),
+    row('food', 'NEAR', 85, 600, 510),
+    row('utilities', 'NORMAL', 40, 300, 120),
+    row('housing', null, null, 0, 1200),
+  ]);
+  assert.equal(s.percent, 82); // S/ 1 025.00 de S/ 1 250.00
+  assert.equal(budgetSummary([row('housing', null, null)]).percent, 0);
+});

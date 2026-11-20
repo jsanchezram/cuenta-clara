@@ -84,6 +84,11 @@ test('formatDayLong da el nombre completo del día en español', () => {
   assert.equal(formatDayLong('2026-11-20'), 'viernes 20 de noviembre de 2026');
 });
 
+test('formatDayLong sin el año da la fecha del encabezado de cada vista', () => {
+  assert.equal(formatDayLong('2026-11-20', false), 'viernes 20 de noviembre');
+  assert.equal(formatDayLong('2026-11-01', false), 'domingo 1 de noviembre');
+});
+
 // ---------- Atajo "Mes anterior" y unidad del período (HU01-12) ----------
 import { periodUnit } from '../js/logic/period.js';
 
@@ -99,4 +104,21 @@ test('periodUnit reconoce mes, día, semana y rango', () => {
   assert.equal(periodUnit({ kind: 'day', from: TODAY, to: TODAY }), 'day');
   assert.equal(periodUnit({ kind: 'range', from: '2026-11-16', to: '2026-11-20' }), 'week');
   assert.equal(periodUnit({ kind: 'range', from: '2026-11-01', to: '2026-11-15' }), 'range');
+});
+
+// ---------- Hoja "Elige un mes" de Presupuesto: saltar a otro año sin tocar ‹ una y otra vez ----------
+import { monthsOfYear } from '../js/logic/period.js';
+import { formatMonthName } from '../js/utils/lima-date.js';
+
+test('monthsOfYear da los 12 meses del año en orden, de enero a diciembre', () => {
+  const months = monthsOfYear(2025);
+  assert.equal(months.length, 12);
+  assert.equal(months[0], '2025-01');
+  assert.equal(months[5], '2025-06');
+  assert.equal(months[11], '2025-12');
+});
+
+test('formatMonthName da el nombre del mes en español, sin el año', () => {
+  assert.equal(formatMonthName('2026-06'), 'junio');
+  assert.equal(formatMonthName('2025-09'), 'septiembre');
 });
