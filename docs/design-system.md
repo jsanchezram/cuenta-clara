@@ -67,7 +67,7 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 - Al hacer scroll, la barra de marca y `.sticky-bar` quedan fijas: el título pasa en pequeño a la barra y los controles ganan una sombra suave. En pantallas bajas (`max-height: 30rem`: zoom alto o celular horizontal) dejan de ser fijas para no tapar el contenido (WCAG 1.4.10).
 - En el celular, el menú va abajo, el título va centrado y "Guardar" va al final del formulario. `.layout__panel` no genera caja (`display: contents`): los controles quedan fijos arriba y el resumen va en el flujo.
 - En laptop, el menú sube a la barra de marca y el título se alinea a la izquierda. Movimientos y Presupuesto usan un **panel fijo a la izquierda** (`.layout__panel` con `position: sticky`: período y chips, o el mes, más el resumen) y el contenido a la derecha. Las dos vistas ocupan **una sola pantalla de alto**: la página no se desplaza y la lista (o las categorías) tiene su propio scroll (`.layout__scroll`), con "Cargar más" o "Ver más" al final. En pantallas bajas (`max-height: 30rem`) todo vuelve a desplazarse entero. Registrar usa `.container--narrow`, con el título centrado (`.page-header--center`) y el formulario en una tarjeta (`.form-card`).
-- Las hojas (`.sheet`) son diálogos modales: en el celular se abren desde abajo, sobre la pantalla, y en laptop se ven como un diálogo centrado.
+- Las hojas (`.sheet`) son diálogos modales: en el celular se abren desde abajo, sobre la pantalla. En laptop se abren como un desplegable justo debajo de su botón, como cualquier calendario (anclaje CSS: `anchor-name` y `position-area`), o arriba si allí hay más espacio. Sin soporte de anclaje, quedan centradas.
 
 ## 4. Componentes
 
@@ -107,7 +107,8 @@ Los nombres siguen el patrón `categoría-rol-variante`.
 | `--color-hero-bg`, `--color-hero-bg-end`, `--color-on-hero`, `--color-on-hero-muted`, `--color-hero-well`, `--color-hero-track` | Semántico | Resumen destacado: degradado azul, texto blanco (≥ 5:1), pozos y riel de la barra |
 | `--color-cat-icon-bg`, `--color-cat-icon-fg` | Semántico | Ícono de categoría monocromo |
 | `--color-backdrop`, `--shadow-card`, `--shadow-raised`, `--shadow-nav` | Semántico | Velo del modal y elevación |
-| `--calendar-day-size`, `--chip-visual-height`, `--list-row-min-height` | Componente | Medidas |
+| `--color-scrollbar-thumb`, `--color-scrollbar-thumb-hover` | Semántico | Barra de scroll fina en azul claro (lista de laptop y hojas) |
+| `--calendar-day-size`, `--chip-visual-height`, `--list-row-min-height`, `--tile-min-height`, `--scrollbar-size` | Componente | Medidas. En laptop se compactan (controles de 40 px) |
 
 ## 6. Estados de UI
 
@@ -136,7 +137,7 @@ El detalle está en `.claude/rules/estilos-css.md` y `.claude/rules/html-accesib
 - El estado se lee en texto. El color y el ícono solo refuerzan.
 - `role="status"` en las confirmaciones. `role="alert"` solo para errores que interrumpen.
 - Durante la carga: `aria-busy="true"` y un skeleton con `aria-hidden`.
-- Objetivos táctiles de 44 px o más (48 px el primario). Los chips y atajos se ven de 36 px, pero su área táctil es de 44 px.
+- Objetivos táctiles de 44 px o más en el celular (48 px el primario). Los chips y atajos se ven de 36 px, pero su área táctil es de 44 px. En laptop (mouse), `tokens.css` baja los controles a 40 px y los chips se ven de 32 px: WCAG 2.5.8 pide 24 px.
 - Excepción: los días del calendario miden 46 × 36 px. Cumplen WCAG 2.5.8 (24 px como mínimo); se achicaron para que la hoja no ocupe toda la pantalla.
 - Las hojas devuelven el foco al botón que las abrió al cerrarse por cualquier camino: atajo, Aplicar, Cancelar, ✕, Escape o tocar el fondo.
 - Lo enfocado nunca queda tapado por las barras fijas (WCAG 2.4.11): `scroll-padding-top` usa la altura que mide `watchHeader()`.
