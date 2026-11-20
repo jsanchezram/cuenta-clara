@@ -627,7 +627,7 @@ textarea.field__control {
   align-items: center;
   justify-content: center;
   gap: var(--space-1);
-  min-height: 4.25rem;
+  min-height: var(--tile-min-height);
   padding: var(--space-2);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -1633,7 +1633,7 @@ cc-movimiento {
   }
 
   .page-header__body {
-    padding-block: var(--space-6) var(--space-3);
+    padding-block: var(--space-4) var(--space-3);
   }
 
   .page-header:has(+ .page-body .sticky-bar) .page-header__body {
@@ -1649,10 +1649,6 @@ cc-movimiento {
   .page-header--center .page-header__body {
     align-items: center;
     text-align: center;
-  }
-
-  .page-header__title {
-    font-size: var(--font-size-3xl);
   }
 
   /* La barra de marca lleva el menú, que se dibuja sobre ella a la derecha */
@@ -1680,23 +1676,13 @@ cc-movimiento {
     box-shadow: var(--shadow-card);
   }
 
-  /* En laptop las cifras del resumen destacado crecen */
   .hero-summary {
     padding: var(--space-4);
   }
 
-  .hero-summary__value {
-    font-size: var(--font-size-2xl);
-  }
-
-  .hero-summary__stat-value,
-  .hero-summary__badge {
-    font-size: var(--font-size-md);
-  }
-
-  .hero-summary__of,
-  .hero-summary__percent {
-    font-size: var(--font-size-sm);
+  /* El monto se escribe en grande en el celular; en laptop basta un poco menos */
+  .field__control--amount {
+    font-size: var(--font-size-lg);
   }
 
   html {
@@ -1828,23 +1814,111 @@ cc-movimiento {
     min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
-    /* barra delgada con su espacio reservado: la lista no salta cuando aparece tras "Cargar más" */
-    scrollbar-width: thin;
+    /* espacio reservado para la barra: la lista no salta cuando aparece tras "Cargar más" */
     scrollbar-gutter: stable;
     /* aire para que la sombra de las tarjetas no se corte en el borde del scroll */
     margin-inline: calc(-1 * var(--space-2));
     padding: 0 var(--space-2) var(--space-2);
   }
 
-  /* La hoja se vuelve un diálogo centrado */
+  /* La hoja se vuelve un desplegable compacto, justo debajo de su botón, como cualquier calendario.
+     Si no cabe abajo, se abre arriba. Sin soporte de anclaje CSS, queda centrada */
   .sheet {
-    width: min(28rem, calc(100% - 2rem));
+    /* 25 rem: los 4 atajos del período caben en una fila */
+    width: min(25rem, calc(100% - 2rem));
     margin: auto;
-    border-radius: var(--sheet-radius);
+    overflow-y: auto;
+    border-radius: var(--radius-lg);
+  }
+
+  .sheet[open] {
+    animation: sheet-pop var(--duration-fast) ease-out;
+  }
+
+  .sheet__inner {
+    max-height: none;
+    padding: var(--space-3) var(--space-4) var(--space-4);
+    overflow: visible;
   }
 
   .sheet__inner::before {
     display: none;
+  }
+
+  .sheet__title {
+    font-size: var(--font-size-md);
+  }
+
+  .sheet .option-group {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
+  @supports (position-area: block-end) {
+    .period-trigger,
+    .month-bar,
+    .date-trigger {
+      anchor-name: --sheet-anchor;
+    }
+
+    .sheet {
+      position-anchor: --sheet-anchor;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block;
+      /* abajo o arriba: donde haya más espacio */
+      position-try-order: most-height;
+      inset: auto;
+      max-height: calc(100% - var(--space-2));
+      margin: var(--space-2) 0 0;
+    }
+
+    .sheet::backdrop {
+      background: transparent;
+    }
+  }
+}
+
+/* El desplegable de laptop aparece con un leve fundido */
+@keyframes sheet-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+/* Barra de scroll fina en el azul de la marca (lista de laptop y hojas) */
+.layout__scroll::-webkit-scrollbar,
+.sheet::-webkit-scrollbar,
+.sheet__inner::-webkit-scrollbar {
+  width: var(--scrollbar-size);
+}
+
+.layout__scroll::-webkit-scrollbar-track,
+.sheet::-webkit-scrollbar-track,
+.sheet__inner::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.layout__scroll::-webkit-scrollbar-thumb,
+.sheet::-webkit-scrollbar-thumb,
+.sheet__inner::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: var(--radius-pill);
+}
+
+.layout__scroll::-webkit-scrollbar-thumb:hover,
+.sheet::-webkit-scrollbar-thumb:hover,
+.sheet__inner::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}
+
+/* Firefox no tiene ::-webkit-scrollbar: usa las propiedades estándar */
+@supports not selector(::-webkit-scrollbar) {
+  .layout__scroll,
+  .sheet,
+  .sheet__inner {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-scrollbar-thumb) transparent;
   }
 }
 
