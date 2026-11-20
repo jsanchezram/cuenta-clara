@@ -98,6 +98,15 @@ Errores: `422 VALIDATION_ERROR` en estos casos:
 - El rango está invertido.
 - Una fecha tiene formato inválido.
 
+### `GET /api/v1/transactions/{id}`
+
+Lee un movimiento no eliminado. Lo usa la edición (`registrar.html?id=…`).
+
+| Respuesta | Cuándo |
+|---|---|
+| `200 OK` | Devuelve el `Transaction` |
+| `404 NOT_FOUND` | No existe o está eliminado |
+
 ### `POST /api/v1/transactions`
 
 Crea un movimiento.
@@ -195,4 +204,5 @@ Todos los errores tienen la misma forma:
 
 - Guarda los DTO en `localStorage` con las claves `cuentaclara.v1.transactions` y `cuentaclara.v1.budgets`.
 - Si el almacén está vacío, siembra `datos/movimientos.json` y `datos/presupuestos.json`. Al sembrar, **corre los meses** para que el último mes de los datos coincida con el mes en curso. El archivo no cambia, y la demo funciona en cualquier fecha.
-- Simula latencia (`delayMs`) y fallos a pedido (`?fallo=movimientos`, `?fallo=guardar`, `?fallo=presupuesto` → `500 SERVER_ERROR`).
+- Simula latencia (`delayMs`) y fallos a pedido con `?fallo=movimientos`, `?fallo=guardar` o `?fallo=presupuesto`, que responden `500 SERVER_ERROR`. El fallo ocurre **solo en el primer pedido**, así que "Reintentar" funciona.
+- Al sembrar, los meses se corren **por meses completos**, y cualquier fecha que quede después de hoy se ajusta a hoy. Así cada movimiento sigue en su mes y se mantienen los estados del presupuesto.
