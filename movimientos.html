@@ -23,7 +23,7 @@
   </header>
 
   <main id="contenido">
-    <!-- Encabezado de la vista: título grande en una franja blanca; al hacer scroll pasa en pequeño a la barra de marca -->
+    <!-- Encabezado de la vista: la fecha de hoy y el título; al hacer scroll, el título pasa en pequeño a la barra de marca -->
     <div class="page-header">
       <div class="container page-header__body">
         <p class="page-header__eyebrow" data-today>&nbsp;</p>
@@ -31,34 +31,38 @@
       </div>
     </div>
 
-    <!-- Período y filtros: quedan fijos bajo la barra de marca al hacer scroll -->
-    <div class="sticky-bar">
-      <div class="container sticky-bar__inner">
-        <!-- [HU01-12] Selector de período a todo el ancho: abre la hoja con atajos y calendario -->
-        <button class="period-trigger" type="button" id="period-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="period-sheet">
-          <!--icon:calendar--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zM5 10v9h14v-9zM7 12h3v3H7z"/></svg>
-          <span class="period-trigger__text">
-            <span class="period-trigger__value" id="period-value">Este mes</span>
-            <span class="period-trigger__range" id="period-range">&nbsp;</span>
-          </span>
-          <!--icon:chevron-down--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.4 8.6 4 10l8 8 8-8-1.4-1.4-6.6 6.6z"/></svg>
-        </button>
-
-        <!-- [HU01-3] Filtro por categoría -->
-        <div class="chip-group" id="category-chips" role="group" aria-label="Filtrar por categoría"></div>
-      </div>
-    </div>
-
     <div class="container page-body stack stack--compact layout">
       <!-- Aviso al volver de editar o eliminar (HU02-7) -->
       <div id="flash" class="notice-slot"></div>
 
-      <!-- [HU01-5] Totales de lo filtrado en la tarjeta destacada: el saldo en grande; debajo, ingresos y gastos -->
-      <dl class="hero-summary" id="summary" aria-label="Resumen del período">
-        <div class="hero-summary__main"><dt class="hero-summary__label">Saldo</dt><dd class="hero-summary__value" id="total-balance">—</dd></div>
-        <div class="hero-summary__stat"><dt class="hero-summary__stat-label"><!--icon:arrow-down-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M17 18H6V7h2v7.6l8.3-8.3 1.4 1.4L9.4 16H17z"/></svg>Ingresos</dt><dd class="hero-summary__stat-value" id="total-income">—</dd></div>
-        <div class="hero-summary__stat"><dt class="hero-summary__stat-label"><!--icon:arrow-up-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7 6h11v11h-2V9.4l-8.3 8.3-1.4-1.4L14.6 8H7z"/></svg>Gastos</dt><dd class="hero-summary__stat-value" id="total-expenses">—</dd></div>
-      </dl>
+      <!-- Panel: en el celular sus partes van en el flujo y los controles quedan fijos arriba;
+           en laptop es una columna fija a la izquierda, con los controles y el resumen -->
+      <div class="layout__panel">
+        <!-- Período y filtros: quedan fijos al hacer scroll -->
+        <div class="sticky-bar">
+          <div class="sticky-bar__inner">
+            <!-- [HU01-12] Selector de período a todo el ancho: abre la hoja con atajos y calendario -->
+            <button class="period-trigger" type="button" id="period-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="period-sheet">
+              <!--icon:calendar--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8 2a1 1 0 0 1 1 1v1h6V3a1 1 0 1 1 2 0v1h2a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V3a1 1 0 0 1 1-1zM5 10v9h14v-9zM7 12h3v3H7z"/></svg>
+              <span class="period-trigger__text">
+                <span class="period-trigger__value" id="period-value">Este mes</span>
+                <span class="period-trigger__range" id="period-range">&nbsp;</span>
+              </span>
+              <!--icon:chevron-down--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M5.4 8.6 4 10l8 8 8-8-1.4-1.4-6.6 6.6z"/></svg>
+            </button>
+
+            <!-- [HU01-3] Filtro por categoría -->
+            <div class="chip-group" id="category-chips" role="group" aria-label="Filtrar por categoría"></div>
+          </div>
+        </div>
+
+        <!-- [HU01-5] Totales de lo filtrado en la tarjeta destacada: el saldo en grande; debajo, ingresos y gastos -->
+        <dl class="hero-summary" id="summary" aria-label="Resumen del período">
+          <div class="hero-summary__main"><dt class="hero-summary__label">Saldo</dt><dd class="hero-summary__value" id="total-balance">—</dd></div>
+          <div class="hero-summary__stat"><dt class="hero-summary__stat-label"><!--icon:arrow-down-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M17 18H6V7h2v7.6l8.3-8.3 1.4 1.4L9.4 16H17z"/></svg>Ingresos</dt><dd class="hero-summary__stat-value" id="total-income">—</dd></div>
+          <div class="hero-summary__stat"><dt class="hero-summary__stat-label"><!--icon:arrow-up-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7 6h11v11h-2V9.4l-8.3 8.3-1.4-1.4L14.6 8H7z"/></svg>Gastos</dt><dd class="hero-summary__stat-value" id="total-expenses">—</dd></div>
+        </dl>
+      </div>
 
       <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
 
