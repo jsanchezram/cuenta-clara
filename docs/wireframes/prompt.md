@@ -4,8 +4,9 @@ Herramienta: Figma Make. Baja fidelidad, en grises, con marco de 360 px.
 
 Exportados desde la versión publicada, con Chrome DevTools a 360 × 800:
 - `01-movimientos.png` (HU-01)
+- `01-movimientos-periodo.png` (HU-01 · selector de período abierto: atajos + rango, HU01-12/13)
 - `02-registrar.png` (HU-02)
-- `03-presupuesto.png` (HU-03)
+- `03-presupuesto.png` (HU-03 · página completa: los 4 estados de R5 + "Sin límite definido")
 
 Límite: **2000 caracteres por prompt**. El prompt maestro arma las 3 pantallas con sus estados, y cada iteración corrige **un solo cambio**.
 
