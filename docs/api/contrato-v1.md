@@ -133,8 +133,8 @@ Cuerpo de ejemplo:
 |---|---|
 | `200 OK` | Devuelve el `Transaction` actualizado, con un `updated_at` nuevo |
 | `404 NOT_FOUND` | No existe o ya está eliminado |
-| `409 OUTSIDE_CURRENT_MONTH` | El movimiento guardado **o** la fecha nueva no son del mes en curso (R6) |
-| `422 VALIDATION_ERROR` | El resultado combinado no cumple R1–R4 |
+| `409 OUTSIDE_CURRENT_MONTH` | El movimiento guardado no es del mes en curso (R6) |
+| `422 VALIDATION_ERROR` | El resultado combinado no cumple R1–R4, o la fecha nueva sale del mes en curso (R6, en `fields.date`) |
 
 ### `DELETE /api/v1/transactions/{id}`
 

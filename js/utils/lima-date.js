@@ -20,6 +20,14 @@ export function todayInLima(now) {
   return new Date(now.getTime() + LIMA_OFFSET_MS).toISOString().slice(0, 10);
 }
 
+/**
+ * Instante actual en Lima como ISO 8601 con zona: "2026-11-20T12:00:00-05:00".
+ * @param {Date} now
+ */
+export function nowInLimaIso(now) {
+  return `${new Date(now.getTime() + LIMA_OFFSET_MS).toISOString().slice(0, 19)}-05:00`;
+}
+
 /** @param {number} n */
 const pad = (n) => String(n).padStart(2, '0');
 
