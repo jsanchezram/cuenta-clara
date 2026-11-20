@@ -1,0 +1,8 @@
+# Contexto local de Claude Code (no se comparte)
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Sistema operativo y editor
+Thumbs.db
+.DS_Store
+.vscode/
