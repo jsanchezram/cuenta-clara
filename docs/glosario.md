@@ -7,7 +7,7 @@
 - **Excepciones que fija el enunciado:**
   - Las páginas `movimientos.html`, `registrar.html`, `presupuesto.html` y `componentes.html`, con sus pantallas en `js/screens/` y el mismo nombre.
   - `js/rutas.js` y `datos/*.json`.
-  - Las etiquetas `<cc-movimiento>` y `<cc-barra-presupuesto>`.
+  - Las etiquetas y los eventos de los custom elements `cc-*` (`<cc-movimiento>`, `<cc-barra-presupuesto>`, `<cc-calendario-rango>`, `cc-editar`…).
   - El fragmento de categoría en la URL (`#/2026-11/comida`).
 
 ## Términos

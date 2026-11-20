@@ -5,54 +5,67 @@
      2 · SEMÁNTICOS   intención; el tema oscuro redefine solo esta capa
      3 · COMPONENTE   decisiones de un componente
    Los componentes de components.css usan las capas 2 y 3, nunca la 1.
-   Contrastes (WCAG 2.2): texto ≥ 4.5:1 y bordes/barras ≥ 3:1, medidos contra
-   la superficie donde se usan.
+   Marca: azul vibrante (revisión de la persona, bitácora #21).
+   Contrastes (WCAG 2.2) medidos con script contra la superficie donde se usan:
+   texto ≥ 4.5:1; bordes de controles y rellenos de barra ≥ 3:1.
    ===================================================================== */
 
 /* ---------- 1 · PRIMITIVOS ---------- */
 :root {
-  /* Grises */
+  /* Grises fríos */
   --gray-0: #ffffff;
-  --gray-50: #f7f7f5;
-  --gray-100: #e6e9ed;
-  --gray-200: #d9dde1;
-  --gray-400: #a7b0ba;
-  --gray-500: #7b8794;
-  --gray-600: #6b7785;
-  --gray-700: #52606d;
-  --gray-800: #2a313a;
-  --gray-900: #1f2933;
-  --gray-925: #1b2027;
-  --gray-950: #111418;
+  --gray-50: #f5f7fb;
+  --gray-100: #e8ecf2;
+  --gray-200: #d9dee7;
+  --gray-400: #a7b0be;
+  --gray-500: #7d8797;
+  --gray-600: #687385;
+  --gray-700: #4d5868;
+  --gray-800: #263043;
+  --gray-900: #172033;
+  --gray-925: #111a2e;
+  --gray-950: #0b1220;
 
-  /* Verde: marca, acción e ingresos */
-  --green-50: #e7f5ee;
-  --green-300: #6fcf9f;
-  --green-700: #0f6b4f;
-  --green-800: #0a523c;
-  --green-950: #0b1f17;
+  /* Azul: marca y acción */
+  --blue-50: #eff6ff;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --blue-900: #1e3a8a;
+  --blue-950: #172554;
+
+  /* Verde: ingresos y presupuesto bajo control */
+  --green-50: #f0fdf4;
+  --green-300: #86efac;
+  --green-700: #15803d;
+  --green-950: #052e16;
 
   /* Ámbar: cerca del límite */
-  --amber-50: #fff4e0;
-  --amber-300: #f5b754;
-  --amber-800: #8a4b00;
-  --amber-950: #3a2a10;
+  --amber-50: #fffbeb;
+  --amber-300: #fcd34d;
+  --amber-700: #b45309;
+  --amber-950: #451a03;
 
   /* Naranja: límite alcanzado */
-  --orange-50: #fff0e6;
-  --orange-300: #fdae6b;
-  --orange-800: #9a3412;
-  --orange-950: #3b1d0f;
+  --orange-50: #fff7ed;
+  --orange-300: #fdba74;
+  --orange-700: #c2410c;
+  --orange-950: #431407;
 
-  /* Rojo: error y límite excedido */
-  --red-50: #fdecea;
-  --red-300: #ff8a80;
-  --red-700: #b42318;
-  --red-950: #3d1512;
+  /* Rojo: errores y límite excedido */
+  --red-50: #fef2f2;
+  --red-300: #fca5a5;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-950: #450a0a;
 
-  /* Azul: foco */
-  --blue-300: #93b4ff;
-  --blue-700: #1d4ed8;
+  /* Sombras y velo del modal: valores crudos */
+  --shadow-light: rgb(23 32 51 / 0.08);
+  --shadow-light-strong: rgb(23 32 51 / 0.18);
+  --shadow-dark: rgb(0 0 0 / 0.45);
+  --veil-light: rgb(11 18 32 / 0.45);
+  --veil-dark: rgb(0 0 0 / 0.6);
 
   /* Espacios: grilla de 8 pt con medio paso de 4 */
   --space-1: 0.25rem;  /* 4 px */
@@ -63,27 +76,37 @@
   --space-8: 2rem;     /* 32 px */
   --space-12: 3rem;    /* 48 px */
 
-  /* Tipografía: escala 16 × 1.25 */
-  --font-family-base: system-ui, "Segoe UI", Roboto, sans-serif;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
-  --font-size-2xl: 2rem;
+  /* Tipografía: escala compacta (revisión de la persona: los textos se sentían grandes).
+     El cuerpo es de 15 px; los campos se quedan en 16 px para evitar el zoom de iOS. */
+  /* Inter (Google Fonts, pesos 400–700): más liviana que la del sistema; si no carga, usa la del sistema */
+  --font-family-base: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-size-xs: 0.75rem;     /* 12 px */
+  --font-size-sm: 0.8125rem;   /* 13 px */
+  --font-size-md: 0.9375rem;   /* 15 px */
+  --font-size-input: 1rem;     /* 16 px */
+  --font-size-lg: 1.125rem;    /* 18 px */
+  --font-size-xl: 1.375rem;    /* 22 px */
+  --font-size-2xl: 1.75rem;    /* 28 px */
+  --font-size-3xl: 2.25rem;    /* 36 px */
   --font-weight-regular: 400;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  --font-weight-bold: 600;                          /* sin 700 en el texto: la fuente se sentía pesada (bitácora #29) */
+  --font-weight-title: 700;                         /* solo los títulos de cada vista */
+  --letter-spacing-title: -0.025em;
   --line-height-body: 1.5;
   --line-height-heading: 1.2;
 
-  /* Formas */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
+  /* Formas y movimiento */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
   --radius-pill: 999px;
   --border-width-1: 1px;
   --border-width-2: 2px;
   --duration-fast: 150ms;
+  --duration-sheet: 220ms;
 }
 
 /* ---------- 2 · SEMÁNTICOS · tema claro ---------- */
@@ -93,48 +116,59 @@
   --color-bg: var(--gray-50);
   --color-surface: var(--gray-0);
   --color-surface-muted: var(--gray-100);
-  --color-text: var(--gray-900);                    /* 14.8:1 sobre surface */
-  --color-text-muted: var(--gray-700);              /* 6.5:1 */
-  --color-border: var(--gray-600);                  /* 4.6:1 · bordes de controles */
+  --color-text: var(--gray-900);                    /* 16.3:1 sobre surface */
+  --color-text-muted: var(--gray-700);              /* 6.7:1 sobre bg (el fondo más claro donde se usa) */
+  --color-border: var(--gray-600);                  /* 4.8:1 · borde de campos */
   --color-divider: var(--gray-200);                 /* decorativo */
 
-  --color-action-primary: var(--green-700);         /* 6.5:1 con on-action */
-  --color-action-primary-hover: var(--green-800);
+  --color-brand: var(--blue-600);                   /* barra de marca */
+  --color-on-brand: var(--gray-0);                  /* 5.2:1 sobre brand */
+  --color-action-primary: var(--blue-600);          /* 5.2:1 con on-action */
+  --color-action-primary-hover: var(--blue-700);
   --color-on-action: var(--gray-0);
   --color-action-secondary-bg: var(--gray-0);
   --color-action-secondary-hover: var(--gray-100);
-  --color-selected-bg: var(--green-50);
-  --color-selected-border: var(--green-700);
+  --color-accent-text: var(--blue-700);             /* enlaces y menú activo: 6.7:1 */
+  --color-selected-bg: var(--blue-50);
+  --color-selected-text: var(--blue-700);           /* 6.2:1 sobre selected-bg */
   --color-focus-ring: var(--blue-700);              /* 6.3:1 sobre bg */
+  --color-backdrop: var(--veil-light);
 
-  --color-income-text: var(--green-700);            /* 6.5:1 */
+  --color-income-text: var(--green-700);            /* 5.0:1 */
   --color-expense-text: var(--gray-900);
 
-  --color-danger-text: var(--red-700);              /* 6.6:1 */
+  --color-danger-text: var(--red-700);              /* 6.5:1 · 5.9:1 sobre danger-bg */
   --color-danger-bg: var(--red-50);
   --color-danger-border: var(--red-700);
+  --color-danger-solid: var(--red-600);             /* 4.8:1 con texto surface */
   --color-success-text: var(--green-700);
   --color-success-bg: var(--green-50);
   --color-success-border: var(--green-700);
 
-  /* Presupuesto: 4 estados (R5). El texto y el patrón distinguen; el color refuerza. */
+  /* Presupuesto: 4 estados (R5). El texto y el ícono distinguen; el color de la barra sólida refuerza. */
   --color-budget-track: var(--gray-100);
-  --color-budget-track-border: var(--gray-600);     /* 4.6:1: el contorno de la barra se ve */
-  --color-budget-normal-fill: var(--green-700);     /* 5.3:1 sobre track */
+  --color-budget-normal-fill: var(--green-700);     /* 4.2:1 sobre track */
   --color-budget-normal-text: var(--green-700);
-  --color-budget-near-fill: var(--amber-800);       /* 5.6:1 sobre track */
-  --color-budget-near-text: var(--amber-800);       /* 6.8:1 */
+  --color-budget-near-fill: var(--amber-700);       /* 4.2:1 sobre track */
+  --color-budget-near-text: var(--amber-700);       /* 5.0:1 · 4.8:1 sobre near-bg */
   --color-budget-near-bg: var(--amber-50);
-  --color-budget-reached-fill: var(--orange-800);   /* 6.0:1 sobre track */
-  --color-budget-reached-text: var(--orange-800);   /* 7.3:1 */
+  --color-budget-reached-fill: var(--orange-700);   /* 4.4:1 sobre track */
+  --color-budget-reached-text: var(--orange-700);   /* 5.2:1 · 4.9:1 sobre reached-bg */
   --color-budget-reached-bg: var(--orange-50);
-  --color-budget-exceeded-fill: var(--red-700);     /* 5.4:1 sobre track */
-  --color-budget-exceeded-text: var(--red-700);     /* 6.6:1 */
+  --color-budget-exceeded-fill: var(--red-600);     /* 4.1:1 sobre track */
+  --color-budget-exceeded-text: var(--red-700);
   --color-budget-exceeded-bg: var(--red-50);
-  --color-budget-pattern: var(--gray-0);            /* rayas sobre el relleno */
+
+  /* Ícono de categoría: un solo color, el de marca, sobre un círculo claro (revisión de la persona) */
+  --color-cat-icon-bg: var(--blue-50);
+  --color-cat-icon-fg: var(--blue-600);             /* 4.8:1 sobre cat-icon-bg (decorativo) */
 
   --color-skeleton: var(--gray-100);
   --color-skeleton-shine: var(--gray-50);
+
+  --shadow-card: 0 1px 2px var(--shadow-light), 0 2px 10px var(--shadow-light);
+  --shadow-raised: 0 12px 32px var(--shadow-light-strong);
+  --shadow-nav: 0 -2px 12px var(--shadow-light);
 }
 
 /* ---------- 2 · SEMÁNTICOS · tema oscuro ---------- */
@@ -144,52 +178,64 @@
   --color-bg: var(--gray-950);
   --color-surface: var(--gray-925);
   --color-surface-muted: var(--gray-800);
-  --color-text: var(--gray-100);                    /* 13.4:1 sobre surface */
-  --color-text-muted: var(--gray-400);              /* 7.5:1 */
-  --color-border: var(--gray-500);                  /* 4.4:1 · bordes piden ≥ 3:1 */
+  --color-text: var(--gray-100);
+  --color-text-muted: var(--gray-400);
+  --color-border: var(--gray-500);
   --color-divider: var(--gray-800);
 
-  --color-action-primary: var(--green-300);         /* 9:1 con on-action */
-  --color-action-primary-hover: var(--green-50);
-  --color-on-action: var(--green-950);
+  --color-brand: var(--blue-900);
+  --color-on-brand: var(--gray-0);
+  --color-action-primary: var(--blue-400);
+  --color-action-primary-hover: var(--blue-300);
+  --color-on-action: var(--gray-950);
   --color-action-secondary-bg: var(--gray-925);
   --color-action-secondary-hover: var(--gray-800);
-  --color-selected-bg: var(--green-950);
-  --color-selected-border: var(--green-300);
-  --color-focus-ring: var(--blue-300);              /* 9:1 */
+  --color-accent-text: var(--blue-300);
+  --color-selected-bg: var(--blue-950);
+  --color-selected-text: var(--blue-300);
+  --color-focus-ring: var(--blue-300);
+  --color-backdrop: var(--veil-dark);
 
-  --color-income-text: var(--green-300);            /* 8.7:1 */
+  --color-income-text: var(--green-300);
   --color-expense-text: var(--gray-100);
 
-  --color-danger-text: var(--red-300);              /* 7.2:1 */
+  --color-danger-text: var(--red-300);
   --color-danger-bg: var(--red-950);
   --color-danger-border: var(--red-300);
+  --color-danger-solid: var(--red-300);
   --color-success-text: var(--green-300);
   --color-success-bg: var(--green-950);
   --color-success-border: var(--green-300);
 
   --color-budget-track: var(--gray-800);
-  --color-budget-track-border: var(--gray-500);     /* 4.4:1 */
   --color-budget-normal-fill: var(--green-300);
   --color-budget-normal-text: var(--green-300);
   --color-budget-near-fill: var(--amber-300);
-  --color-budget-near-text: var(--amber-300);       /* 9.2:1 */
+  --color-budget-near-text: var(--amber-300);
   --color-budget-near-bg: var(--amber-950);
   --color-budget-reached-fill: var(--orange-300);
-  --color-budget-reached-text: var(--orange-300);   /* 8.9:1 */
+  --color-budget-reached-text: var(--orange-300);
   --color-budget-reached-bg: var(--orange-950);
   --color-budget-exceeded-fill: var(--red-300);
-  --color-budget-exceeded-text: var(--red-300);     /* 7.2:1 */
+  --color-budget-exceeded-text: var(--red-300);
   --color-budget-exceeded-bg: var(--red-950);
-  --color-budget-pattern: var(--gray-950);
+
+  --color-cat-icon-bg: var(--blue-950);
+  --color-cat-icon-fg: var(--blue-300);
 
   --color-skeleton: var(--gray-800);
   --color-skeleton-shine: var(--gray-925);
+
+  --shadow-card: 0 1px 3px var(--shadow-dark);
+  --shadow-raised: 0 12px 32px var(--shadow-dark);
+  --shadow-nav: 0 -2px 12px var(--shadow-dark);
 }
 
 /* ---------- 3 · COMPONENTE ---------- */
 :root {
   --content-max-width: 40rem;
+  --content-max-width-wide: 72rem;
+  --content-max-width-narrow: 36rem;
 
   --control-height: 2.75rem;                        /* 44 px: objetivo táctil mínimo */
   --button-height: 3rem;                            /* 48 px: acción primaria (Fitts) */
@@ -197,22 +243,28 @@
   --button-font-weight: var(--font-weight-semibold);
 
   --field-border-width: var(--border-width-1);
-  --field-radius: var(--radius-sm);
+  --field-radius: var(--radius-md);
   --field-error-border-width: var(--border-width-2);
 
-  --chip-height: 2.75rem;
+  --chip-height: 2.75rem;                           /* área táctil (44 px) */
+  --chip-visual-height: 2.25rem;                    /* lo que se ve (36 px) */
   --chip-radius: var(--radius-pill);
 
   --focus-ring-width: 3px;
   --focus-ring-offset: 2px;
 
-  --list-row-min-height: 4rem;
+  --icon-size: 1.25rem;
+  --cat-icon-size: 2.5rem;
+  --brand-bar-height: 3rem;
   --bottom-nav-height: 4rem;
+  --action-bar-space: 4.5rem;                       /* alto de la barra de Guardar fija */
+  --list-row-min-height: 3.5rem;
 
-  --budget-bar-height: 0.75rem;
+  --budget-bar-height: 0.625rem;
   --budget-bar-radius: var(--radius-pill);
-  --budget-marker-width: 3px;
 
   --card-padding: var(--space-4);
-  --card-radius: var(--radius-md);
+  --card-radius: var(--radius-lg);
+  --sheet-radius: var(--radius-xl);
+  --calendar-day-size: 2.25rem;                     /* 36 px por día: celda de 46 × 36 px, cumple WCAG 2.5.8 (24 px) */
 }

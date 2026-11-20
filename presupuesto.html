@@ -5,43 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Tu límite mensual por categoría, cuánto llevas usado y los avisos cuando te acercas o te pasas.">
   <title>Presupuesto · CuentaClara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="styles/tokens.css">
   <link rel="stylesheet" href="styles/components.css">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="container page-header">
-    <p class="page-header__eyebrow" id="month-eyebrow">&nbsp;</p>
-    <h1 class="page-header__title">Tu presupuesto</h1>
-    <p class="page-header__lead">Define cuánto quieres gastar en cada categoría y te avisamos antes de que te pases.</p>
+  <header class="page-header">
+    <div class="brand-bar"><div class="container"><a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a></div></div>
+    <div class="container page-header__body">
+      <h1 class="page-header__title">Tu presupuesto</h1>
+      <p class="page-header__lead">Te avisamos antes de que te pases en cada categoría.</p>
+    </div>
   </header>
 
-  <main id="contenido" class="container stack">
-    <!-- REQ-10 · Navegación de mes -->
-    <nav class="month-nav" id="month-nav" aria-label="Cambiar de mes"></nav>
+  <main id="contenido" class="container stack stack--compact">
+    <!-- REQ-10 · Navegación de mes en una sola fila: ‹ mes › -->
+    <nav class="month-bar" id="month-nav" aria-label="Cambiar de mes">
+      <a class="icon-btn" id="prev-month" href="#"><!--icon:chevron-left--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg><span class="visually-hidden">Mes anterior</span></a>
+      <p class="month-bar__label" id="month-label">&nbsp;</p>
+      <a class="icon-btn" id="next-month" href="#"><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Mes siguiente</span></a>
+      <span class="icon-btn icon-btn--disabled" id="next-month-off" hidden><!--icon:chevron-right--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg><span class="visually-hidden">Mes siguiente (no hay meses futuros)</span></span>
+    </nav>
 
     <!-- REQ-10 · Meses anteriores en solo lectura -->
     <p class="alert" id="readonly-note" hidden>Estás viendo un mes anterior: solo lectura.</p>
 
-    <!-- REQ-04 · Resumen del mes -->
-    <p class="card" id="summary"><strong>Resumen:</strong> <span id="summary-text">—</span></p>
+    <!-- REQ-04 · Resumen del mes: un número principal y el aviso debajo -->
+    <section class="card budget-summary" id="summary" aria-label="Resumen del mes">
+      <p class="budget-summary__label" id="summary-label">Gastaste en categorías con límite</p>
+      <p class="budget-summary__amount" id="summary-amount">—</p>
+      <p class="budget-summary__attention" id="summary-attention"></p>
+    </section>
 
     <!-- Anuncios: resumen al cargar y confirmaciones -->
     <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
 
-    <section class="stack" aria-labelledby="cards-title">
-      <h2 class="card__title" id="cards-title" tabindex="-1">Categorías</h2>
+    <section class="stack stack--sm" aria-labelledby="cards-title">
+      <h2 class="list-title" id="cards-title" tabindex="-1">Categorías</h2>
       <!-- REQ-02 · REQ-03 · REQ-11 · Tarjetas por urgencia y estados de carga y error -->
-      <div class="stack" id="cards" aria-busy="true"></div>
+      <div class="card-grid" id="cards" aria-busy="true"></div>
+      <div class="list-more" id="cards-more"></div>
     </section>
   </main>
 
   <nav class="bottom-nav" aria-label="Principal">
     <ul class="bottom-nav__list">
-      <li><a class="bottom-nav__link" href="movimientos.html"><span class="bottom-nav__icon" aria-hidden="true">≡</span>Movimientos</a></li>
-      <li><a class="bottom-nav__link" href="registrar.html"><span class="bottom-nav__icon" aria-hidden="true">＋</span>Registrar</a></li>
-      <li><a class="bottom-nav__link" href="presupuesto.html" aria-current="page"><span class="bottom-nav__icon" aria-hidden="true">◔</span>Presupuesto</a></li>
+      <li><a class="bottom-nav__link" href="movimientos.html"><!--icon:list--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M4 5h16v2H4zM4 11h16v2H4zM4 17h16v2H4z"/></svg>Movimientos</a></li>
+      <li><a class="bottom-nav__link" href="registrar.html"><!--icon:plus--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z"/></svg>Registrar</a></li>
+      <li><a class="bottom-nav__link" href="presupuesto.html" aria-current="page"><!--icon:pie--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11 4a9 9 0 1 0 9 9h-9zM13 2v9h9a9 9 0 0 0-9-9z"/></svg>Presupuesto</a></li>
     </ul>
   </nav>
 

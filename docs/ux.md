@@ -44,7 +44,8 @@ Las 3 heurísticas o leyes que guían el diseño, la pantalla donde se ven y có
 
 **Aplicación (prevención):**
 - Monto con `inputmode="decimal"`.
-- Fecha con `type="date"` y `min`/`max`, para que no se elija una fecha futura ni una de hace más de 60 días. Al editar, solo se pueden elegir fechas del mes en curso.
+- Fecha en una hoja con atajos ("Hoy", "Ayer") y un calendario: los días futuros y los de hace más de 60 días están deshabilitados. Al editar, solo se pueden elegir días del mes en curso.
+- Categoría en un mosaico de botones con ícono, en lugar de un desplegable: un toque y sin una lista que se salga de la pantalla.
 - Las categorías cambian según el tipo, así que no se puede registrar un gasto como "Trabajo".
 - Contador `n/60` en la descripción.
 - Eliminar pide confirmación en la página mostrando qué se elimina ("Almuerzo menú · S/ 15.00").
@@ -64,4 +65,4 @@ Las 3 heurísticas o leyes que guían el diseño, la pantalla donde se ven y có
 ## Leyes complementarias
 
 - **Hick:** el filtro de categorías se muestra como chips en un solo grupo, con "Todas" primero. Los atajos de período se reducen a 4 opciones.
-- **Jakob:** controles nativos (radio, `type="date"`, `<select>`, `<progress>`) que Diego ya conoce de otras apps.
+- **Jakob:** patrones que Diego ya conoce de otras apps de finanzas: hoja inferior con atajos y calendario, filas con › para editar, "Cargar más" y radios nativos detrás del mosaico.

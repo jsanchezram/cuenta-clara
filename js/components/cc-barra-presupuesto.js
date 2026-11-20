@@ -2,7 +2,8 @@
 /**
  * <cc-barra-presupuesto>: tarjeta del presupuesto de una categoría (HU03-1, HU03-2, HU03-4, R5)
  * con edición dentro de la tarjeta y confirmación para quitar el límite (HU-03 REQ-05..09).
- * El estado se lee en texto; la barra tiene un patrón distinto por estado y el ícono refuerza.
+ * Tarjeta compacta: ícono, nombre, "S/ usado de S/ límite", porcentaje, barra sólida y el estado
+ * en texto con lo que queda o el exceso. El ícono del estado refuerza; el color no es la única señal.
  * Usa clases de components.css, sin Shadow DOM ni CSS propio. No importa la API ni el store:
  * la pantalla decide y le pasa el estado con setState().
  *
@@ -25,6 +26,7 @@
 import { CATEGORY_LABELS } from '../models/types.js';
 import { formatMoney } from '../utils/money.js';
 import { esc } from '../utils/html.js';
+import { icon } from './icons.js';
 
 /** @typedef {import('../logic/budget.js').BudgetRow} BudgetRow */
 /** @typedef {{ editing: boolean, confirmingRemoval: boolean, saving: boolean, error: string, draft: string }} CardState */
@@ -130,27 +132,25 @@ export class CcBarraPresupuesto extends HTMLElement {
     let body;
     if (!hasLimit) {
       body = `
-        <p class="budget-status budget-status--none"><span class="budget-status__icon" aria-hidden="true">○</span>Sin límite definido</p>
-        <p class="field__hint">Usado en el mes: ${esc(formatMoney(r.spent))}</p>`;
+        <p class="budget-card__figures"><span><span class="budget-card__spent">${esc(formatMoney(r.spent))}</span> usados este mes</span></p>
+        <p class="budget-status budget-status--none"><span class="budget-status__icon" aria-hidden="true">○</span>Sin límite definido</p>`;
     } else {
       const status = /** @type {import('../models/types.js').BudgetStatus} */ (r.status);
       const mod = MODIFIER[status];
-      const exceeded = status === 'EXCEEDED';
       const percent = /** @type {number} */ (r.percent);
+      const remaining = /** @type {number} */ (r.remaining);
+      // "Lo que queda" siempre visible (HU03-1): en NEAR y REACHED el mensaje de R5 no lo dice
+      const detail = status === 'NEAR' || status === 'REACHED' ? ` · Quedan ${formatMoney(remaining)}` : '';
       body = `
-        <dl class="budget-figures">
-          <div><dt class="budget-figures__label">Usado</dt><dd class="budget-figures__value">${esc(formatMoney(r.spent))}</dd></div>
-          <div><dt class="budget-figures__label">Límite</dt><dd class="budget-figures__value">${esc(formatMoney(/** @type {number} */ (r.limit)))}</dd></div>
-          <div><dt class="budget-figures__label">${exceeded ? 'Excedido' : 'Restante'}</dt><dd class="budget-figures__value">${esc(formatMoney(/** @type {number} */ (r.remaining)))}</dd></div>
-        </dl>
+        <p class="budget-card__figures">
+          <span><span class="budget-card__spent">${esc(formatMoney(r.spent))}</span> de ${esc(formatMoney(/** @type {number} */ (r.limit)))}</span>
+          <span>${percent} %</span>
+        </p>
         <div class="budget-bar${mod ? ` budget-bar--${mod}` : ''}" role="progressbar" aria-label="Uso del presupuesto de ${esc(label)}"
              aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(percent, 100)}" aria-valuetext="${percent} % usado. ${esc(r.message)}">
           <span class="budget-bar__fill" style="--budget-value: ${percent}%"></span>
         </div>
-        <div class="budget-meta">
-          <p class="budget-status${mod ? ` budget-status--${mod}` : ''}"><span class="budget-status__icon" aria-hidden="true">${ICONS[status]}</span>${esc(r.message)}</p>
-          <p class="budget-meta__percent">${percent} % usado</p>
-        </div>`;
+        <p class="budget-status${mod ? ` budget-status--${mod}` : ''}"><span class="budget-status__icon" aria-hidden="true">${ICONS[status]}</span>${esc(r.message + detail)}</p>`;
     }
 
     // REQ-05..08: edición dentro de la tarjeta
@@ -161,12 +161,9 @@ export class CcBarraPresupuesto extends HTMLElement {
       editor = `
         <form class="stack stack--sm" data-form novalidate aria-label="Límite de ${esc(label)}">
           <div class="field">
-            <label class="field__label" for="${fieldId}">Límite mensual de ${esc(label)}</label>
-            <div class="field__money">
-              <span class="field__prefix" aria-hidden="true">S/</span>
-              <input class="field__control" type="text" id="${fieldId}" data-field="limit" inputmode="decimal" autocomplete="off"
-                     enterkeyhint="done" value="${esc(s.draft)}" aria-describedby="${errorId}"${s.error ? ' aria-invalid="true"' : ''}>
-            </div>
+            <label class="field__label" for="${fieldId}">Límite mensual de ${esc(label)} (S/)</label>
+            <input class="field__control" type="text" id="${fieldId}" data-field="limit" inputmode="decimal" autocomplete="off"
+                   enterkeyhint="done" placeholder="0.00" value="${esc(s.draft)}" aria-describedby="${errorId}"${s.error ? ' aria-invalid="true"' : ''}>
             <p class="field__error" id="${errorId}">${esc(s.error)}</p>
           </div>
           <div class="cluster">
@@ -192,9 +189,10 @@ export class CcBarraPresupuesto extends HTMLElement {
     }
 
     this.innerHTML = `
-      <article class="card stack stack--sm" aria-labelledby="${titleId}" data-category="${r.category}">
-        <div class="card__header">
-          <${level} class="card__title" id="${titleId}">${esc(label)}</${level}>
+      <article class="card budget-card" aria-labelledby="${titleId}" data-category="${r.category}">
+        <div class="budget-card__head">
+          <span class="cat-icon">${icon(r.category)}</span>
+          <${level} class="budget-card__title" id="${titleId}">${esc(label)}</${level}>
           ${action}
         </div>
         ${body}

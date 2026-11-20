@@ -44,18 +44,19 @@ Fuente de verdad de lo que se construye. Cada criterio tiene un código (`HU01-3
 | Código | Criterio |
 |---|---|
 | HU01-1 | Sin ruta, se muestra el mes en curso y la URL se corrige a `#/AAAA-MM` sin agregar una entrada al historial. |
-| HU01-2 | La lista está ordenada por fecha, de la más reciente a la más antigua. Cada movimiento muestra fecha, descripción, categoría y monto. Gasto e ingreso se distinguen por un texto o signo (`−` / `+`), no solo por color. |
+| HU01-2 | La lista está ordenada por fecha, de la más reciente a la más antigua. Cada movimiento es una fila compacta con el ícono de la categoría, la descripción, la categoría y la fecha, y el monto. Gasto e ingreso se distinguen por el signo (`−` / `+`) y el lector de pantalla oye "Gasto de" o "Ingreso de", no solo por color. |
 | HU01-3 | Hay un filtro por categoría: "Todas" más las 8 categorías. El filtro activo se marca con `aria-pressed="true"` y con una señal visible además del color. |
 | HU01-4 | El período y el filtro viven en la URL. Abrir o recargar la URL muestra lo mismo, así que la ruta se puede compartir. Hay tres formas: **mes** `#/2026-11/comida`, **día** `#/2026-11-20/comida` y **rango** `#/2026-11-01..2026-11-15/comida`. Sin categoría, la ruta muestra "Todas" (`#/2026-11`). |
 | HU01-5 | Se muestran el total de gastos, el total de ingresos y el saldo (ingresos − gastos) de lo que está filtrado. |
-| HU01-6 | En la vista de mes hay enlaces "Mes anterior" y "Mes siguiente". No se puede pasar del mes en curso. |
-| HU01-12 | **Selector de período: un solo componente desplegable.** Un botón muestra el período actual (por ejemplo "Este mes ▾") con `aria-expanded`. Al abrirlo aparecen los atajos "Hoy", "Esta semana" (de lunes a hoy) y "Este mes", y el rango "Desde" / "Hasta" con el botón "Aplicar rango". El atajo activo lleva ✓ y `aria-pressed="true"`. Elegir un atajo o aplicar un rango actualiza la URL y cierra el panel. Escape también lo cierra. En ambos casos, el foco vuelve al botón. |
+| HU01-6 | Se puede ver el mes anterior con el atajo "Mes anterior", y cualquier otro mes o rango con el calendario de la hoja. Nunca se eligen fechas futuras. *(Antes eran enlaces "Mes anterior / Mes siguiente" junto al selector; la persona prefirió el selector a todo el ancho: bitácora #25.)* |
+| HU01-12 | **Selector de período: un botón a todo el ancho que abre una hoja sobre la pantalla** (diálogo modal; no empuja el contenido). El botón muestra el período y sus fechas, por ejemplo "Este mes · 1 – 30 nov 2026", con `aria-expanded`. La hoja tiene los atajos "Hoy", "Esta semana" (de lunes a hoy), "Este mes" y "Mes anterior", un calendario para marcar un rango y los campos "Desde" / "Hasta" con "Aplicar rango". El atajo activo lleva ✓ y `aria-pressed="true"`. Elegir un atajo o aplicar un rango actualiza la URL y cierra la hoja. Escape, ✕, Cancelar o tocar el fondo también la cierran. En todos los casos, el foco vuelve al botón. |
 | HU01-13 | **Rango personalizado:** "Desde" y "Hasta" tienen etiqueta visible. Se valida que desde ≤ hasta y que hasta ≤ hoy, con el error junto al campo y sin cerrar el panel. Al aplicar, la URL cambia a la forma de rango. |
 | HU01-7 | **Carga:** se muestra un skeleton, el texto "Cargando movimientos…" y `aria-busy="true"`. |
 | HU01-8 | **Vacío:** si no hay movimientos en el mes o en la categoría, se muestra un mensaje y una acción ("Registrar un movimiento" o "Ver todas las categorías"). |
 | HU01-9 | **Error:** se muestra "No pudimos cargar tus movimientos." y un botón "Reintentar". El error se puede simular con `?fallo=movimientos`. |
 | HU01-10 | Una URL inválida, como `#/2026-13/xyz`, un rango invertido o una fecha futura, se corrige al mes en curso o a "Todas", sin agregar una entrada al historial. |
-| HU01-11 | Los movimientos del mes en curso tienen una acción "Editar" que lleva a `registrar.html?id=<id>`. Los de meses anteriores no la tienen (R6). |
+| HU01-11 | En los movimientos del mes en curso, toda la fila es el enlace "Editar" a `registrar.html?id=<id>`, con una › al final. Los de meses anteriores no son enlace (R6). |
+| HU01-14 | La lista muestra 8 movimientos y un botón **"Cargar más"** con "Mostrando 8 de N". Cada toque agrega 8 más y el foco va a la primera fila nueva. Los totales siempre son del período completo. |
 
 ## HU-02 · Registrar, editar y eliminar un movimiento · `registrar.html` · AI-Augmented
 
@@ -63,8 +64,8 @@ Fuente de verdad de lo que se construye. Cada criterio tiene un código (`HU01-3
 
 | Código | Criterio |
 |---|---|
-| HU02-1 | El tipo se elige entre "Gasto" e "Ingreso" con controles nativos. Por defecto es "Gasto". Las categorías disponibles cambian según el tipo (R3). |
-| HU02-2 | El formulario tiene estos campos: tipo, monto (teclado decimal en el celular), fecha (por defecto hoy), categoría y descripción (con contador `n/60`). |
+| HU02-1 | El tipo se elige entre "Gasto" e "Ingreso" con controles nativos. Por defecto es "Gasto". Las categorías disponibles cambian según el tipo (R3) y se eligen en un mosaico de botones con ícono (radios nativos), no en un desplegable. |
+| HU02-2 | El formulario tiene estos campos: tipo, monto a todo el ancho (teclado decimal en el celular, la moneda va en la etiqueta), categoría, fecha y descripción (con contador `n/60`). La fecha es por defecto hoy y se elige en la misma hoja con calendario que el período de Movimientos (atajos "Hoy" y "Ayer"). Los días fuera de R2 o de R6 están deshabilitados. |
 | HU02-3 | Cada regla se valida al enviar (R1–R4). El mensaje de error aparece junto al campo con `aria-invalid` y `aria-describedby`. El foco va al primer campo con error y no se borra nada de lo escrito. |
 | HU02-4 | Mientras se guarda, el botón está deshabilitado y dice "Guardando…". Al terminar, una confirmación con `role="status"` dice qué se guardó (por ejemplo "Gasto registrado: S/ 25.50 en Comida") y ofrece "Registrar otro" y "Ver movimientos". |
 | HU02-5 | **Editar:** `registrar.html?id=<id>` carga el movimiento, el título dice "Editar movimiento" y aplica las mismas validaciones. La fecha solo puede quedar en el mes en curso (R6): el campo limita `min` al día 1 del mes, y si se sale de ese rango el error dice "Al editar, la fecha debe ser de este mes." |
@@ -86,6 +87,7 @@ Criterios de alto nivel. El detalle verificable (Dado / Cuando / Entonces) se es
 | HU03-4 | Una categoría sin límite dice "Sin límite definido" y ofrece la acción para definirlo. |
 | HU03-5 | La pantalla tiene estados de carga, vacío y error, con Reintentar. |
 | HU03-6 | El límite se copia a los meses siguientes hasta que se cambie (R8). Si Diego cambia el límite en el mes en curso, ese valor queda guardado para ese mes y los siguientes, y los meses anteriores conservan el suyo. |
+| HU03-7 | Primero se ven las 4 categorías más urgentes. El botón "Ver N categorías más" muestra el resto y lleva el foco a la primera que aparece. *(Agregado tras la revisión de la persona.)* |
 
 ## Preguntas resueltas
 

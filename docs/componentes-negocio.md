@@ -2,25 +2,30 @@
 
 Son custom elements **sin Shadow DOM y sin CSS propio**. Se arman con clases de `styles/components.css`. Siguen la regla "datos hacia abajo, eventos hacia arriba": reciben los modelos por propiedad y avisan con eventos `cc-*` que burbujean. No importan la API ni el store; quien los conecta es la pantalla.
 
+Las etiquetas y los eventos `cc-*` van en español, como las dos etiquetas que fija el enunciado.
+
 ## `<cc-movimiento>` · `js/components/cc-movimiento.js`
 
 | Contrato | Detalle |
 |---|---|
 | Propiedades | `transaction: Transaction` (obligatoria) · `editHref: string \| null` |
 | Atributos | — |
-| Eventos | `cc-editar { id }` al activar "Editar" |
-| Clases que usa | `.list-row` (en el host), `.list-row__title`, `.list-row__meta`, `.amount--income/--expense`, `.btn--link` |
+| Eventos | `cc-editar { id }` al activar la fila |
+| Clases que usa | `.list-row`, `.list-row--link`, `.list-row__text`, `.list-row__title`, `.list-row__meta`, `.cat-icon`, `.amount--income/--expense`, `.list-row__chevron` |
+
+Fila compacta en una sola línea: ícono · descripción con "categoría · fecha" · monto con signo · ›.
 
 | Estado | Qué pinta | Evento |
 |---|---|---|
-| Gasto del mes en curso | "Almuerzo menú", "Comida · 18 nov · Gasto", **− S/ 15.00** y el enlace "Editar" | `cc-editar` |
-| Ingreso del mes en curso | **+ S/ 1 800.00** y el enlace "Editar" | `cc-editar` |
-| Mes anterior (`editHref = null`) | Igual, sin "Editar" (R6, HU01-11) | — |
+| Gasto del mes en curso | "Almuerzo menú", "Comida · 18 nov", **− S/ 15.00** y ›. Toda la fila es el enlace de edición | `cc-editar` |
+| Ingreso del mes en curso | **+ S/ 1 800.00** y ›, también como enlace | `cc-editar` |
+| Mes anterior (`editHref = null`) | La misma fila, sin enlace ni › (R6, HU01-11) | — |
 
 Accesibilidad:
-- El signo − / + es visible y el lector de pantalla oye "Gasto de S/ 15.00".
-- El enlace "Editar" tiene un texto oculto con la descripción, para que en la lista no se lean 16 "Editar" iguales.
+- La fila-enlace se nombra así: "Editar: Almuerzo menú, Comida · 18 nov, Gasto de S/ 15.00". El signo − / + es visible y "Gasto de" se lee con el lector de pantalla.
+- El objetivo táctil es la fila completa (56 px de alto como mínimo), sin un "Editar" subrayado aparte.
 - La descripción va escapada con `esc()`.
+- El ícono es decorativo (`aria-hidden`).
 
 ## `<cc-barra-presupuesto>` · `js/components/cc-barra-presupuesto.js`
 
@@ -30,28 +35,47 @@ Accesibilidad:
 | Atributos | `editable` (solo en el mes en curso, R8) · `heading-level="2\|3"` |
 | Eventos | `cc-editar-limite`, `cc-cancelar-limite`, `cc-guardar-limite { value }`, `cc-quitar-limite`, `cc-confirmar-quitar` y `cc-cancelar-quitar`, todos con `{ category }` |
 | Métodos | `setState({ editing, confirmingRemoval, saving, error, draft })` · `focusAction()` · `focusField()` · `focusConfirm()` · `focusRemove()` |
-| Clases que usa | `.card`, `.budget-figures`, `.budget-bar--*`, `.budget-status--*`, `.budget-meta` |
+| Clases que usa | `.card.budget-card`, `.budget-card__head`, `.budget-card__figures`, `.budget-bar--*`, `.budget-status--*`, `.cat-icon` |
 
-| Estado (R5) | Barra | Ícono | Texto | Botón |
-|---|---|---|---|---|
-| `NORMAL` | Relleno liso | ✓ | "Te quedan S/ 180.00" | Editar límite |
-| `NEAR` | Rayas diagonales | ⚠ | "Cerca del límite" | Editar límite |
-| `REACHED` | Llena, con rayas verticales | ● | "Alcanzaste tu límite" | Editar límite |
-| `EXCEEDED` | Cuadriculado; la tercera cifra dice "Excedido" | ✕ | "Te pasaste por S/ 45.00" | Editar límite |
-| Sin límite | Sin barra | ○ | "Sin límite definido" + lo usado | Definir límite |
+Tarjeta compacta. Muestra el ícono y el nombre, "S/ usado de S/ límite" y el porcentaje, una **barra sólida** y el estado en texto, con lo que queda o el exceso:
 
-Accesibilidad:
-- `role="progressbar"`, con `aria-valuenow` acotado a 100 y un `aria-valuetext` que dice el porcentaje real y el estado, por ejemplo "130 % usado. Te pasaste por S/ 45.00".
-- El título de la tarjeta le da nombre al `article` mediante `aria-labelledby`.
-- El botón tiene un texto oculto con la categoría: "Editar límite de Ocio".
+| Estado (R5) | Ícono | Texto | Botón |
+|---|---|---|---|
+| `NORMAL` | ✓ | "Te quedan S/ 180.00" | Editar límite |
+| `NEAR` | ⚠ | "Cerca del límite · Quedan S/ 90.00" | Editar límite |
+| `REACHED` | ● | "Alcanzaste tu límite · Quedan S/ 0.00" | Editar límite |
+| `EXCEEDED` | ✕ | "Te pasaste por S/ 45.00" | Editar límite |
+| Sin límite | ○ | "Sin límite definido" + lo usado | Definir límite |
 
 ### Edición dentro de la tarjeta (HU-03, REQ-05..09)
 
 | Estado de la tarjeta | Qué pinta | Eventos |
 |---|---|---|
-| `editing` | Campo "Límite mensual de X" con `draft`, Guardar, Cancelar y, si tiene límite, Quitar límite | `cc-guardar-limite`, `cc-cancelar-limite` (también con Escape), `cc-quitar-limite` |
+| `editing` | Campo "Límite mensual de X (S/)" a todo el ancho con `draft`, Guardar, Cancelar y, si tiene límite, Quitar límite | `cc-guardar-limite`, `cc-cancelar-limite` (también con Escape), `cc-quitar-limite` |
 | `editing` + `error` | El mismo campo con `aria-invalid` y el mensaje debajo; el valor escrito se conserva | — |
-| `saving` | "Guardando…" / "Quitando…" con `aria-disabled`, sin perder el foco | — |
+| `saving` | "Guardando…" / "Quitando…" con `aria-disabled`. Solo se actualiza el botón, así no se pierde el foco | — |
 | `confirmingRemoval` | Confirmación en la página: "¿Quitar el límite de X?", con "Sí, quitar" y "Cancelar" | `cc-confirmar-quitar`, `cc-cancelar-quitar` (también con Escape) |
 
-El componente no decide qué se guarda: solo avisa. La pantalla llama a las acciones del store y le devuelve el estado con `setState()`. El foco lo mueve la pantalla con los métodos `focus*()`, buscando la tarjeta por categoría, porque las tarjetas se reordenan por urgencia.
+Accesibilidad:
+- `role="progressbar"`, con `aria-valuenow` acotado a 100 y un `aria-valuetext` que dice el porcentaje real y el estado.
+- El título le da nombre al `article`.
+- El botón incluye un texto oculto con la categoría: "Editar límite de Ocio".
+
+El foco lo mueve la pantalla con los métodos `focus*()`, buscando la tarjeta por categoría, porque las tarjetas se reordenan por urgencia.
+
+## Componente de UI: `<cc-calendario-rango>` · `js/components/cc-calendario-rango.js`
+
+No es de negocio, pero sigue las mismas reglas: no tiene Shadow DOM ni CSS propio y no conoce rutas, API ni store.
+
+| Contrato | Detalle |
+|---|---|
+| Propiedades | `today` · `min` · `value: { from, to } \| null` |
+| Atributos | `single`: elige un solo día |
+| Eventos | `cc-cambiar-rango { from, to }` · en modo `single`, `cc-elegir-fecha { date }` |
+| Lo usan | La hoja del período en Movimientos (rango) y la hoja de la fecha en Registrar (`single`, con `min` según R2 o R6) |
+
+Accesibilidad:
+- Solo un día está en el orden de tabulación (tabindex itinerante).
+- Las flechas del teclado mueven el día; Re Pág / Av Pág cambian de mes; Inicio / Fin van al lunes y al domingo.
+- Cada día tiene un nombre completo, por ejemplo "viernes 20 de noviembre de 2026, hoy, fin del rango".
+- Los días futuros, y los anteriores a `min`, están deshabilitados.
