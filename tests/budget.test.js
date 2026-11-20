@@ -81,3 +81,53 @@ test('buildBudgetRows suma solo gastos del mes por categoría y marca las que no
   assert.equal(housing?.limit, null);
   assert.equal(housing?.spent, 1200);
 });
+
+// ---------- HU-03 · orden, resumen y límites quitados ----------
+import { sortByUrgency, budgetSummary } from '../js/logic/budget.js';
+
+/** @param {string} category @param {any} status @param {number | null} percent @param {number | null} [limit] @param {number} [spent] */
+const row = (category, status, percent, limit = 100, spent = 0) =>
+  /** @type {any} */ ({ category, status, percent, limit: status ? limit : null, spent, remaining: null, message: '' });
+
+test('REQ-03: ordena por urgencia y, en el mismo estado, por mayor porcentaje', () => {
+  const sorted = sortByUrgency([
+    row('utilities', 'NORMAL', 40),
+    row('housing', null, null),
+    row('food', 'NEAR', 85),
+    row('other', null, null),
+    row('leisure', 'EXCEEDED', 130),
+    row('transport', 'REACHED', 100),
+    row('x', 'NEAR', 95),
+  ]);
+  assert.deepEqual(sorted.map((r) => r.category), ['leisure', 'transport', 'x', 'food', 'utilities', 'housing', 'other']);
+});
+
+test('REQ-04: el resumen cuenta categorías que necesitan atención y suma solo las que tienen límite', () => {
+  const s = budgetSummary([
+    row('leisure', 'EXCEEDED', 130, 150, 195),
+    row('transport', 'REACHED', 100, 200, 200),
+    row('food', 'NEAR', 85, 600, 510),
+    row('utilities', 'NORMAL', 40, 300, 120),
+    row('housing', null, null, 0, 1200),
+  ]);
+  assert.equal(s.attention, 3);
+  assert.equal(s.spent, 1025);
+  assert.equal(s.limit, 1250);
+  assert.equal(s.text, '3 categorías necesitan atención · Gastaste S/ 1 025.00 de S/ 1 250.00 presupuestados');
+});
+
+test('REQ-04: textos del resumen con 1, 0 y ninguna categoría con límite', () => {
+  assert.match(budgetSummary([row('food', 'NEAR', 85, 600, 510)]).text, /^1 categoría necesita atención · /);
+  assert.match(budgetSummary([row('food', 'NORMAL', 10, 600, 60)]).text, /^Todo bajo control · Gastaste S\/ 60\.00 de S\/ 600\.00/);
+  assert.equal(budgetSummary([row('housing', null, null)]).text, 'Aún no defines límites este mes. Define uno para recibir avisos.');
+});
+
+test('REQ-09: un límite quitado deja sin límite desde ese mes y conserva los anteriores', () => {
+  const records = [
+    { category: /** @type {const} */ ('food'), limit: 600, effectiveFrom: '2026-10', removed: false },
+    { category: /** @type {const} */ ('food'), limit: 600, effectiveFrom: '2026-11', removed: true },
+  ];
+  assert.equal(effectiveLimit(records, 'food', '2026-10')?.removed, false);
+  assert.equal(effectiveLimit(records, 'food', '2026-11')?.removed, true);
+  assert.equal(effectiveLimit(records, 'food', '2027-02')?.removed, true);
+});
