@@ -93,12 +93,29 @@ export function addDays(date, days) {
 }
 
 /**
+ * Días entre dos fechas (b − a); 0 si son el mismo día.
+ * @param {string} a YYYY-MM-DD
+ * @param {string} b YYYY-MM-DD
+ */
+export function daysBetween(a, b) {
+  return toDayNumber(...parts(b)) - toDayNumber(...parts(a));
+}
+
+/**
  * Día de la semana con 0 = lunes y 6 = domingo.
  * @param {string} date
  */
 export function weekdayMondayFirst(date) {
   // 1970-01-01 fue jueves (índice 3 contando desde lunes)
   return (((toDayNumber(...parts(date)) + 3) % 7) + 7) % 7;
+}
+
+const WEEKDAYS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
+
+/** "viernes 20 de noviembre de 2026" (nombre accesible de un día del calendario) @param {string} date */
+export function formatDayLong(date) {
+  const [y, m, d] = parts(date);
+  return `${WEEKDAYS[weekdayMondayFirst(date)]} ${d} de ${MONTHS[m - 1]} de ${y}`;
 }
 
 /** "18 nov" @param {string} date */

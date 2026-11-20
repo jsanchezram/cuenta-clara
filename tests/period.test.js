@@ -67,3 +67,36 @@ test('todayInLima usa la hora de Lima y no la de la PC', () => {
   assert.equal(todayInLima(new Date('2026-11-21T03:00:00Z')), '2026-11-20');
   assert.equal(todayInLima(new Date('2026-11-21T05:00:00Z')), '2026-11-21');
 });
+
+// ---------- Calendario del selector de período (HU01-12) ----------
+import { calendarWeeks, shortcutOf } from '../js/logic/period.js';
+import { formatDayLong } from '../js/utils/lima-date.js';
+
+test('calendarWeeks arma semanas de lunes a domingo con huecos fuera del mes', () => {
+  const weeks = calendarWeeks('2026-11'); // el 1 de noviembre de 2026 es domingo
+  assert.equal(weeks.length, 6);
+  assert.deepEqual(weeks[0], [null, null, null, null, null, null, '2026-11-01']);
+  assert.deepEqual(weeks[5], ['2026-11-30', null, null, null, null, null, null]);
+  assert.ok(weeks.every((w) => w.length === 7));
+});
+
+test('formatDayLong da el nombre completo del día en español', () => {
+  assert.equal(formatDayLong('2026-11-20'), 'viernes 20 de noviembre de 2026');
+});
+
+// ---------- Atajo "Mes anterior" y unidad del período (HU01-12) ----------
+import { periodUnit } from '../js/logic/period.js';
+
+test('HU01-12: el atajo Mes anterior abre el mes completo anterior al mes en curso', () => {
+  assert.deepEqual(periodFromShortcut('PREV_MONTH', TODAY), monthPeriod('2026-10'));
+  assert.equal(shortcutOf(monthPeriod('2026-10'), TODAY), 'PREV_MONTH');
+  // en enero, el mes anterior es diciembre del año pasado
+  assert.deepEqual(periodFromShortcut('PREV_MONTH', '2027-01-05'), monthPeriod('2026-12'));
+});
+
+test('periodUnit reconoce mes, día, semana y rango', () => {
+  assert.equal(periodUnit(monthPeriod('2026-11')), 'month');
+  assert.equal(periodUnit({ kind: 'day', from: TODAY, to: TODAY }), 'day');
+  assert.equal(periodUnit({ kind: 'range', from: '2026-11-16', to: '2026-11-20' }), 'week');
+  assert.equal(periodUnit({ kind: 'range', from: '2026-11-01', to: '2026-11-15' }), 'range');
+});
