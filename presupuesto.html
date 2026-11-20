@@ -11,10 +11,13 @@
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-  <header class="container page-header">
+  <header class="page-header">
+    <div class="container">
+      <a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a>
     <p class="page-header__eyebrow" id="month-eyebrow">&nbsp;</p>
     <h1 class="page-header__title">Tu presupuesto</h1>
     <p class="page-header__lead">Define cuánto quieres gastar en cada categoría y te avisamos antes de que te pases.</p>
+    </div>
   </header>
 
   <main id="contenido" class="container stack">
@@ -33,7 +36,7 @@
     <section class="stack" aria-labelledby="cards-title">
       <h2 class="card__title" id="cards-title" tabindex="-1">Categorías</h2>
       <!-- REQ-02 · REQ-03 · REQ-11 · Tarjetas por urgencia y estados de carga y error -->
-      <div class="stack" id="cards" aria-busy="true"></div>
+      <div class="stack card-grid" id="cards" aria-busy="true"></div>
     </section>
   </main>
 

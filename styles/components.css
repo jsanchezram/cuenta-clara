@@ -883,3 +883,223 @@ textarea.field__control {
     border-left: var(--border-width-1) solid var(--color-divider);
   }
 }
+
+/* =====================================================================
+   Identidad visual (rama style/identidad-y-escritorio)
+   Banda de marca, tarjetas con elevación, color e ícono por categoría.
+   El color decora; el dato siempre va en texto.
+   ===================================================================== */
+
+/* ---------- Banda de marca en el encabezado ---------- */
+.page-header {
+  padding-block: var(--space-4) var(--space-8);
+  margin-bottom: var(--space-4);
+  color: var(--color-on-brand);
+  background: linear-gradient(135deg, var(--color-brand-bg), var(--color-brand-bg-deep));
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.page-header__eyebrow,
+.page-header__lead {
+  color: var(--color-on-brand-muted);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-on-brand);
+  text-decoration: none;
+}
+
+.brand__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-on-brand);
+  color: var(--color-brand-bg);
+  font-size: var(--font-size-sm);
+}
+
+.page-header :focus-visible {
+  outline-color: var(--color-on-brand);
+}
+
+/* ---------- Superficies con elevación ---------- */
+.card,
+.summary,
+.period-picker__trigger,
+.period-picker__panel {
+  box-shadow: var(--shadow-card);
+}
+
+.card,
+.summary {
+  border-color: var(--color-divider);
+}
+
+.summary__item--total {
+  background: var(--color-selected-bg);
+  border-radius: 0 0 var(--card-radius) var(--card-radius);
+}
+
+/* ---------- Selección con más presencia (el ✓ sigue siendo la señal no cromática) ---------- */
+.chip[aria-pressed="true"],
+.segmented__input:checked + .segmented__label {
+  color: var(--color-on-action);
+  background: var(--color-action-primary);
+  border-color: var(--color-action-primary);
+}
+
+/* ---------- Lista como tarjeta ---------- */
+.list {
+  padding-inline: var(--space-4);
+  background: var(--color-surface);
+  border-top: 0;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-card);
+}
+
+.list > li:last-child .list-row {
+  border-bottom: 0;
+}
+
+.list-row--icon {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+/* ---------- Ícono de categoría ---------- */
+.cat-icon {
+  --_bg: var(--color-cat-other-bg);
+  --_fg: var(--color-cat-other-fg);
+
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: var(--cat-icon-size);
+  height: var(--cat-icon-size);
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  color: var(--_fg);
+  background: var(--_bg);
+  border-radius: var(--radius-pill);
+}
+
+.cat-icon--food { --_bg: var(--color-cat-food-bg); --_fg: var(--color-cat-food-fg); }
+.cat-icon--transport { --_bg: var(--color-cat-transport-bg); --_fg: var(--color-cat-transport-fg); }
+.cat-icon--housing { --_bg: var(--color-cat-housing-bg); --_fg: var(--color-cat-housing-fg); }
+.cat-icon--utilities { --_bg: var(--color-cat-utilities-bg); --_fg: var(--color-cat-utilities-fg); }
+.cat-icon--leisure { --_bg: var(--color-cat-leisure-bg); --_fg: var(--color-cat-leisure-fg); }
+.cat-icon--other { --_bg: var(--color-cat-other-bg); --_fg: var(--color-cat-other-fg); }
+.cat-icon--work { --_bg: var(--color-cat-work-bg); --_fg: var(--color-cat-work-fg); }
+.cat-icon--other_income { --_bg: var(--color-cat-other_income-bg); --_fg: var(--color-cat-other_income-fg); }
+
+.card__title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* ---------- Escritorio (laptop de Diego): mismo breakpoint único ---------- */
+@media (min-width: 48rem) {
+  body {
+    padding-top: var(--bottom-nav-height);
+    padding-bottom: var(--space-8);
+  }
+
+  .container {
+    max-width: var(--content-max-width-wide);
+    padding-inline: var(--space-8);
+  }
+
+  .container.container--narrow {
+    max-width: calc(var(--content-max-width-narrow) + 2 * var(--space-8));
+  }
+
+  /* El menú inferior pasa a ser una barra superior */
+  .bottom-nav {
+    top: 0;
+    bottom: auto;
+    border-top: 0;
+    border-bottom: var(--border-width-1) solid var(--color-divider);
+    box-shadow: var(--shadow-card);
+  }
+
+  .bottom-nav__list {
+    grid-template-columns: repeat(3, max-content);
+    justify-content: end;
+    gap: var(--space-2);
+    max-width: var(--content-max-width-wide);
+    padding-inline: var(--space-8);
+  }
+
+  .bottom-nav__link {
+    flex-direction: row;
+    gap: var(--space-2);
+    padding-inline: var(--space-4);
+    font-size: var(--font-size-md);
+    border-top: 0;
+    border-bottom: var(--border-width-2) solid transparent;
+  }
+
+  .bottom-nav__link[aria-current="page"] {
+    border-bottom-color: var(--color-action-primary);
+  }
+
+  /* Movimientos: filtros y resumen a la izquierda, lista a la derecha */
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+    gap: var(--space-4) var(--space-8);
+    align-items: start;
+  }
+
+  .layout > * {
+    grid-column: 1;
+  }
+
+  .layout > .layout__main {
+    grid-column: 2;
+    grid-row: 1 / span 12;
+  }
+
+  .layout .summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .layout .summary__item--total {
+    grid-column: 1 / -1;
+    display: flex;
+    border-left: 0;
+    border-top: var(--border-width-1) solid var(--color-divider);
+  }
+
+  /* Presupuesto: tarjetas en cuadrícula */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .action-bar {
+    position: static;
+  }
+}
+
+@media (min-width: 48rem) {
+  .page-header {
+    border-radius: 0;
+  }
+
+  /* En la columna de filtros los chips saltan de línea en lugar de desplazarse */
+  .layout .chip-group {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
