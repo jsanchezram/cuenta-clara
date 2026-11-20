@@ -14,7 +14,7 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
   1. Design system: `styles/tokens.css` → `styles/components.css` → vitrina `componentes.html`.
   2. Modelos y contratos: `js/models/types.js`, `js/contracts/{dto,mappers}.js`.
   3. Estado y lógica: `js/logic/` (reglas puras), `js/api/` (API simulada), `js/state/` (store y acciones).
-  4. Componentes de negocio: `js/components/` (`<cc-movimiento>`, `<cc-barra-presupuesto>`).
+  4. Componentes: `js/components/` (de negocio `<cc-movimiento>`, `<cc-barra-presupuesto>`; de UI `<cc-calendario-rango>` e `icons.js`).
   5. Rutas y pantallas: `js/rutas.js`, `js/screens/`.
 - Una pantalla es el único módulo que conoce rutas, API, store y componentes. Solo conecta: no tiene reglas ni estilos.
 - Un componente no importa ni la API ni el store: recibe los datos por propiedades y avisa con eventos `cc-*`.
@@ -26,11 +26,11 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
 - Idioma: el código va en inglés y lo que lee una persona va en español.
   - En inglés: variables, funciones, tipos, carpetas y archivos de `js/`, clases CSS, tokens, eventos, campos y enumeraciones del contrato.
   - En español: textos de la UI, mensajes de error, documentación, nombres de pruebas y commits.
-  - Excepciones fijadas por el enunciado: nombres de las páginas, `js/rutas.js`, `datos/*.json`, las etiquetas `<cc-movimiento>` y `<cc-barra-presupuesto>`, y el fragmento de categoría en la URL (`#/2026-11/comida`). El mapeo entre ese fragmento y la enumeración vive solo en `js/rutas.js`.
+  - Excepciones fijadas por el enunciado: nombres de las páginas, `js/rutas.js`, `datos/*.json`, las etiquetas y eventos `cc-*` (como `<cc-movimiento>` y `cc-editar`), y el fragmento de categoría en la URL (`#/2026-11/comida`). El mapeo entre ese fragmento y la enumeración vive solo en `js/rutas.js`.
 - WCAG 2.2 AA obligatoria. La meta es Lighthouse Accessibility de 95 o más en cada pantalla.
 - Ningún color hex fuera de `styles/tokens.css`: un hook lo bloquea. Los componentes usan tokens semánticos o de componente, nunca primitivos.
 - Los interactivos son `<a>`, `<button>` o controles nativos, nunca `<div onclick>`.
-- Mobile-first: se diseña a 360 px y se amplía con `min-width`. Sin scroll horizontal a 360 px y con objetivos táctiles de 44 px o más.
+- Mobile-first: se diseña a 360 px y se amplía con `min-width`. Sin scroll horizontal a 360 px y con objetivos táctiles de 44 px o más (los días del calendario: 46 × 36 px).
 - Los avisos y estados se leen en texto. El color y el ícono solo refuerzan.
 - Las reglas del negocio son funciones puras: la fecha de hoy llega como parámetro (`today`), nunca `new Date()` ni `Date.now()` dentro de `js/logic/`.
 - Montos en céntimos enteros en el contrato y en soles en el modelo. Las conversiones solo se hacen en `js/contracts/mappers.js` y `js/utils/`.
