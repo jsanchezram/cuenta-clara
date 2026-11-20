@@ -1,0 +1,279 @@
+{
+  "data": [
+    {
+      "id": "txn_0001",
+      "type": "EXPENSE",
+      "category": "HOUSING",
+      "amount": 120000,
+      "date": "2026-10-01",
+      "description": "Alquiler departamento",
+      "created_at": "2026-10-01T09:10:00-05:00",
+      "updated_at": "2026-10-01T09:10:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0002",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 22050,
+      "date": "2026-10-05",
+      "description": "Mercado semanal",
+      "created_at": "2026-10-05T11:30:00-05:00",
+      "updated_at": "2026-10-05T11:30:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0003",
+      "type": "EXPENSE",
+      "category": "UTILITIES",
+      "amount": 13240,
+      "date": "2026-10-06",
+      "description": "Luz y agua",
+      "created_at": "2026-10-06T08:45:00-05:00",
+      "updated_at": "2026-10-06T08:45:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0004",
+      "type": "EXPENSE",
+      "category": "TRANSPORT",
+      "amount": 9500,
+      "date": "2026-10-10",
+      "description": "Recarga tarjeta Metropolitano",
+      "created_at": "2026-10-10T07:50:00-05:00",
+      "updated_at": "2026-10-10T07:50:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0005",
+      "type": "INCOME",
+      "category": "WORK",
+      "amount": 250000,
+      "date": "2026-10-15",
+      "description": "Pago proyecto web",
+      "created_at": "2026-10-15T18:20:00-05:00",
+      "updated_at": "2026-10-15T18:20:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0006",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 26000,
+      "date": "2026-10-19",
+      "description": "Supermercado del mes",
+      "created_at": "2026-10-19T12:15:00-05:00",
+      "updated_at": "2026-10-19T12:15:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0007",
+      "type": "EXPENSE",
+      "category": "LEISURE",
+      "amount": 18000,
+      "date": "2026-10-24",
+      "description": "Escapada a Lunahuaná",
+      "created_at": "2026-10-24T10:00:00-05:00",
+      "updated_at": "2026-10-24T10:00:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0008",
+      "type": "EXPENSE",
+      "category": "OTHER",
+      "amount": 6000,
+      "date": "2026-10-27",
+      "description": "Corte de cabello",
+      "created_at": "2026-10-27T17:40:00-05:00",
+      "updated_at": "2026-10-27T17:40:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0009",
+      "type": "EXPENSE",
+      "category": "HOUSING",
+      "amount": 120000,
+      "date": "2026-11-01",
+      "description": "Alquiler departamento",
+      "created_at": "2026-11-01T09:05:00-05:00",
+      "updated_at": "2026-11-01T09:05:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0010",
+      "type": "EXPENSE",
+      "category": "TRANSPORT",
+      "amount": 10000,
+      "date": "2026-11-01",
+      "description": "Recarga tarjeta Metropolitano",
+      "created_at": "2026-11-01T08:10:00-05:00",
+      "updated_at": "2026-11-01T08:10:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0011",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 18540,
+      "date": "2026-11-02",
+      "description": "Mercado semanal",
+      "created_at": "2026-11-02T11:20:00-05:00",
+      "updated_at": "2026-11-02T11:20:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0012",
+      "type": "INCOME",
+      "category": "WORK",
+      "amount": 140000,
+      "date": "2026-11-04",
+      "description": "Diseño de branding",
+      "created_at": "2026-11-04T19:00:00-05:00",
+      "updated_at": "2026-11-04T19:00:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0013",
+      "type": "EXPENSE",
+      "category": "UTILITIES",
+      "amount": 12000,
+      "date": "2026-11-05",
+      "description": "Internet hogar",
+      "created_at": "2026-11-05T08:30:00-05:00",
+      "updated_at": "2026-11-05T08:30:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0014",
+      "type": "EXPENSE",
+      "category": "LEISURE",
+      "amount": 4500,
+      "date": "2026-11-07",
+      "description": "Cine con Ana",
+      "created_at": "2026-11-07T21:15:00-05:00",
+      "updated_at": "2026-11-07T21:15:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0015",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 16230,
+      "date": "2026-11-09",
+      "description": "Supermercado",
+      "created_at": "2026-11-09T13:40:00-05:00",
+      "updated_at": "2026-11-09T13:40:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0016",
+      "type": "INCOME",
+      "category": "OTHER_INCOME",
+      "amount": 12000,
+      "date": "2026-11-10",
+      "description": "Venta de libro usado",
+      "created_at": "2026-11-10T16:00:00-05:00",
+      "updated_at": "2026-11-10T16:00:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0017",
+      "type": "EXPENSE",
+      "category": "TRANSPORT",
+      "amount": 7750,
+      "date": "2026-11-11",
+      "description": "Gasolina",
+      "created_at": "2026-11-11T18:05:00-05:00",
+      "updated_at": "2026-11-11T18:05:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0018",
+      "type": "EXPENSE",
+      "category": "OTHER",
+      "amount": 3590,
+      "date": "2026-11-12",
+      "description": "Regalo de cumpleaños",
+      "created_at": "2026-11-12T15:30:00-05:00",
+      "updated_at": "2026-11-12T15:30:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0019",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 3000,
+      "date": "2026-11-13",
+      "description": "Almuerzo duplicado",
+      "created_at": "2026-11-13T13:10:00-05:00",
+      "updated_at": "2026-11-13T13:12:00-05:00",
+      "deleted_at": "2026-11-13T13:12:00-05:00"
+    },
+    {
+      "id": "txn_0020",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 9830,
+      "date": "2026-11-14",
+      "description": "Cena con amigos",
+      "created_at": "2026-11-14T22:00:00-05:00",
+      "updated_at": "2026-11-14T22:00:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0021",
+      "type": "INCOME",
+      "category": "WORK",
+      "amount": 180000,
+      "date": "2026-11-15",
+      "description": "Pago proyecto logo",
+      "created_at": "2026-11-15T10:30:00-05:00",
+      "updated_at": "2026-11-15T10:30:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0022",
+      "type": "EXPENSE",
+      "category": "LEISURE",
+      "amount": 15000,
+      "date": "2026-11-15",
+      "description": "Entrada a concierto",
+      "created_at": "2026-11-15T12:00:00-05:00",
+      "updated_at": "2026-11-15T12:00:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0023",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 4900,
+      "date": "2026-11-16",
+      "description": "Panadería y café",
+      "created_at": "2026-11-16T08:00:00-05:00",
+      "updated_at": "2026-11-16T08:00:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0024",
+      "type": "EXPENSE",
+      "category": "TRANSPORT",
+      "amount": 2250,
+      "date": "2026-11-17",
+      "description": "Taxi a reunión",
+      "created_at": "2026-11-17T09:40:00-05:00",
+      "updated_at": "2026-11-17T10:40:00-05:00",
+      "deleted_at": null
+    },
+    {
+      "id": "txn_0025",
+      "type": "EXPENSE",
+      "category": "FOOD",
+      "amount": 1500,
+      "date": "2026-11-18",
+      "description": "Almuerzo menú",
+      "created_at": "2026-11-18T13:05:00-05:00",
+      "updated_at": "2026-11-18T13:05:00-05:00",
+      "deleted_at": null
+    }
+  ]
+}

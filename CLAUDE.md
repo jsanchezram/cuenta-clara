@@ -61,7 +61,7 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
   - R7 El límite cumple R1.
   - R8 El límite se copia a los meses siguientes hasta que se cambie. Solo se edita en el mes en curso.
 - "Hoy" y "mes en curso" se calculan en hora de Lima (UTC−5) con `js/utils/lima-date.js`, nunca con la zona de la PC.
-- Contrato v1: snake_case, montos en céntimos, fechas `YYYY-MM-DD`, enumeraciones en MAYÚSCULAS y errores con la forma `{ "error": { "code", "message" } }`.
+- Contrato v1: snake_case, montos en céntimos enteros (`amount`, `limit`), fechas `YYYY-MM-DD`, enumeraciones en MAYÚSCULAS, edición con PATCH parcial, eliminación lógica (`deleted_at`) y errores `{ "error": { "code", "message", "fields" } }`.
 - Textos en español de Perú, tratando de tú. Montos con el formato `S/ 25.50`.
 - Vocabulario y nombres en código: @docs/glosario.md
 
