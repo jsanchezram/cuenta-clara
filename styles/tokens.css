@@ -293,7 +293,7 @@
   --card-padding: var(--space-4);
   --card-radius: var(--radius-lg);
   --sheet-radius: var(--radius-xl);
-  --calendar-day-size: 2.25rem;                     /* 36 px por día: celda de 46 × 36 px, cumple WCAG 2.5.8 (24 px) */
+  --calendar-day-size: 2.25rem;                     /* botón de 36 × 36 px por día: cumple WCAG 2.5.8 (24 px) */
   --tile-min-height: 4.25rem;                       /* mosaico de categoría */
   --scrollbar-size: 0.375rem;                       /* 6 px: barra de scroll fina */
   --avatar-size: 3rem;                              /* avatar de Perfil */
