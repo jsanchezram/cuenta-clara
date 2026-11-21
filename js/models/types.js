@@ -85,3 +85,16 @@ export const CATEGORY_LABELS = Object.freeze(
 export function categoriesFor(type) {
   return type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES;
 }
+
+// ---------- Preferencias del dispositivo (añadido: vista de Perfil) ----------
+// No son parte del contrato v1: viven solo en el navegador de Diego.
+
+/** @typedef {'light' | 'dark' | 'system'} ThemePreference */
+
+/** Temas que se pueden elegir; "system" sigue al modo claro u oscuro del equipo. */
+export const THEMES = Object.freeze(/** @type {ThemePreference[]} */ (['light', 'dark', 'system']));
+
+/** Nombre de cada tema en la UI. */
+export const THEME_LABELS = Object.freeze(/** @type {Record<ThemePreference, string>} */ ({ light: 'Claro', dark: 'Oscuro', system: 'Sistema' }));
+
+/** @typedef {{ theme: ThemePreference }} Preferences */

@@ -196,3 +196,36 @@ test('shiftSeed también corre deleted_at de un límite quitado', () => {
   assert.equal(shifted.budgets[0].effective_from, '2026-12');
   assert.equal(shifted.budgets[0].deleted_at, '2026-12-02T09:00:00-05:00');
 });
+
+// ---------- Perfil (añadido): preferencias del dispositivo y datos de ejemplo ----------
+
+test('Perfil: el tema empieza en "Sistema" y se guarda en cuentaclara.v1.preferences', async () => {
+  const { api, storage } = makeApi();
+  assert.deepEqual(await api.getPreferences(), { theme: 'system' });
+  assert.deepEqual(await api.savePreferences({ theme: 'dark' }), { theme: 'dark' });
+  assert.deepEqual(await api.getPreferences(), { theme: 'dark' });
+  assert.equal(storage.getItem('cuentaclara.v1.preferences'), '{"theme":"dark"}');
+});
+
+test('Perfil: un tema desconocido se rechaza al guardar y vuelve a "Sistema" al leer', async () => {
+  const { api, storage } = makeApi();
+  await assert.rejects(
+    api.savePreferences(/** @type {any} */ ({ theme: 'sepia' })),
+    (/** @type {ApiError} */ e) => e instanceof ApiError && e.code === 'VALIDATION_ERROR' && 'theme' in e.fields,
+  );
+  storage.setItem('cuentaclara.v1.preferences', '{"theme":"sepia"}');
+  assert.deepEqual(await api.getPreferences(), { theme: 'system' });
+  storage.setItem('cuentaclara.v1.preferences', 'no es json');
+  assert.deepEqual(await api.getPreferences(), { theme: 'system' });
+});
+
+test('Perfil: restablecer vuelve a los datos de ejemplo y conserva el tema', async () => {
+  const { api } = makeApi();
+  const before = (await api.listTransactions(NOVEMBER)).length;
+  await api.createTransaction({ type: 'expense', category: 'food', amount: 12.5, date: '2026-11-20', description: 'Menú de prueba' });
+  await api.savePreferences({ theme: 'dark' });
+  assert.equal((await api.listTransactions(NOVEMBER)).length, before + 1);
+  api.resetDemo();
+  assert.equal((await api.listTransactions(NOVEMBER)).length, before);
+  assert.deepEqual(await api.getPreferences(), { theme: 'dark' });
+});
