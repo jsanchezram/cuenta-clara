@@ -2,21 +2,31 @@
 
 Fecha de las verificaciones: 20 de noviembre de 2026 (hora de Lima). Todas se hicieron sobre `master` antes de la entrega.
 
-## 1. Lighthouse · Accessibility (meta: 95 o más en las 3 pantallas)
+## 1. Lighthouse · Accesibilidad 100 en las 4 pantallas (la meta es 95 o más)
 
-Se corre en Chrome DevTools: Lighthouse no se instala, porque el proyecto no usa npm.
+Lo corrió la persona en Chrome DevTools, con el celular emulado a 360 × 800. Lighthouse viene con Chrome: no se instala nada. Cada captura muestra la pantalla y sus 4 puntajes.
 
-1. Abre el proyecto con Live Server.
-2. En Chrome, abre cada pantalla, presiona F12 y entra a la pestaña **Lighthouse**.
-3. Mode: **Navigation**. Device: **Mobile**. Categories: solo **Accessibility**. Presiona **Analyze page load**.
-4. Guarda la captura del puntaje en esta carpeta con estos nombres.
+| Pantalla | Rendimiento | Accesibilidad | Recomendaciones | SEO | Captura |
+|---|---|---|---|---|---|
+| `movimientos.html` | 97 | **100** | 96 | 100 | [lighthouse-movimientos.png](lighthouse-movimientos.png) |
+| `registrar.html` | 98 | **100** | 96 | 100 | [lighthouse-registrar.png](lighthouse-registrar.png) |
+| `presupuesto.html` | 97 | **100** | 96 | 100 | [lighthouse-presupuesto.png](lighthouse-presupuesto.png) |
+| `perfil.html` (añadida) | 99 | **100** | 96 | 100 | [lighthouse-perfil.png](lighthouse-perfil.png) |
 
-| Pantalla | Captura | Puntaje |
-|---|---|---|
-| `movimientos.html` | `lighthouse-movimientos.png` | pendiente |
-| `registrar.html` | `lighthouse-registrar.png` | pendiente |
-| `presupuesto.html` | `lighthouse-presupuesto.png` | pendiente |
-| `perfil.html` (añadida, opcional) | `lighthouse-perfil.png` | pendiente |
+En la primera corrida, Presupuesto dio 83 en Rendimiento por la carga inicial (Speed Index); al repetirla dio 97. Accesibilidad dio 100 en las dos.
+
+<table>
+  <tr>
+    <td><img src="lighthouse-movimientos.png" alt="Lighthouse en Movimientos: Accesibilidad 100" width="400"></td>
+    <td><img src="lighthouse-registrar.png" alt="Lighthouse en Registrar: Accesibilidad 100" width="400"></td>
+  </tr>
+  <tr>
+    <td><img src="lighthouse-presupuesto.png" alt="Lighthouse en Presupuesto: Accesibilidad 100" width="400"></td>
+    <td><img src="lighthouse-perfil.png" alt="Lighthouse en Perfil: Accesibilidad 100" width="400"></td>
+  </tr>
+</table>
+
+Para repetirlo, abre el proyecto con Live Server y entra a cada pantalla en Chrome. Presiona F12, abre la pestaña **Lighthouse**, elige Mode: Navigation y Device: Mobile, y presiona **Analyze page load**.
 
 ## 2. axe-core 4.10.2 · 0 violaciones en 28 revisiones
 

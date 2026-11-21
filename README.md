@@ -53,7 +53,7 @@ Reglas del negocio: R1–R6 del enunciado, más R7 (el límite cumple R1) y R8 (
 | Componentes de negocio | `<cc-movimiento>` y `<cc-barra-presupuesto>` en `js/components/business/` · [`docs/componentes-negocio.md`](docs/componentes-negocio.md) |
 | Pages, routes y screens | `js/rutas.js` · `js/screens/` · ruta compartible `movimientos.html#/2026-11/comida` |
 | Arquitectura | [`docs/arquitectura.md`](docs/arquitectura.md): las 5 capas con su diagrama de dependencias |
-| Verificación | [`docs/evidencias/`](docs/evidencias/): Lighthouse, axe (0 violaciones en 28 revisiones), teclado, 360 px, contraste, hook y pantallas finales |
+| Verificación | [`docs/evidencias/`](docs/evidencias/): Lighthouse (Accesibilidad 100 en las 4 pantallas), axe (0 violaciones en 28 revisiones), teclado, 360 px, contraste, hook y pantallas finales |
 | Vocabulario | [`docs/glosario.md`](docs/glosario.md): términos de la UI, del código y del contrato |
 
 ## Rúbrica (100 puntos) y su evidencia
@@ -66,7 +66,7 @@ Reglas del negocio: R1–R6 del enunciado, más R7 (el límite cumple R1) y R8 (
 | Prompts y human-in-the-loop | 15 | 3 prompts con 12/12. La bitácora tiene 52 decisiones reales, y en la mayoría se corrigió o rechazó lo que propuso la IA |
 | Arquitectura por capas | 20 | Design system, modelos y contratos, lógica pura, componentes y rutas separados. Las dependencias solo bajan (`docs/arquitectura.md`) |
 | Pruebas y verificación | 10 | 113 pruebas en verde con `node --test`: monto, fecha, edición del mes en curso, total del mes, porcentaje y avisos del presupuesto, mapeadores, API y store |
-| Accesibilidad y responsive | 10 | WCAG 2.2 AA. axe da 0 violaciones en 28 revisiones. Teclado completo, sin scroll horizontal a 360 px. Las capturas de Lighthouse van en `docs/evidencias/` |
+| Accesibilidad y responsive | 10 | **Lighthouse: Accesibilidad 100** en las 3 pantallas, y también en Perfil. axe da 0 violaciones en 28 revisiones. Teclado completo y sin scroll horizontal a 360 px. Capturas en [`docs/evidencias/`](docs/evidencias/) |
 
 Requisitos técnicos:
 - `// @ts-check` en cada archivo de `js/`.
