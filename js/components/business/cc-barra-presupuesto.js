@@ -128,7 +128,7 @@ export class CcBarraPresupuesto extends HTMLElement {
     const showAction = editable && !s.editing && !s.confirmingRemoval;
     // Toda la fila es el botón de editar ("enlace estirado"): objetivo grande y sin texto subrayado
     const action = showAction
-      ? `<button class="budget-row__action" type="button" data-action="edit-limit"><span class="visually-hidden">${hasLimit ? 'Editar límite' : 'Definir límite'} de ${esc(label)}</span></button>`
+      ? `<button class="budget-row__action" type="button" data-action="edit-limit" aria-describedby="${titleId}-status"><span class="visually-hidden">${hasLimit ? 'Editar límite' : 'Definir límite'} de ${esc(label)}</span></button>`
       : '';
     const chevron = showAction ? icon('chevron-right', 'icon budget-row__chevron') : '';
 
@@ -138,7 +138,7 @@ export class CcBarraPresupuesto extends HTMLElement {
     let percentText = '';
     if (!hasLimit) {
       figures = `<span class="budget-row__money budget-row__spent">${esc(formatMoney(r.spent))}</span> usados`;
-      status = '<p class="budget-status budget-status--none"><span class="budget-status__dot" aria-hidden="true"></span>Sin límite definido</p>';
+      status = `<p class="budget-status budget-status--none" id="${titleId}-status"><span class="budget-status__dot" aria-hidden="true"></span>Sin límite definido</p>`;
     } else {
       const st = /** @type {import('../../models/types.js').BudgetStatus} */ (r.status);
       const mod = MODIFIER[st];
@@ -151,7 +151,7 @@ export class CcBarraPresupuesto extends HTMLElement {
              aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(percent, 100)}" aria-valuetext="${percent} % usado. ${esc(r.message)}">
           <span class="budget-bar__fill" style="--budget-value: ${percent}%"></span>
         </div>`;
-      status = `<p class="budget-status${mod ? ` budget-status--${mod}` : ''}"><span class="budget-status__dot" aria-hidden="true"></span>${esc(r.message + detail)}</p>`;
+      status = `<p class="budget-status${mod ? ` budget-status--${mod}` : ''}" id="${titleId}-status"><span class="budget-status__dot" aria-hidden="true"></span>${esc(r.message + detail)}</p>`;
       percentText = `<span class="budget-row__percent">${percent} %</span>`;
     }
 
