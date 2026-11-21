@@ -215,7 +215,11 @@ export function mountBudget() {
 
   /** @param {Readonly<BudgetState>} state */
   function announce(state) {
-    if (previous?.status === 'loading' && state.summary) announcer.textContent = state.summary.text;
+    // Al cargar un mes se dice cuál es (y si es de solo lectura) antes del resumen
+    if (previous?.status === 'loading' && state.summary) {
+      const month = capitalize(formatMonth(viewedMonth));
+      announcer.textContent = `${month}${viewedMonth === thisMonth ? '' : ', solo lectura'}. ${state.summary.text}`;
+    }
     if (state.notice && state.notice !== previous?.notice) announcer.textContent = state.notice;
   }
 

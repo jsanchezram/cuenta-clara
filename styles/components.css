@@ -646,6 +646,7 @@ textarea.field__control {
 }
 
 .tile__input:checked + .tile {
+  font-weight: var(--font-weight-semibold);
   color: var(--color-on-action);
   background: var(--color-action-primary);
   border-color: var(--color-action-primary);
@@ -872,7 +873,7 @@ textarea.field__control {
   border-radius: var(--sheet-radius);
 }
 
-/* Opciones suaves (atajos de período): sin bordes, la elegida en azul claro */
+/* Opciones suaves (atajos de período y de fecha): sin bordes; la elegida va rellena en azul y con texto más grueso */
 .option-group {
   display: flex;
   gap: var(--space-2);
@@ -903,6 +904,12 @@ textarea.field__control {
 }
 
 /* Activo: igual que un chip activo (relleno sólido y texto más grueso), no solo otro color */
+/* Deshabilitado (por ejemplo "Ayer" fuera de R2 o R6): se ve apagado, no como elegido */
+.option:disabled {
+  cursor: default;
+  opacity: 0.35;
+}
+
 .option[aria-pressed="true"] {
   font-weight: var(--font-weight-semibold);
   color: var(--color-on-action);
@@ -931,11 +938,6 @@ textarea.field__control {
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0 2px;
-}
-
-.calendar .icon-btn {
-  width: var(--calendar-day-size);
-  height: var(--calendar-day-size);
 }
 
 .calendar__grid th {
@@ -1032,7 +1034,9 @@ a.month-grid__month:hover {
   background: var(--color-selected-bg-hover);
 }
 
+/* Mes en curso: azul y más grueso (la señal no es solo el color) */
 .month-grid__month.is-this-month {
+  font-weight: var(--font-weight-semibold);
   color: var(--color-accent-text);
 }
 
@@ -1313,7 +1317,9 @@ cc-movimiento {
   padding-top: var(--space-1);
 }
 
+/* Centrado en todo el ancho de la lista: sin el tope de 65ch de los párrafos */
 .list-more__count {
+  max-width: none;
   font-size: var(--font-size-sm);
   text-align: center;
   color: var(--color-text-muted);

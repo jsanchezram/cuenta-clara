@@ -30,7 +30,7 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
 - WCAG 2.2 AA obligatoria. La meta es Lighthouse Accessibility de 95 o más en cada pantalla.
 - Ningún color hex fuera de `styles/tokens.css`: un hook lo bloquea. Los componentes usan tokens semánticos o de componente, nunca primitivos.
 - Los interactivos son `<a>`, `<button>` o controles nativos, nunca `<div onclick>`.
-- Mobile-first: se diseña a 360 px y se amplía con `min-width`. Sin scroll horizontal a 360 px y con objetivos táctiles de 44 px o más (los días del calendario: 46 × 36 px). En laptop, los controles miden 40 px.
+- Mobile-first: se diseña a 360 px y se amplía con `min-width`. Sin scroll horizontal a 360 px y con objetivos táctiles de 44 px o más (los días del calendario: 36 × 36 px; 28 × 28 px en el desplegable de laptop). En laptop, los controles miden 40 px.
 - Los avisos y estados se leen en texto. El color y el ícono solo refuerzan.
 - Las reglas del negocio son funciones puras: la fecha de hoy llega como parámetro (`today`), nunca `new Date()` ni `Date.now()` dentro de `js/logic/`.
 - Montos en céntimos enteros en el contrato y en soles en el modelo. Las conversiones solo se hacen en `js/contracts/mappers.js` y `js/utils/`.

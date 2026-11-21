@@ -152,23 +152,36 @@ export class CcCalendarioRango extends HTMLElement {
       return `<td${classes ? ` class="${classes}"` : ''}><button type="button" class="calendar__day" data-date="${date}" tabindex="${date === this._focusDate ? 0 : -1}" aria-pressed="${isStart || isEnd}"${isToday ? ' aria-current="date"' : ''}${this._isDisabled(date) ? ' disabled' : ''} aria-label="${formatDayLong(date)}${isToday ? ', hoy' : ''}${state}">${Number(date.slice(8, 10))}</button></td>`;
     }).join('')}</tr>`).join('');
 
-    this.innerHTML = `
-      <div class="calendar">
-        <div class="calendar__header">
-          <button type="button" class="icon-btn" data-nav="-1"${atMinMonth ? ' disabled' : ''}>${icon('chevron-left')}<span class="visually-hidden">Ver mes anterior</span></button>
-          <p class="calendar__title" aria-live="polite">${title.charAt(0).toUpperCase()}${title.slice(1)}</p>
-          <button type="button" class="icon-btn" data-nav="1"${atCurrentMonth ? ' disabled' : ''}>${icon('chevron-right')}<span class="visually-hidden">Ver mes siguiente</span></button>
-        </div>
-        <table class="calendar__grid">
-          <caption class="visually-hidden">Calendario de ${title}</caption>
-          <thead><tr>${WEEKDAYS.map(([short, long]) => `<th scope="col" abbr="${long}">${short}</th>`).join('')}</tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>`;
-    this._wire();
+    // La cabecera se crea una sola vez: su título es una región viva estable, así ‹ › anuncia el mes nuevo
+    // (una región viva recreada en cada render puede no anunciarse). Solo cambian sus textos y los días.
+    if (!this.querySelector('.calendar')) {
+      this.innerHTML = `
+        <div class="calendar">
+          <div class="calendar__header">
+            <button type="button" class="icon-btn" data-nav="-1">${icon('chevron-left')}<span class="visually-hidden">Ver mes anterior</span></button>
+            <p class="calendar__title" aria-live="polite"></p>
+            <button type="button" class="icon-btn" data-nav="1">${icon('chevron-right')}<span class="visually-hidden">Ver mes siguiente</span></button>
+          </div>
+          <table class="calendar__grid">
+            <caption class="visually-hidden"></caption>
+            <thead><tr>${WEEKDAYS.map(([short, long]) => `<th scope="col" abbr="${long}">${short}</th>`).join('')}</tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>`;
+      this._wireNav();
+    }
+    const label = `${title.charAt(0).toUpperCase()}${title.slice(1)}`;
+    const titleEl = /** @type {HTMLElement} */ (this.querySelector('.calendar__title'));
+    if (titleEl.textContent !== label) titleEl.textContent = label;
+    /** @type {HTMLElement} */ (this.querySelector('.calendar__grid caption')).textContent = `Calendario de ${title}`;
+    /** @type {HTMLButtonElement} */ (this.querySelector('[data-nav="-1"]')).disabled = atMinMonth;
+    /** @type {HTMLButtonElement} */ (this.querySelector('[data-nav="1"]')).disabled = atCurrentMonth;
+    /** @type {HTMLElement} */ (this.querySelector('.calendar__grid tbody')).innerHTML = rows;
+    this._wireDays();
   }
 
-  _wire() {
+  /** Flechas ‹ ›: se conectan una sola vez, porque la cabecera no se vuelve a crear. */
+  _wireNav() {
     this.querySelectorAll('[data-nav]').forEach((button) => button.addEventListener('click', () => {
       const dir = Number(button.getAttribute('data-nav'));
       this._month = shiftMonth(this._month, dir);
@@ -178,7 +191,10 @@ export class CcCalendarioRango extends HTMLElement {
       const other = /** @type {HTMLButtonElement | null} */ (this.querySelector(`[data-nav="${-dir}"]`));
       (again && !again.disabled ? again : other)?.focus();
     }));
+  }
 
+  /** Días: se vuelven a crear en cada render, así que se conectan cada vez. */
+  _wireDays() {
     this.querySelectorAll('.calendar__day').forEach((button) => {
       const date = /** @type {string} */ (button.getAttribute('data-date'));
       button.addEventListener('click', () => this._choose(date));

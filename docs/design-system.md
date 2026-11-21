@@ -140,7 +140,7 @@ El detalle está en `.claude/rules/estilos-css.md` y `.claude/rules/html-accesib
 - Durante la carga: `aria-busy="true"` y un skeleton con `aria-hidden`.
 - Objetivos táctiles de 44 px o más en el celular (48 px el primario). Los chips y atajos se ven de 36 px, pero su área táctil es de 44 px. En laptop (mouse), `tokens.css` baja los controles a 36 px y los chips se ven de 30 px; en los desplegables, 32 px. WCAG 2.5.8 pide 24 px.
 - Tema: Claro, Oscuro o Sistema, elegido en Perfil. `js/api/theme-boot.js` lo aplica en el `<head>` antes de pintar, así no se ve un instante el tema equivocado.
-- Excepción: los días del calendario miden 46 × 36 px. Cumplen WCAG 2.5.8 (24 px como mínimo); se achicaron para que la hoja no ocupe toda la pantalla.
+- Excepción: cada día del calendario es un botón de 36 × 36 px en el celular y de 28 × 28 px en el desplegable de laptop. Cumplen WCAG 2.5.8 (24 px como mínimo); se achicaron para que la hoja no ocupe toda la pantalla. Las flechas ‹ › sí usan el alto de control (44 px en el celular).
 - Las hojas devuelven el foco al botón que las abrió al cerrarse por cualquier camino: atajo, Aplicar, Cancelar, ✕, Escape o tocar el fondo.
 - Lo enfocado nunca queda tapado por las barras fijas (WCAG 2.4.11): `scroll-padding-top` usa la altura que mide `watchHeader()`.
 - Se prueba a 360 px y a 1280 px, sin scroll horizontal.

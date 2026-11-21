@@ -77,7 +77,8 @@
         <p class="showcase-label">&lt;cc-barra-presupuesto&gt;: los 4 estados de R5 (excedido, alcanzado, cerca, normal) y sin límite</p>
         <div class="budget-list" id="demo-presupuesto"></div>
         <p class="showcase-label">Eventos emitidos</p>
-        <ol class="field__hint" id="demo-eventos" role="log" aria-live="polite"><li>Activa "Editar", "Editar límite" o elige un rango en el calendario para ver el evento.</li></ol>
+        <!-- El rol log va en el contenedor: en el <ol> anularía la lista y sus <li> quedarían huérfanos -->
+        <div class="field__hint" role="log" aria-live="polite"><ol id="demo-eventos"><li>Activa "Editar", "Editar límite" o elige un rango en el calendario para ver el evento.</li></ol></div>
       </section>
 
       <!-- ===== Íconos ===== -->
