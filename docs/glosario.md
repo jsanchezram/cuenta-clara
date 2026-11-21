@@ -35,6 +35,8 @@
 | Eliminado | — | `deleted_at` | Eliminación lógica: el movimiento se guarda con fecha de eliminación y deja de listarse y sumarse. |
 | Creado / actualizado | `createdAt` / `updatedAt` | `created_at` / `updated_at` | Marcas de auditoría ISO 8601 con zona -05:00. |
 | Saldo | `balance` | — | Ingresos − gastos de lo que se está viendo. |
+| Perfil | `perfil.html` · `mountProfile()` | — | Vista añadida: los datos de Diego, el tema y restablecer los datos de ejemplo. |
+| Tema | `ThemePreference`: `'light'` · `'dark'` · `'system'` | — (fuera del contrato) | "Claro", "Oscuro" o "Sistema" (sigue al modo del equipo). Preferencia del dispositivo en `cuentaclara.v1.preferences`. |
 | Ruta compartible | `parseTransactionsRoute()` | — | Hash de `movimientos.html`: `#/2026-11/comida`, `#/2026-11-20` o `#/2026-11-01..2026-11-15/ocio`. |
 
 ## Categorías

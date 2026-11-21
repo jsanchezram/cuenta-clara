@@ -5,7 +5,7 @@
  * Guarda DTO (claves cuentaclara.v1.*), devuelve modelos, aplica las reglas del servidor y lanza ApiError.
  */
 import { toTransaction, toTransactionDTO, toTransactionList, toTransactionPatch, toBudget, toBudgetRecord } from '../contracts/mappers.js';
-import { EXPENSE_CATEGORIES } from '../models/types.js';
+import { EXPENSE_CATEGORIES, THEMES } from '../models/types.js';
 import { validateAmount, validateCategory, validateDate, validateDescription, validateLimit } from '../logic/rules.js';
 import { currentMonth, monthPeriod, shiftMonth } from '../logic/period.js';
 import { effectiveLimit } from '../logic/budget.js';
@@ -21,12 +21,15 @@ import { toCents } from '../utils/money.js';
 /** @typedef {import('../models/types.js').Budget} Budget */
 /** @typedef {import('../models/types.js').Category} Category */
 /** @typedef {import('../models/types.js').ExpenseCategory} ExpenseCategory */
+/** @typedef {import('../models/types.js').Preferences} Preferences */
 /** @typedef {{ transactions: TransactionDTO[], budgets: BudgetDTO[] }} Seed */
 /** @typedef {{ getItem(key: string): string | null, setItem(key: string, value: string): void, removeItem(key: string): void }} Storage */
 /** @typedef {'movimientos' | 'guardar' | 'presupuesto'} Failure */
 
 const KEY_TRANSACTIONS = 'cuentaclara.v1.transactions';
 const KEY_BUDGETS = 'cuentaclara.v1.budgets';
+/** Preferencias del dispositivo (tema): fuera del contrato v1. js/api/theme-boot.js lee la misma clave. */
+const KEY_PREFERENCES = 'cuentaclara.v1.preferences';
 
 const MESSAGES = /** @type {Record<ErrorCode, string>} */ ({
   VALIDATION_ERROR: 'Revisa los campos marcados.',
@@ -330,10 +333,35 @@ export function createApi({ storage, loadSeed, today, nowIso, delayMs = 400, fai
         : [...list, { category: cat, limit: toCents(current.limit), effective_from: month, created_at: now, updated_at: now, deleted_at: now }]);
     },
 
-    /** Borra los datos guardados; el próximo pedido vuelve a sembrar la demo. */
+    /** Borra los movimientos y presupuestos guardados; el próximo pedido vuelve a sembrar la demo. El tema se conserva. */
     resetDemo() {
       storage.removeItem(KEY_TRANSACTIONS);
       storage.removeItem(KEY_BUDGETS);
+    },
+
+    /**
+     * Preferencias del dispositivo (Perfil). No son parte del contrato v1 ni tienen latencia simulada:
+     * viven solo en este navegador. Un valor guardado que no se reconoce vuelve a "system".
+     * @returns {Promise<Preferences>}
+     */
+    async getPreferences() {
+      let theme;
+      try {
+        theme = JSON.parse(storage.getItem(KEY_PREFERENCES) ?? '{}').theme;
+      } catch {
+        theme = undefined;
+      }
+      return { theme: THEMES.includes(theme) ? theme : 'system' };
+    },
+
+    /**
+     * @param {Preferences} preferences
+     * @returns {Promise<Preferences>}
+     */
+    async savePreferences(preferences) {
+      if (!THEMES.includes(preferences.theme)) throw new ApiError('VALIDATION_ERROR', { theme: 'Elige Claro, Oscuro o Sistema.' });
+      storage.setItem(KEY_PREFERENCES, JSON.stringify({ theme: preferences.theme }));
+      return { theme: preferences.theme };
     },
   };
 }

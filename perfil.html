@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tus datos y la configuración de CuentaClara: el tema y los datos de ejemplo.">
+  <title>Perfil · CuentaClara</title>
+  <!-- Tema guardado, antes de pintar: así no se ve un instante el tema equivocado -->
+  <script src="js/api/theme-boot.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <!-- Barra de marca: queda fija arriba en toda la página; al hacer scroll muestra el título de la vista -->
+  <header class="brand-bar">
+    <div class="container brand-bar__inner">
+      <a class="brand" href="movimientos.html"><span class="brand__mark" aria-hidden="true">C</span>CuentaClara</a>
+      <p class="brand-bar__title" aria-hidden="true"></p>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <!-- Encabezado de la vista: la fecha de hoy y el título; al hacer scroll, el título pasa en pequeño a la barra de marca -->
+    <div class="page-header page-header--center">
+      <div class="container container--narrow page-header__body">
+        <p class="page-header__eyebrow" data-today>&nbsp;</p>
+        <h1 class="page-header__title">Tu <span class="page-header__accent">perfil</span></h1>
+      </div>
+    </div>
+
+    <div class="container container--narrow page-body stack">
+      <!-- Anuncios para lector de pantalla (región viva fija desde la carga) -->
+      <p class="visually-hidden" id="announcer" role="status" aria-live="polite"></p>
+
+      <!-- [HU04-1] Quién usa la app -->
+      <section class="card profile-card" aria-labelledby="profile-name">
+        <span class="profile-card__avatar" aria-hidden="true">D</span>
+        <div class="profile-card__text">
+          <h2 class="profile-card__name" id="profile-name">Diego</h2>
+          <p class="profile-card__meta">Diseñador freelance · Lima</p>
+        </div>
+      </section>
+
+      <!-- [HU04-2] Tema: Claro · Oscuro · Sistema, con radios nativos -->
+      <section class="stack stack--sm" aria-labelledby="appearance-title">
+        <h2 class="list-title" id="appearance-title">Apariencia</h2>
+        <div class="card">
+          <fieldset class="fieldset" id="theme-group" aria-describedby="theme-hint">
+            <legend class="fieldset__legend">Tema</legend>
+            <div class="segmented">
+              <input class="segmented__input" type="radio" name="theme" id="theme-light" value="light">
+              <label class="segmented__label" for="theme-light">Claro</label>
+              <input class="segmented__input" type="radio" name="theme" id="theme-dark" value="dark">
+              <label class="segmented__label" for="theme-dark">Oscuro</label>
+              <input class="segmented__input" type="radio" name="theme" id="theme-system" value="system" checked>
+              <label class="segmented__label" for="theme-system">Sistema</label>
+            </div>
+            <p class="field__hint" id="theme-hint">"Sistema" sigue al modo claro u oscuro de tu equipo.</p>
+          </fieldset>
+        </div>
+      </section>
+
+      <!-- [HU04-3] Restablecer los datos de ejemplo, con confirmación en la página -->
+      <section class="stack stack--sm" aria-labelledby="demo-title">
+        <h2 class="list-title" id="demo-title">Datos de ejemplo</h2>
+        <div class="card stack stack--sm">
+          <p class="card__text">Vuelve a los movimientos y presupuestos de ejemplo. Se borra lo que registraste; tu tema se mantiene.</p>
+          <div id="reset-notice" class="notice-slot"></div>
+          <button class="btn btn--danger btn--block" type="button" id="reset-button" aria-controls="reset-confirm" aria-expanded="false">Restablecer datos de ejemplo</button>
+          <div class="confirm stack" id="reset-confirm" role="group" aria-labelledby="reset-confirm-title" hidden>
+            <h3 class="confirm__title" id="reset-confirm-title" tabindex="-1">¿Restablecer los datos de ejemplo?</h3>
+            <p>Se borran tus movimientos y presupuestos, y vuelven los de ejemplo. Esta acción no se puede deshacer.</p>
+            <div class="form-actions">
+              <button class="btn btn--danger-solid" type="button" id="reset-yes">Sí, restablecer</button>
+              <button class="btn btn--secondary" type="button" id="reset-no">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- [HU04-4] Cómo trabaja la app con tus datos -->
+      <section class="stack stack--sm" aria-labelledby="about-title">
+        <h2 class="list-title" id="about-title">Acerca de</h2>
+        <dl class="card about-list">
+          <div class="about-list__row"><dt>Moneda</dt><dd>Soles (S/)</dd></div>
+          <div class="about-list__row"><dt>Hora</dt><dd>Lima (UTC−5)</dd></div>
+          <div class="about-list__row"><dt>Tus datos</dt><dd>Solo en este navegador</dd></div>
+        </dl>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Principal">
+    <ul class="bottom-nav__list">
+      <li><a class="bottom-nav__link" href="movimientos.html"><!--icon:list--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M4 5h16v2H4zM4 11h16v2H4zM4 17h16v2H4z"/></svg>Movimientos</a></li>
+      <li><a class="bottom-nav__link" href="registrar.html"><!--icon:plus--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11 4h2v7h7v2h-7v7h-2v-7H4v-2h7z"/></svg>Registrar</a></li>
+      <li><a class="bottom-nav__link" href="presupuesto.html"><!--icon:pie--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M11 4a9 9 0 1 0 9 9h-9zM13 2v9h9a9 9 0 0 0-9-9z"/></svg>Presupuesto</a></li>
+      <li><a class="bottom-nav__link" href="perfil.html" aria-current="page"><!--icon:user--><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M12 3a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zM4 20c0-3.87 3.58-6.5 8-6.5s8 2.63 8 6.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/></svg>Perfil</a></li>
+    </ul>
+  </nav>
+
+  <script type="module">
+    import { mountProfile } from './js/screens/perfil.js';
+    mountProfile();
+  </script>
+</body>
+</html>

@@ -69,6 +69,7 @@ CuentaClara/
 ├── movimientos.html            HU-01 · armazón
 ├── registrar.html              HU-02 · armazón
 ├── presupuesto.html            HU-03 · armazón
+├── perfil.html                 HU-04 (añadido) · armazón
 ├── componentes.html            vitrina del design system
 ├── styles/
 │   ├── tokens.css              primitivos → semánticos → componente (claro y oscuro)
@@ -77,11 +78,11 @@ CuentaClara/
 │   ├── models/types.js         2 · tipos y categorías
 │   ├── contracts/              2 · dto.js (contrato v1) · mappers.js
 │   ├── logic/                  3 · rules.js · summary.js · period.js · budget.js
-│   ├── api/                    3 · cuentaclara-api.js (única puerta a localStorage)
+│   ├── api/                    3 · cuentaclara-api.js (única puerta a localStorage) · theme-boot.js
 │   ├── state/                  3 · store.js · transactions.js · transaction-form.js · budget.js
 │   ├── components/
 │   │   ├── business/           4 · cc-movimiento.js · cc-barra-presupuesto.js
-│   │   └── ui/                 4 · cc-calendario-rango.js · icons.js · sticky-header.js
+│   │   └── ui/                 4 · cc-calendario-rango.js · icons.js · sticky-header.js · theme.js
 │   ├── screens/                5 · una por página, con el mismo nombre
 │   ├── rutas.js                5 · rutas compartibles (#/2026-11/comida)
 │   └── utils/                  money.js · html.js · lima-date.js
@@ -115,6 +116,8 @@ sequenceDiagram
   A-->>P: el store cambia de estado ("saved")
   P-->>Diego: "Gasto registrado: S/ 25.50 en Comida" (role="status")
 ```
+
+El tema es la única excepción al flujo por módulos: `js/api/theme-boot.js` es un script clásico y síncrono que cada página carga en su `<head>`. Aplica el tema guardado antes de pintar, porque un módulo llegaría tarde y se vería un instante el tema equivocado. Vive en la capa de API, así que las páginas siguen sin tocar `localStorage`.
 
 La pantalla crea la API (`createBrowserApi()`) y se la pasa a las acciones (`createFormActions(api, today)`). Por eso el estado no importa la API. En las pruebas se usa `createApi()` con un almacenamiento en memoria, sin navegador.
 

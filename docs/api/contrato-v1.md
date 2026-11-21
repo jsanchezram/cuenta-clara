@@ -219,6 +219,8 @@ Todos los errores tienen la misma forma:
 
 ## Simulación
 
+- **Preferencias del dispositivo (Perfil): fuera del contrato v1.** El tema se guarda en `cuentaclara.v1.preferences` como `{ "theme": "light" | "dark" | "system" }`, sin latencia simulada. Solo vive en el navegador: no es un dato de Diego que el servidor necesite. Un valor que no se reconoce vuelve a `"system"`.
+
 - Guarda los DTO en `localStorage` con las claves `cuentaclara.v1.transactions` y `cuentaclara.v1.budgets`.
 - Si el almacén está vacío, siembra `datos/movimientos.json` y `datos/presupuestos.json`. Al sembrar, **corre los meses** para que el último mes de los datos coincida con el mes en curso. El archivo no cambia, y la demo funciona en cualquier fecha.
 - Simula latencia (`delayMs`) y fallos a pedido con `?fallo=movimientos`, `?fallo=guardar` o `?fallo=presupuesto`, que responden `500 SERVER_ERROR`. El fallo ocurre **solo en el primer pedido**, así que "Reintentar" funciona.

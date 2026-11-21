@@ -9,7 +9,7 @@ App web para registrar gastos personales y controlar un presupuesto mensual por 
 - Se abre con Live Server (VS Code): los módulos ES no funcionan con `file://`, y `index.html` lleva a `movimientos.html`. El equipo trabaja en Windows (PowerShell).
 
 ## 2. Contexto arquitectónico
-- Una página HTML por pantalla, en la raíz: `movimientos.html`, `registrar.html`, `presupuesto.html`. La página es solo el armazón y su pantalla vive en `js/screens/` con el mismo nombre.
+- Una página HTML por pantalla, en la raíz: `movimientos.html`, `registrar.html`, `presupuesto.html` y la añadida `perfil.html`. La página es solo el armazón y su pantalla vive en `js/screens/` con el mismo nombre.
 - Hay 5 capas y las dependencias van en una sola dirección:
   1. Design system: `styles/tokens.css` → `styles/components.css` → vitrina `componentes.html`.
   2. Modelos y contratos: `js/models/types.js`, `js/contracts/{dto,mappers}.js`.
