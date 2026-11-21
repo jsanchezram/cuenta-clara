@@ -44,7 +44,7 @@ Reglas del negocio: R1–R6 del enunciado, más R7 (el límite cumple R1) y R8 (
 | UX y accesibilidad | [`docs/ux.md`](docs/ux.md): Ley de Fitts, H1 y H5 + H9, con la pantalla donde se ven |
 | Figma AI y wireframes | [`docs/wireframes/`](docs/wireframes/): wireframes a 360 px y el prompt usado. Qué cambió después: [`docs/evolucion-del-diseno.md`](docs/evolucion-del-diseno.md) |
 | Human-in-the-loop | [`docs/bitacora-hitl.md`](docs/bitacora-hitl.md): 52 decisiones con su porqué |
-| CLAUDE.md y capas de contexto | [`CLAUDE.md`](CLAUDE.md) en 5 contextos · reglas con `paths` en [`.claude/rules/`](.claude/rules/) · skill [`/nueva-pantalla`](.claude/skills/nueva-pantalla/SKILL.md) · hook [`guardian-tokens.mjs`](.claude/hooks/guardian-tokens.mjs) · subagente [`revisor-a11y`](.claude/agents/revisor-a11y.md) |
+| CLAUDE.md y capas de contexto | [`CLAUDE.md`](CLAUDE.md) en 5 contextos · reglas con `paths` en [`.claude/rules/`](.claude/rules/) · skill [`/nueva-pantalla`](.claude/skills/nueva-pantalla/SKILL.md) · hook [`guardian-tokens.mjs`](.claude/hooks/guardian-tokens.mjs) · subagente [`revisor-a11y`](.claude/agents/revisor-a11y.md). Uso real: la skill en los prompts P-1 y P-2, el subagente en la bitácora (#13, #17 y #19) y el hook, probado en [`docs/evidencias/`](docs/evidencias/) |
 | Prompting agéntico | [`docs/prompts.md`](docs/prompts.md): 3 prompts con los 6 bloques, todos con 12/12 |
 | AI-Augmented vs AI-First | HU-01 y HU-02 en AI-Augmented. HU-03 en AI-First con [`specs/hu-03/`](specs/hu-03/): spec, plan, tasks y decisiones |
 | Design system | [`docs/design-system.md`](docs/design-system.md) · `styles/tokens.css` en 3 capas, con tema oscuro · vitrina `componentes.html` |
@@ -56,19 +56,8 @@ Reglas del negocio: R1–R6 del enunciado, más R7 (el límite cumple R1) y R8 (
 | Verificación | [`docs/evidencias/`](docs/evidencias/): Lighthouse (Accesibilidad 100 en las 4 pantallas), axe (0 violaciones en 28 revisiones), teclado, 360 px, contraste, hook y pantallas finales |
 | Vocabulario | [`docs/glosario.md`](docs/glosario.md): términos de la UI, del código y del contrato |
 
-## Rúbrica (100 puntos) y su evidencia
+## Requisitos técnicos
 
-| Criterio | Puntos | Evidencia |
-|---|---|---|
-| Funcionalidad de HU-01, HU-02 y HU-03 | 20 | Las 3 pantallas con todos sus criterios. Reglas R1–R8 como funciones puras en `js/logic/`, con pruebas |
-| Diseño y UX | 10 | Wireframes y prompt, `docs/ux.md` (3 heurísticas o leyes), estados de carga, vacío y error en cada pantalla y la evolución del diseño |
-| Contexto para Claude | 15 | `CLAUDE.md` en 5 contextos. Regla con `paths`, skill, hook y subagente usados de verdad: la skill en los prompts P-1 y P-2, el subagente en la bitácora (#13, #17 y #19) y el hook probado en `docs/evidencias/` |
-| Prompts y human-in-the-loop | 15 | 3 prompts con 12/12. La bitácora tiene 52 decisiones reales, y en la mayoría se corrigió o rechazó lo que propuso la IA |
-| Arquitectura por capas | 20 | Design system, modelos y contratos, lógica pura, componentes y rutas separados. Las dependencias solo bajan (`docs/arquitectura.md`) |
-| Pruebas y verificación | 10 | 113 pruebas en verde con `node --test`: monto, fecha, edición del mes en curso, total del mes, porcentaje y avisos del presupuesto, mapeadores, API y store |
-| Accesibilidad y responsive | 10 | **Lighthouse: Accesibilidad 100** en las 3 pantallas, y también en Perfil. axe da 0 violaciones en 28 revisiones. Teclado completo y sin scroll horizontal a 360 px. Capturas en [`docs/evidencias/`](docs/evidencias/) |
-
-Requisitos técnicos:
 - `// @ts-check` en cada archivo de `js/`.
 - 0 colores hex fuera de `styles/tokens.css` (el hook lo verifica).
 - Las páginas no usan `localStorage` directo.
