@@ -43,7 +43,7 @@ Reglas del negocio: R1–R6 del enunciado, más R7 (el límite cumple R1) y R8 (
 |---|---|
 | UX y accesibilidad | [`docs/ux.md`](docs/ux.md): Ley de Fitts, H1 y H5 + H9, con la pantalla donde se ven |
 | Figma AI y wireframes | [`docs/wireframes/`](docs/wireframes/): wireframes a 360 px y el prompt usado. Qué cambió después: [`docs/evolucion-del-diseno.md`](docs/evolucion-del-diseno.md) |
-| Human-in-the-loop | [`docs/bitacora-hitl.md`](docs/bitacora-hitl.md): 52 decisiones con su porqué |
+| Human-in-the-loop | [`docs/bitacora-hitl.md`](docs/bitacora-hitl.md): 54 decisiones con su porqué. En 49 se corrigió o rechazó lo que propuso la IA |
 | CLAUDE.md y capas de contexto | [`CLAUDE.md`](CLAUDE.md) en 5 contextos · reglas con `paths` en [`.claude/rules/`](.claude/rules/) · skill [`/nueva-pantalla`](.claude/skills/nueva-pantalla/SKILL.md) · hook [`guardian-tokens.mjs`](.claude/hooks/guardian-tokens.mjs) · subagente [`revisor-a11y`](.claude/agents/revisor-a11y.md). Uso real: la skill en los prompts P-1 y P-2, el subagente en la bitácora (#13, #17 y #19) y el hook, probado en [`docs/evidencias/`](docs/evidencias/) |
 | Prompting agéntico | [`docs/prompts.md`](docs/prompts.md): 3 prompts con los 6 bloques, todos con 12/12 |
 | AI-Augmented vs AI-First | HU-01 y HU-02 en AI-Augmented. HU-03 en AI-First con [`specs/hu-03/`](specs/hu-03/): spec, plan, tasks y decisiones |
