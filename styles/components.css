@@ -1313,7 +1313,9 @@ cc-movimiento {
   padding-top: var(--space-1);
 }
 
+/* Centrado en todo el ancho de la lista: sin el tope de 65ch de los párrafos */
 .list-more__count {
+  max-width: none;
   font-size: var(--font-size-sm);
   text-align: center;
   color: var(--color-text-muted);
