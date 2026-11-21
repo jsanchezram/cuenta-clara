@@ -18,7 +18,7 @@ Se corre en Chrome DevTools: Lighthouse no se instala, porque el proyecto no usa
 | `presupuesto.html` | `lighthouse-presupuesto.png` | pendiente |
 | `perfil.html` (añadida, opcional) | `lighthouse-perfil.png` | pendiente |
 
-## 2. axe-core 4.10.2 · 0 violaciones en 26 revisiones
+## 2. axe-core 4.10.2 · 0 violaciones en 28 revisiones
 
 axe-core es el motor de reglas que usa Lighthouse. Se cargó desde un CDN **solo dentro de la prueba**, en Chrome sin interfaz, así que no es una dependencia del proyecto. Reglas revisadas: WCAG 2.0, 2.1 y 2.2 A y AA, más buenas prácticas.
 
@@ -35,6 +35,9 @@ axe-core es el motor de reglas que usa Lighthouse. Se cargó desde un CDN **solo
 | Presupuesto · hoja "Elige un mes" abierta | 0 | 0 | — |
 | Perfil | 0 | 0 | 0 |
 | Perfil · confirmación de restablecer abierta | 0 | 0 | — |
+| Vitrina (`componentes.html`) | 0 | 0 | — |
+
+En la vitrina, axe encontró un `<ol role="log">`: el rol anulaba la lista y dejaba sus `<li>` huérfanos. El rol pasó a un contenedor y la lista quedó intacta adentro.
 
 ## 3. Teclado y foco
 
