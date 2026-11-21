@@ -49,6 +49,17 @@ export function mountTransactions() {
   const calendar = /** @type {CcCalendarioRango} */ ($('range-calendar'));
   const listRegion = $('list-region');
   const announcer = $('announcer');
+  /**
+   * Aviso al volver de editar o eliminar. Se anuncia junto con el primer resultado de la lista, por la región
+   * viva que existe desde la carga: un role="status" creado ya con su texto puede no leerse.
+   */
+  let pendingNotice = '';
+  /** @param {string} text */
+  const withNotice = (text) => {
+    const full = pendingNotice ? `${pendingNotice} ${text}` : text;
+    pendingNotice = '';
+    return full;
+  };
 
   /** Ruta vigente, leída de la URL. */
   let route = parseTransactionsRoute(location.hash, today);
@@ -100,7 +111,7 @@ export function mountTransactions() {
     $('period-range').textContent = periodRange(period);
     document.title = `Movimientos · ${periodLabel(period)} · CuentaClara`;
 
-    // [HU01-12] atajo activo con ✓ (CSS) y aria-pressed
+    // [HU01-12] atajo activo con aria-pressed (relleno sólido y texto más grueso en CSS)
     const active = shortcutOf(period, today);
     sheet.querySelectorAll('[data-shortcut]').forEach((b) => {
       b.setAttribute('aria-pressed', String(b.getAttribute('data-shortcut') === active));
@@ -203,7 +214,7 @@ export function mountTransactions() {
              <p>Registra tu primer gasto o ingreso.</p>
              <a class="btn btn--primary" href="${routes.register()}">Registrar un movimiento</a>
            </div>`;
-      announcer.textContent = 'No hay movimientos para mostrar.';
+      announcer.textContent = withNotice('No hay movimientos para mostrar.');
       restoreFocus();
       return;
     }
@@ -217,7 +228,7 @@ export function mountTransactions() {
     listRegion.replaceChildren(ul, more);
     for (const t of list.slice(0, visibleCount)) appendRow(ul, t);
     paintMore();
-    announcer.textContent = `${list.length} ${list.length === 1 ? 'movimiento' : 'movimientos'} en ${periodLabel(route.period).toLowerCase()}.`;
+    announcer.textContent = withNotice(`${list.length} ${list.length === 1 ? 'movimiento' : 'movimientos'} en ${periodLabel(route.period).toLowerCase()}.`);
     restoreFocus();
   }
 
@@ -378,7 +389,9 @@ export function mountTransactions() {
   const NOTICES = /** @type {Record<string, string>} */ ({ actualizado: 'Movimiento actualizado.', eliminado: 'Movimiento eliminado.' });
   const flash = NOTICES[new URLSearchParams(location.search).get('aviso') ?? ''];
   if (flash) {
-    $('flash').innerHTML = `<p class="alert alert--success" role="status">${esc(flash)}</p>`;
+    // Visible aquí; el lector de pantalla lo oye con el primer anuncio de la lista (withNotice)
+    $('flash').innerHTML = `<p class="alert alert--success">${esc(flash)}</p>`;
+    pendingNotice = flash;
     history.replaceState(null, '', location.pathname + location.hash); // el aviso no se repite al recargar
   }
 
