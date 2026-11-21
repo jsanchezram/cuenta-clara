@@ -89,6 +89,19 @@ Criterios de alto nivel. El detalle verificable (Dado / Cuando / Entonces) se es
 | HU03-6 | El límite se copia a los meses siguientes hasta que se cambie (R8). Si Diego cambia el límite en el mes en curso, ese valor queda guardado para ese mes y los siguientes, y los meses anteriores conservan el suyo. |
 | HU03-7 | Primero se ven las 4 categorías más urgentes. El botón "Ver N categorías más" muestra el resto y lleva el foco a la primera que aparece. *(Agregado tras la revisión de la persona.)* |
 
+## HU-04 · Perfil y configuración · `perfil.html` · Añadido
+
+*(No lo pide el enunciado: lo pidió la persona como añadido.)*
+
+**Como** Diego, **quiero** ver mi perfil y elegir el tema de la app, **para** usarla cómodo de día y de noche, y volver a los datos de ejemplo cuando quiera empezar de nuevo.
+
+| Código | Criterio |
+|---|---|
+| HU04-1 | El menú tiene una 4.ª opción, "Perfil", con el ícono de persona; la vista muestra a Diego y su oficio. |
+| HU04-2 | El tema se elige con radios nativos: Claro, Oscuro o Sistema (por defecto; sigue al modo del equipo). Se aplica al momento, se anuncia con `role="status"` y vale en todas las páginas, sin un instante del tema equivocado al cargar. |
+| HU04-3 | "Restablecer datos de ejemplo" pide confirmación en la página, sin `confirm()`. El foco va a la confirmación, "Cancelar" o Escape lo devuelven al botón, y al confirmar un aviso dice qué pasó. El tema se conserva. |
+| HU04-4 | El tema es una preferencia del dispositivo: pasa por la API (`cuentaclara.v1.preferences`), no es parte del contrato v1 y las páginas no tocan `localStorage`. |
+
 ## Preguntas resueltas
 
 | Pregunta | Respuesta | Regla |

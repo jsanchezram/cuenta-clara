@@ -86,7 +86,8 @@ Tres capas, donde cada una solo usa la de abajo. Ningún componente usa primitiv
 | `.list`, `.list-row`, `.list-more` | Fila compacta (`<cc-movimiento>`) y "Cargar más" de a 8 |
 | `.cat-icon` | Ícono de categoría: azul de marca sobre un círculo azul claro |
 | `.budget-list`, `.budget-row`, `.budget-bar`, `.budget-status` | Una tarjeta por categoría con la fila compacta (como la de un movimiento), la barra sólida y el estado en texto con un puntito |
-| `.layout`, `.layout__panel`, `.form-card` | Laptop: panel fijo a la izquierda con los controles y el resumen, y el contenido a la derecha. El formulario de Registrar va en una tarjeta |
+| `.layout`, `.layout__panel`, `.form-card` | Laptop: panel fijo a la izquierda con los controles y el resumen, y el contenido a la derecha. El formulario de Registrar va en una tarjeta de 2 columnas (tipo, monto y fecha · categoría y descripción) para verse completo sin scroll; el orden del HTML y del foco no cambia |
+| `.profile-card`, `.about-list`, `.card__text` | Perfil: avatar con la inicial (degradado del resumen destacado), datos en filas y notas en gris |
 | `.form-actions`, `.sheet__footer` | Fila de acciones con botones de igual ancho: uno solo va a todo el ancho; dos, mitad y mitad (Eliminar · Guardar, Sí, eliminar · Cancelar, Cancelar · Aplicar) |
 | `.alert` (`--success`, `--error`), `.state`, `.skeleton`, `.confirm` | Mensajes, vacío o error, carga y confirmación de eliminar en la página |
 | `.brand-bar`, `.brand`, `.bottom-nav`, `.page-header` (`__eyebrow` con la fecha, `__title`, `__accent`), `.sticky-bar`, `.page-body`, `.notice-slot`, `main[data-pending]`, `.skip-link`, `.visually-hidden` | Estructura y accesibilidad. `.notice-slot` vacío no ocupa lugar; `data-pending` oculta la vista hasta que la pantalla pinta su estado real |
@@ -108,7 +109,7 @@ Los nombres siguen el patrón `categoría-rol-variante`.
 | `--color-cat-icon-bg`, `--color-cat-icon-fg` | Semántico | Ícono de categoría monocromo |
 | `--color-backdrop`, `--shadow-card`, `--shadow-raised`, `--shadow-nav` | Semántico | Velo del modal y elevación |
 | `--color-scrollbar-thumb`, `--color-scrollbar-thumb-hover` | Semántico | Barra de scroll fina en azul claro (lista de laptop y hojas) |
-| `--calendar-day-size`, `--chip-visual-height`, `--list-row-min-height`, `--tile-min-height`, `--scrollbar-size` | Componente | Medidas. En laptop se compactan (controles de 40 px) |
+| `--calendar-day-size`, `--chip-visual-height`, `--list-row-min-height`, `--tile-min-height`, `--scrollbar-size`, `--avatar-size`, `--content-max-width-form` | Componente | Medidas. En laptop se compactan: controles de 36 px, texto base de 14 px (los campos siguen en 16 px), barra de presupuesto de 6 px; dentro de los desplegables, controles de 32 px |
 
 ## 6. Estados de UI
 
@@ -137,7 +138,8 @@ El detalle está en `.claude/rules/estilos-css.md` y `.claude/rules/html-accesib
 - El estado se lee en texto. El color y el ícono solo refuerzan.
 - `role="status"` en las confirmaciones. `role="alert"` solo para errores que interrumpen.
 - Durante la carga: `aria-busy="true"` y un skeleton con `aria-hidden`.
-- Objetivos táctiles de 44 px o más en el celular (48 px el primario). Los chips y atajos se ven de 36 px, pero su área táctil es de 44 px. En laptop (mouse), `tokens.css` baja los controles a 40 px y los chips se ven de 32 px: WCAG 2.5.8 pide 24 px.
+- Objetivos táctiles de 44 px o más en el celular (48 px el primario). Los chips y atajos se ven de 36 px, pero su área táctil es de 44 px. En laptop (mouse), `tokens.css` baja los controles a 36 px y los chips se ven de 30 px; en los desplegables, 32 px. WCAG 2.5.8 pide 24 px.
+- Tema: Claro, Oscuro o Sistema, elegido en Perfil. `js/api/theme-boot.js` lo aplica en el `<head>` antes de pintar, así no se ve un instante el tema equivocado.
 - Excepción: los días del calendario miden 46 × 36 px. Cumplen WCAG 2.5.8 (24 px como mínimo); se achicaron para que la hoja no ocupe toda la pantalla.
 - Las hojas devuelven el foco al botón que las abrió al cerrarse por cualquier camino: atajo, Aplicar, Cancelar, ✕, Escape o tocar el fondo.
 - Lo enfocado nunca queda tapado por las barras fijas (WCAG 2.4.11): `scroll-padding-top` usa la altura que mide `watchHeader()`.
